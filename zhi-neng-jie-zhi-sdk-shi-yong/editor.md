@@ -41,7 +41,19 @@ sdk在releases里
 * IDE版本：xcode 16以上
 * 蓝牙版本：5.0以上
 
+**注意事项：因Xcode不同版本中使用到的Swift编译器版本问题，可能会导致集成后编译错误，可以联系我们提供对应的SDK库**
+
 ### 库文件添加
+```pod
+# SDK用到的库
+pod 'Foil', '~> 5.1.2'
+pod 'NordicDFU'
+pod 'RxSwift', '~> 6.9.0'
+pod 'RxCocoa', '~> 6.9.0'
+pod 'SwiftDate'
+pod 'SwiftyBeaver', '1.9.5'
+pod 'Zip'
+```
 
 **安卓：**
 
@@ -119,3 +131,30 @@ LmAPI.removeWLSCmdListener(this)
 ```
 
 **IOS：**
+
+1、初始化相关配置
+```Swift
+// 配置网络地址（国外地址：.overseas、国内地址：.domestic（默认））
+// 如果是提供给国外用户使用，需要设置为国外地址
+BCLRingManager.shared.networkRegion = .overseas
+
+// 配置指令超时时间，默认5s，如果超过5s没有响应，则认为超时,部分固件超时时间可能更长，可以设置为8s,也可以不设置，使用默认值
+BCLRingManager.shared.commandTimeout = 8
+
+// 应用启动后可以检查蓝牙权限
+BCLRingManager.shared.checkBluetoothPermission { auth in
+    switch auth {
+    case .allowedAlways:
+        print("蓝牙权限：已授权")
+    case .denied:
+        print("蓝牙权限：未授权")
+    case .notDetermined:
+        print("蓝牙权限：未确定")
+    case .restricted:
+        print("蓝牙权限：受限")
+    default:
+        break
+    }
+}
+
+```
