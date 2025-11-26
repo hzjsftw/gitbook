@@ -21,7 +21,7 @@ layout:
 
 ### sdk下载
 
-[sdk地址](https://github.com/BravechipSpace/ChipletRing-APPSDK/edit/main/Doc/%E6%99%BA%E8%83%BD%E6%88%92%E6%8C%87SDK%E8%A7%84%E8%8C%83.md)
+[sdk地址](https://github.com/BravechipSpace/ChipletRing-APPSDK/releases)
 
 sdk在releases里
 
