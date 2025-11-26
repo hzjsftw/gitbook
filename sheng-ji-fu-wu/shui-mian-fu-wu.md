@@ -1,9 +1,11 @@
 ---
-description: 睡眠服务是一项很重要的服务，也是一个非常复杂的功能，睡眠是在服务器计算，根据大数据来分析，会持续更新。
+description: 睡眠服务是一项很重要的服务，也是一个非常复杂的功能，睡眠是在服务器计算，根据大数据来分析，会持续更新。部分戒指支持gomore睡眠算法，这个可以在戒指端计算
 icon: face-sleeping
 ---
 
 # 睡眠服务
+
+## 传统睡眠
 
 ### 计算原理
 
@@ -220,12 +222,23 @@ public class Sleep2thBean {
     double xiaolv;//睡眠效率
     double shenshui;//深睡比例
     int score ;//睡眠评分
-    int wakeupCount;//清醒次数
+    int wakeupCount;//清醒次数(传统睡眠返回)
+    int waso;//入睡后的总清醒时间（单位分钟）,gomore算法使用
     String tips;//评价(保留)
-    int sleepDataType;//1是1代睡眠，2是2代睡眠
+    int sleepDataType;//1是1代睡眠，2是2代睡眠,3是gomore算法
     int voMax;//最大摄氧量
+
+    double resultTemperture;//平均体温
+    int xshours;//小睡使用shortSleepList，暂时用不到这个字段
+    int xsminutes;//小睡使用shortSleepList，暂时用不到这个字段
+    String xsAllhours;//小睡使用shortSleepList，暂时用不到这个字段
+    String xsAllminutes;//小睡使用shortSleepList，暂时用不到这个字段
+    String sleepLog;//计算睡眠产生的日志
+    List<HistoryDataBean> historyBeanList;
+    String noSleepResult;//无睡眠的原因
+    List<Sleep2thBean> shortSleepList;//短睡眠列表(目前只有gomore支持，传统算法后续支持)
     }
-    
+    //对应数据库字段
    public class HistoryDataBean{
 
     private Long id;
