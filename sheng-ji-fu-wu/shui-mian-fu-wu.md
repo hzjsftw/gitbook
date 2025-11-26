@@ -172,73 +172,10 @@ public static void APP_CONNECT(long timeMillis)
 public static void APP_REFRESH(long timeMillis)
 ```
 
-### 获取睡眠
-
-**android:**
-
-获取睡眠数据，需要在IWebHistoryResult的updateHistoryFinish回调里获取，保证云端数据已经保存，才能计算出睡眠数据
+### 数据库字段
 
 ```java
-                String dateTimeString = "2025-02-12";
-
-                LogicalApi.getSleepDataFromService( dateTimeString, new IWebSleepResult() {
-                    @Override
-                    public void sleepDataSuccess(Sleep2thBean sleep2thBean) {
-                        // 定义日期时间格式
-                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                        // 将时间戳转换为 Date 对象
-                        Date startDate = new Date(sleep2thBean.getStartTime()*1000);
-                        // 将时间戳转换为 Date 对象
-                        Date endDate = new Date(sleep2thBean.getEndTime()*1000);
-                        postView("\n入睡时间:" + sdf.format(startDate)+"\n清醒时间:" +sdf.format(endDate)+"\n睡眠小时:" + sleep2thBean.getHours()+"\n睡眠分钟:" + sleep2thBean.getMinutes() );
-
-                    }
-
-                    @Override
-                    public void error(String message) {
-
-                    }
-
-                });
-```
-
-\
-返回的数据结构：
-
-```java
-public class Sleep2thBean {
-    List<HistoryDataBean> sleepDataBeanList;
-    long startTime;//第一次入睡时间
-    long endTime;//最后一次醒来时间
-    long sleepTime;//睡眠时长，包含清醒时间
-    long deepTime ;//深睡眠时长
-    long lowTime ;//浅睡眠时长
-    long ydTime ;//眼动时间
-    long qxTime;//清醒时长
-    long seconds;//睡眠时长(秒)
-    int hours;//睡眠时长(小时)，不包含清醒时间
-    int minutes;//睡眠时长(分钟)，不包含清醒时间
-    long sjTime;//实际睡眠时长
-    double xiaolv;//睡眠效率
-    double shenshui;//深睡比例
-    int score ;//睡眠评分
-    int wakeupCount;//清醒次数(传统睡眠返回)
-    int waso;//入睡后的总清醒时间（单位分钟）,gomore算法使用
-    String tips;//评价(保留)
-    int sleepDataType;//1是1代睡眠，2是2代睡眠,3是gomore算法
-    int voMax;//最大摄氧量
-
-    double resultTemperture;//平均体温
-    int xshours;//小睡使用shortSleepList，暂时用不到这个字段
-    int xsminutes;//小睡使用shortSleepList，暂时用不到这个字段
-    String xsAllhours;//小睡使用shortSleepList，暂时用不到这个字段
-    String xsAllminutes;//小睡使用shortSleepList，暂时用不到这个字段
-    String sleepLog;//计算睡眠产生的日志
-    List<HistoryDataBean> historyBeanList;
-    String noSleepResult;//无睡眠的原因
-    List<Sleep2thBean> shortSleepList;//短睡眠列表(目前只有gomore支持，传统算法后续支持)
-    }
-    //对应数据库字段
+ /
    public class HistoryDataBean{
 
     private Long id;
@@ -331,6 +268,75 @@ public class Sleep2thBean {
      */
     private int stepCountingType;
     }
+```
+
+### 获取睡眠
+
+**android:**
+
+获取睡眠数据，需要在IWebHistoryResult的updateHistoryFinish回调里获取，保证云端数据已经保存，才能计算出睡眠数据
+
+```java
+                String dateTimeString = "2025-02-12";
+
+                LogicalApi.getSleepDataFromService( dateTimeString, new IWebSleepResult() {
+                    @Override
+                    public void sleepDataSuccess(Sleep2thBean sleep2thBean) {
+                        // 定义日期时间格式
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        // 将时间戳转换为 Date 对象
+                        Date startDate = new Date(sleep2thBean.getStartTime()*1000);
+                        // 将时间戳转换为 Date 对象
+                        Date endDate = new Date(sleep2thBean.getEndTime()*1000);
+                        postView("\n入睡时间:" + sdf.format(startDate)+"\n清醒时间:" +sdf.format(endDate)+"\n睡眠小时:" + sleep2thBean.getHours()+"\n睡眠分钟:" + sleep2thBean.getMinutes() );
+
+                    }
+
+                    @Override
+                    public void error(String message) {
+
+                    }
+
+                });
+```
+
+\
+返回的数据结构：
+
+```java
+public class Sleep2thBean {
+    List<HistoryDataBean> sleepDataBeanList;
+    long startTime;//第一次入睡时间
+    long endTime;//最后一次醒来时间
+    long sleepTime;//睡眠时长，包含清醒时间
+    long deepTime ;//深睡眠时长
+    long lowTime ;//浅睡眠时长
+    long ydTime ;//眼动时间
+    long qxTime;//清醒时长
+    long seconds;//睡眠时长(秒)
+    int hours;//睡眠时长(小时)，不包含清醒时间
+    int minutes;//睡眠时长(分钟)，不包含清醒时间
+    long sjTime;//实际睡眠时长
+    double xiaolv;//睡眠效率
+    double shenshui;//深睡比例
+    int score ;//睡眠评分
+    int wakeupCount;//清醒次数(传统睡眠返回)
+    int waso;//入睡后的总清醒时间（单位分钟）,gomore算法使用
+    String tips;//评价(保留)
+    int sleepDataType;//1是1代睡眠，2是2代睡眠,3是gomore算法
+    int voMax;//最大摄氧量
+
+    double resultTemperture;//平均体温
+    int xshours;//小睡使用shortSleepList，暂时用不到这个字段
+    int xsminutes;//小睡使用shortSleepList，暂时用不到这个字段
+    String xsAllhours;//小睡使用shortSleepList，暂时用不到这个字段
+    String xsAllminutes;//小睡使用shortSleepList，暂时用不到这个字段
+    String sleepLog;//计算睡眠产生的日志
+    List<HistoryDataBean> historyBeanList;
+    String noSleepResult;//无睡眠的原因
+    List<Sleep2thBean> shortSleepList;//短睡眠列表(目前只有gomore支持，传统算法后续支持)
+    }
+   
 ```
 
 如果想要一个时间段内的睡眠描述，可以使用以下接口，这个接口不会返回每天的睡眠详情，否则会返回很慢
