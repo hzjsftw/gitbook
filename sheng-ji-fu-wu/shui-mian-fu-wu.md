@@ -172,10 +172,10 @@ public static void APP_CONNECT(long timeMillis)
 public static void APP_REFRESH(long timeMillis)
 ```
 
-### 数据库字段
+### 历史数据字段
 
 ```java
- /
+ 
    public class HistoryDataBean{
 
     private Long id;
@@ -491,3 +491,120 @@ public void initSleepChat( long showStartTime,List<HistoryDataBean> historyDataB
 ```
 
 处理完以后得数据，可以根据sleepType来判断是否睡眠状态数据 1：清醒 2：浅睡 3：深睡 4：快速眼动 用户可以根据这些类别，按照时间排序，计算出清醒等的开始时间和结束时间
+
+## Gomore睡眠
+
+Gomore睡眠是集成在戒指里，可以直接通过指令，获取用户睡眠信息，用户可以保存睡眠信息到自己服务器，也可以调用我们的接口，保存到我们云端。如果要保证GoMore算法可以正常使用，需要进行授权。
+
+步骤：
+
+1.需要调用指令，获取设备的deviceID\
+2.调用授权接口，传入deviceID，获取key
+
+3.然后调用指令，将key写入到戒指里
+
+首先通过二代协议的返回值，判断戒指是否支持Gomore睡眠
+
+```java
+   private int gomoreSleep;//固件是否支持gomore睡眠算法,1支持0不支持
+```
+
+### 授权
+
+### 指令
+
+通过蓝牙指令获取gomore睡眠结果
+
+```java
+ List<GoMoreSleepBean> gomoreSleepList=new ArrayList<>();
+ LmAPILite.GET_GOMORE_SLEEP(new IGoMoreListener() {
+                @Override
+                public void overviewOfSleep(GoMoreSleep goMoreSleep) {
+                    //睡眠总览
+                    Gson gson = new Gson();
+                    String json = gson.toJson(goMoreSleep);
+                    gomoreSleepList.add(gson.fromJson(json, GoMoreSleepBean.class));
+                }
+
+                @Override
+                public void sleepStaging(GoMoreSleep goMoreSleep) {
+                    //睡眠分期，是每一分钟的睡眠状态
+                    Gson gson = new Gson();
+                    String json = gson.toJson(goMoreSleep);
+                    gomoreSleepList.add(gson.fromJson(json, GoMoreSleepBean.class));
+                }
+
+                @Override
+                public void dataUploadFinish() {
+                    //数据获取完成，用户可以提交到自己服务器，也可以上传到我们服务器
+                    
+                }
+
+                @Override
+                public void noSleepData() {
+                    //没有数据
+                   
+                }
+            });
+```
+
+### 服务器相关接口
+
+```java
+//上传Gomore睡眠记录
+LogicalApi.insertGomoreSleepList(List<GoMoreSleep> gomoreSleepList, IWebCommonListener iWebCommonListener)
+//获取睡眠，兼容gomore和传统睡眠，替换掉LogicalApi.getSleepDataFromService
+LogicalApi.getSleepFromServiceWithGomore(String date, IWebSleepResult webApiResult)
+//批量获取睡眠总览，兼容Gomore睡眠和旧版本睡眠，替换掉LogicalApi.getSleepDataBatchFromService
+LogicalApi.getSleepDataWithGoMoreBatch(List<String> dates, IWebSleepResult webApiResult)
+```
+
+如果是Gomore睡眠，绘图需要改变一下，每个分期是60分钟记录一次睡眠状态，需要特殊处理 根据sleepDataType进行判断，如果是3，是Gomore睡眠
+
+```java
+ /**
+     * 适配gomore算法的睡眠绘图
+     * @param showStartTime
+     * @param endTimeData
+     * @param historyDataBeanList
+     */
+    public void initSleepChatGomore(long showStartTime, long endTimeData, List<HistoryDataBean> historyDataBeanList) {
+        List<SleepChartBean> list = new ArrayList<>();
+        if (historyDataBeanList != null && !historyDataBeanList.isEmpty()) {
+            int currentSleepType = historyDataBeanList.get(0).getSleepType();
+            long startTime = historyDataBeanList.get(0).getTime();
+            long currentEndTime = historyDataBeanList.get(0).getTime();
+
+            for (int i = 1; i < historyDataBeanList.size(); i++) {
+                HistoryDataBean currentBean = historyDataBeanList.get(i);
+                HistoryDataBean previousBean = historyDataBeanList.get(i - 1);
+
+                // 检查是否连续（时间相差60秒）且睡眠类型相同
+                boolean isContinuous = (currentBean.getTime() == previousBean.getTime() + 60);
+                boolean sameSleepType = (currentBean.getSleepType() == currentSleepType);
+
+                if (isContinuous && sameSleepType) {
+                    // 连续且类型相同，更新结束时间
+                    currentEndTime = currentBean.getTime();
+                } else {
+                    // 不连续或类型不同，保存当前时间段
+                    String startTimeStr = com.lm.sdk.library.utils.DateUtils.longToString(startTime * 1000, "yyyy-MM-dd HH:mm:ss");
+                    String endTimeStr = com.lm.sdk.library.utils.DateUtils.longToString(currentEndTime * 1000, "yyyy-MM-dd HH:mm:ss");
+                    list.add(new SleepChartBean(currentSleepType, startTimeStr, endTimeStr));
+
+                    // 开始新的时间段
+                    currentSleepType = currentBean.getSleepType();
+                    startTime = currentBean.getTime();
+                    currentEndTime = currentBean.getTime();
+                }
+            }
+
+            // 添加最后一个时间段
+            String startTimeStr = com.lm.sdk.library.utils.DateUtils.longToString(startTime * 1000, "yyyy-MM-dd HH:mm:ss");
+            String endTimeStr = com.lm.sdk.library.utils.DateUtils.longToString(currentEndTime * 1000, "yyyy-MM-dd HH:mm:ss");
+            list.add(new SleepChartBean(currentSleepType, startTimeStr, endTimeStr));
+        }
+
+    }
+
+```
