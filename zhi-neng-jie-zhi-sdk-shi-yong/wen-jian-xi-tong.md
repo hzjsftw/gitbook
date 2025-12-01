@@ -36,7 +36,7 @@ GET\_FILE\_CONTENT的参数需要依赖GET\_FILE\_LIST的file回调，根据Stri
 public interface IFileListListener {
 
     /**
-     * 文件
+     * 文件列表
      * @param fileCount 文件总个数
      * @param fileIndex 文件序号
      * @param fileSize 文件大小
@@ -47,7 +47,7 @@ public interface IFileListListener {
 
 
     /**
-     * 文件内容
+     * 普通文件内容
      * @param content
      */
     void fileContent(String content);
