@@ -18,7 +18,7 @@ icon: copy
  GET_FILE_CONTENT( int mFileType,byte[] fileName,IFileListListener listenerLite);//根据类型和文件名原始数据，获取文件内容
 ```
 
-GET\_FILE\_CONTENT的参数需要依赖GET\_FILE\_LIST的file回调，根据String fileName解析最后一个下划线后的类型，传给mFileType，比如：类型和文件名的最后一部分保持一致，EDB435685884\_10FF0A68\_8.txt，类型是8 byte\[] fileName是file回调里的byte\[] rawDataByte 回调
+GET\_FILE\_CONTENT的参数需要依赖GET\_FILE\_LIST的file回调，根据String fileName解析最后一个下划线后的类型，传给mFileType，比如：类型和文件名的最后一部分保持一致，EDB435685884\_10FF0A68\_7.txt，类型是7 byte\[] fileName是file回调里的byte\[] rawDataByte 回调
 
 根据文件名获取后缀名的样例：
 
@@ -27,7 +27,7 @@ GET\_FILE\_CONTENT的参数需要依赖GET\_FILE\_LIST的file回调，根据Stri
       String withoutExtension = fileName.substring(0, fileName.lastIndexOf(".txt"));
       // 分割字符串
      String[] parts = withoutExtension.split("_");
-     // 获取最后一个部分，即 "8"
+     // 获取最后一个部分，即 "7"
      String result = parts[parts.length - 1];
      fileType= Integer.parseInt(result);     
 ```
@@ -107,6 +107,8 @@ CMD_START_STOP_RECORDING(boolean start,int totalDuration,int segmentTime,IAudioL
  */
 void recordingResult(boolean result);
 ```
+
+剩余部分如前部分所示，先获取文件列表，然后获取文件后缀，传入8或者9，在AudioFileContent回调得到录音信息，保存为手机pcm文件
 
 ### 特殊版本的文件系统
 
