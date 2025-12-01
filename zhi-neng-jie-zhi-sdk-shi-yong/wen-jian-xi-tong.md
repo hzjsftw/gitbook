@@ -81,7 +81,27 @@ public interface IFileListListener {
 
 #### 录音
 
-l
+开启和停止录音的指令
+
+```java
+    /**
+     * 开始或者停止录音
+     * @param start 开始录音
+     * @param totalDuration 总录音时长，单位s
+     * @param segmentTime 切片保存时长，单位s
+     * @param mIAudioListenerLite
+     */
+CMD_START_STOP_RECORDING(boolean start,int totalDuration,int segmentTime,IAudioListenerLite mIAudioListenerLite)
+```
+
+录音对应的回调是
+
+```java
+/**
+ * 开始/停止录音
+ */
+void recordingResult(boolean result);
+```
 
 ### 特殊版本的文件系统
 
