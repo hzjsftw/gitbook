@@ -86,7 +86,7 @@ public interface IFileListListener {
 
 #### 录音
 
-开启和停止录音的指令
+开启和停止录音的指令LmAPILite或者LmAPI
 
 ```java
     /**
