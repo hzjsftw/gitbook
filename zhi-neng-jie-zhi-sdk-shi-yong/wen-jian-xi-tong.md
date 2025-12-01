@@ -11,11 +11,11 @@ icon: copy
 
 **android:**
 
-通过指令，可以获取戒指本地的文件列表，然后通过文件名，解析文件的内容(需要戒指支持指令) 对应的指令是：
+通过指令，可以获取戒指本地的文件列表，然后通过文件名，解析文件的内容(需要戒指支持指令) 对应的指令是：LmAPILite或者LmAPI
 
 ```java
- LmAPI.GET_FILE_LIST( IFileListListener listenerLite) //文件列表
- LmAPI.GET_FILE_CONTENT( int mFileType,byte[] fileName,IFileListListener listenerLite);//根据类型和文件名原始数据，获取文件内容
+ GET_FILE_LIST( IFileListListener listenerLite) //文件列表
+ GET_FILE_CONTENT( int mFileType,byte[] fileName,IFileListListener listenerLite);//根据类型和文件名原始数据，获取文件内容
 ```
 
 GET\_FILE\_CONTENT的参数需要依赖GET\_FILE\_LIST的file回调，根据String fileName解析最后一个下划线后的类型，传给mFileType，比如：类型和文件名的最后一部分保持一致，EDB435685884\_10FF0A68\_8.txt，类型是8 byte\[] fileName是file回调里的byte\[] rawDataByte 回调
@@ -51,6 +51,11 @@ public interface IFileListListener {
      * @param content
      */
     void fileContent(String content);
+        /**
+     * 录音文件内容
+     * @param content
+     */
+    void AudioFileContent(byte[] content);
 }
 
 ```
