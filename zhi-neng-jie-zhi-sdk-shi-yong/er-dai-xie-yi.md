@@ -81,7 +81,7 @@ LmAPILite.READ_HISTORY_AUTO(IHistoryListenerLite iHistoryListener)
 
 ```java
 public class SystemControlBean {
-    private String firmwareVersion;//固件版本号
+   private String firmwareVersion;//固件版本号
     private String hardwareVersion;//硬件版本号
     private byte battery;//电量
     private byte chargingStatus;//充电状态
@@ -100,6 +100,43 @@ public class SystemControlBean {
     private byte sport;//运动模式支持
     private int stepCounting;//当前计步
     private int keyTest;//自检标识
+    private int bloodPressure;//血压
+    private int bloodSugar;//血糖
+    private int fileSystem;//文件系统
+    private int gomoreSleep;//固件是否支持gomore睡眠算法,1支持0不支持
+    }
+    //简化版本的实体类
+    public class SystemControlBean {
+    private String firmwareVersion;//固件版本号
+    private String hardwareVersion;//硬件版本号
+    private int battery;//电量
+    private int chargingStatus;//充电状态
+    private String collectionInterval;//当前采集间隔
+    private boolean HIDSupport;//HID功能支持
+    private TouchSupport touchSupport;//触摸支持
+    private GestureSupport gestureSupport;//手势支持
+    private int HidTouch;// 触摸hid 模式，0：刷视频模式，1：拍照模式，2：音乐模式，3：ppt模式，4：上传实时音频，0xFF:关闭
+
+    private int HidGesture;//手势hid 模式，0：刷视频模式，1：拍照模式，2：音乐模式，3：ppt模式，4：打响指(拍照)模式，0xFF:关闭
+
+    private int HidSystem;//系统类型 0：安卓，1：IOS，2：WINDOS
+
+    private byte heartRate;//心率曲线支持
+    private byte blood;//血氧曲线支持
+    private byte variability;//变异性曲线支持
+    private byte pressure;//压力曲线支持
+    private byte temperature;//温度曲线支持
+    private byte womenHealth;//女性健康支持
+    private byte vibration;//震动闹钟支持
+    private byte electrocardiogram;//心电图功能支持
+    private byte microphone;//麦克风支持
+    private byte sport;//运动模式支持
+    private int stepCounting;//当前计步
+    private int keyTest;//自检标识
+    private int bloodPressure;//血压
+    private int bloodSugar;//血糖
+    private int fileSystem;//文件系统
+    private int gomoreSleep;//gomore睡眠算法
     }
     
  //简化版本
