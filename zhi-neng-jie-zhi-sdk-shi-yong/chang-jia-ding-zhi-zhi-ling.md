@@ -178,6 +178,83 @@ public interface I6axisListener {
 }
 ```
 
+### 设置六轴传感器工作频率
+
+**iOS:**
+```Swift
+/// 设置六轴传感器工作频率 (暂不支持分开设置，需保证加速度、陀螺仪频率一致)
+/// - Parameters:
+///   - accelerationFrequency: 加速度频率 (25hz，50hz，100hz，150hz，200hz)
+///   - gyroscopeFrequency: 陀螺仪频率 (25hz，50hz，100hz，150hz，200hz)
+/// - BCLSetWorkFrequencyResponse: 包含设置结果的响应模型 status: 1成功，0失败
+func setSixAxisWorkFrequency(accelerationFrequency: Int, gyroscopeFrequency: Int, completion: @escaping (Result<BCLSetWorkFrequencyResponse, BCLError>) -> Void)
+```
+
+#### 调用示例
+```Swift
+BCLRingManager.shared.setSixAxisWorkFrequency(accelerationFrequency: 100, gyroscopeFrequency: 100) { result in
+    switch result {
+    case .success(let response):
+        print("设置六轴工作频率成功")
+    case .failure(let error):
+        print("设置失败: \(error)")
+    }
+}
+```
+
+### 获取六轴传感器工作频率
+
+**iOS:**
+```Swift
+/// 获取六轴传感器工作频率
+/// - BCLGetWorkFrequencyResponse: 包含获取结果的响应模型
+func getSixAxisWorkFrequency(completion: @escaping (Result<BCLGetWorkFrequencyResponse, BCLError>) -> Void)
+```
+
+### 获取六轴传感器数据（单次）
+
+**iOS:**
+```Swift
+/// 获取六轴传感器-加速度数据(单次)
+func getSixAxisAccelerationData(completion: @escaping (Result<BCLReadAccelerationResponse, BCLError>) -> Void)
+
+/// 获取六轴传感器-陀螺仪数据(单次)
+func getSixAxisGyroscopeData(completion: @escaping (Result<BCLReadGyroscopeResponse, BCLError>) -> Void)
+
+/// 获取六轴传感器-加速度和陀螺仪数据(单次)
+func getSixAxisAccelerationAndGyroscopeData(completion: @escaping (Result<BCLReadAccelerationAndGyroscopeResponse, BCLError>) -> Void)
+```
+
+### 获取六轴传感器实时数据（持续上传）
+
+**iOS:**
+```Swift
+/// 获取六轴传感器-加速度数据(开启后一直上传直至接收到停止指令)
+func getSixAxisRealTimeAccelerationData(completion: @escaping (Result<BCLReadRealTimeAccelerationResponse, BCLError>) -> Void)
+
+/// 获取六轴传感器-陀螺仪数据(开启后一直上传直至接收到停止指令)
+func getSixAxisRealTimeGyroscopeData(completion: @escaping (Result<BCLReadRealTimeGyroscopeResponse, BCLError>) -> Void)
+
+/// 获取六轴传感器-加速度和陀螺仪数据(开启后一直上传直至接收到停止指令)
+func getSixAxisRealTimeAccelerationAndGyroscopeData(completion: @escaping (Result<BCLReadRealTimeAccelerationAndGyroscopeResponse, BCLError>) -> Void)
+```
+
+### 停止六轴传感器数据上传
+
+**iOS:**
+```Swift
+/// 停止六轴传感器数据上传
+func stopSixAxisData(completion: @escaping (Result<BCLCloseSixAxisResponse, BCLError>) -> Void)
+```
+
+### 设置六轴传感器省电模式
+
+**iOS:**
+```Swift
+/// 设置六轴传感器省电模式
+func setSixAxisPowerSavingMode(completion: @escaping (Result<BCLSetPowerSavingModeResponse, BCLError>) -> Void)
+```
+
 ### **寿世PPG波形传输**
 
 **android:**
@@ -265,3 +342,50 @@ public interface IHeartListener {
 ```
 
 定制化功能，涉及到的回调返回有error，resultDataSHOUSHI，waveformData，progress，success，stop
+
+### 开始PPG波形测量
+**iOS:**
+```Swift
+/// PPG波形测量
+/// - Parameters:
+///   - collectTime: 采集时间，默认30、0为一直采集
+///   - waveConfig: 波形配置 0:不上传 1:上传
+///   - progressConfig: 进度配置 0:不上传 1:上传
+///   - waveSetting: 波形设置 0：125hz，绿色、1：25hz，绿色+红外、2：佩戴检测（无波形响应）
+///   - completion: 测量结果回调
+func ppgWaveFormMeasurement(collectTime: Int, waveConfig: Int, progressConfig: Int, waveSetting: Int, completion: @escaping (Result<BCLPPGWaveFormResponse, BCLError>) -> Void)
+```
+
+#### 调用示例
+```Swift
+BCLRingManager.shared.ppgWaveFormMeasurement(collectTime: 30, waveConfig: 1, progressConfig: 1, waveSetting: 0) { result in
+    switch result {
+    case .success(let response):
+        print("PPG波形测量成功")
+    case .failure(let error):
+        print("PPG波形测量失败: \(error)")
+    }
+}
+```
+
+### 停止PPG波形测量
+
+**iOS:**
+```Swift
+/// PPG波形测量停止
+/// - Parameters:
+///   - completion: 停止结果回调
+func ppgWaveFormStop(completion: @escaping (Result<BCLPPGWaveFormStopResponse, BCLError>) -> Void)
+```
+
+#### 调用示例
+```Swift
+BCLRingManager.shared.ppgWaveFormStop { result in
+    switch result {
+    case .success(_):
+        print("停止PPG波形测量成功")
+    case .failure(let error):
+        print("停止PPG波形测量失败: \(error)")
+    }
+}
+```
