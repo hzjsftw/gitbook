@@ -168,6 +168,129 @@ public interface IHeartListener {
 }
 ```
 
+**iOS:**
+```Swift
+/// 心率测量
+/// - Parameters:
+///   - collectTime: 采集时间(单位：秒) 默认为30s
+///   - collectFrequency: 采集频率(单位：次/秒) 默认为25hz
+///   - waveformConfig: 波形配置(0:不上传 1:上传)
+///   - progressConfig: 进度配置(0:不上传 1:上传) 建议上传
+///   - intervalConfig: 间期配置(0:不上传 1:上传)
+///   - callbacks: 回调集合
+///   - completion: 测量结果回调
+func startHeartRate(collectTime: Int, collectFrequency: Int, waveformConfig: Int, progressConfig: Int, intervalConfig: Int, callbacks: BCLHeartRateCallbacks, completion: @escaping (Result<Void, BCLError>) -> Void)
+```
+#### 调用示例
+
+```Swift
+let callBacks = BCLHeartRateCallbacks(
+    onProgress: { progress in
+        BDLogger.info("测量进度: \(progress)%")
+        self.showLoading("测量中... \(progress)%", userInteractionEnabled: false)
+    },
+    onStatusChanged: { status in
+        switch status {
+        case .completed:
+            BDLogger.info("测量完成")
+            self.hideLoading()
+            self.showSuccess("心率: \(heartRateValue)次/分\n心率变异性: \(hrvValue)\n精神压力指数: \(stressValue)\n温度: \(String(format: "%.2f°C", Double(temperatureValue) * 0.01))")
+            // 清理回调
+        case .measuring:
+            BDLogger.info("测量中...")
+        case .busy:
+            BDLogger.error("设备正忙，无法开始测量")
+            self.hideLoading()
+            self.showError("设备正忙，无法开始测量")
+        case .notWearing:
+            BDLogger.error("设备未佩戴，请先佩戴设备")
+            self.hideLoading()
+            self.showError("设备未佩戴，请先佩戴设备")
+        case .dataCollectionTimeout:
+            BDLogger.error("数据采集超时")
+            self.hideLoading()
+            self.showError("数据采集超时")
+        default:
+            break
+        }
+    },
+    onMeasureValue: { heartRate, heartRateVariability, stressIndex, temperature in
+        BDLogger.info("心率: \(heartRate ?? 0)次/分")
+        heartRateValue = heartRate ?? 0
+        BDLogger.info("心率变异性: \(heartRateVariability ?? 0)")
+        hrvValue = heartRateVariability ?? 0
+        BDLogger.info("精神压力指数: \(stressIndex ?? 0)")
+        stressValue = stressIndex ?? 0
+        if let temp = temperature {
+            BDLogger.info("温度：\(String(format: "%.2f°C", Double(temp) * 0.01))")
+            temperatureValue = temp
+        }
+    },
+    onWaveform: { seq, num, datas in
+        // 处理波形数据
+        BDLogger.info("波形数据: 序号\(seq), 数量\(num)")
+        BDLogger.info("波形数据: \(datas)")
+    },
+    onRRInterval: { seq, num, datas in
+        // 处理间期数据
+        BDLogger.info("间期数据: 序号\(seq), 数量\(num)")
+        BDLogger.info("间期数据: \(datas)")
+    },
+    onError: { error in
+        BDLogger.info("错误: \(error)")
+        self.hideLoading()
+        switch error {
+        case .heartRate(.notWearing):
+            self.showError("设备未佩戴，无法测量")
+        case .heartRate(.busy):
+            self.showError("设备正忙，无法测量")
+        default:
+            self.showError("测量过程中发生错误: \(error)")
+        }
+    }
+)
+
+// 开始测量
+BCLRingManager.shared.startHeartRate(collectTime: 30,
+                                     collectFrequency: 25,
+                                     waveformConfig: 1,
+                                     progressConfig: 1,
+                                     intervalConfig: 1,
+                                     callbacks: callBacks) { result in
+    switch result {
+    case .success:
+        break
+    case let .failure(error):
+        BDLogger.error("启动心率测量失败: \(error)")
+        if case .heartRate(.measurementStopped) = error { // 停止测量
+            // 用户主动停止测量，无需提示错误
+        }
+    }
+}
+```
+
+### 停止心率测量
+
+**iOS:**
+```Swift
+/// 停止心率测量
+/// - Parameter completion: 停止心率测量回调
+/// - BCLStopHeartRateResponse: 包含停止心率测量结果的响应模型
+func stopHeartRate(completion: @escaping (Result<BCLStopHeartRateResponse, BCLError>) -> Void)
+```
+
+#### 调用示例
+```Swift
+BCLRingManager.shared.stopHeartRate { result in
+    switch result {
+    case .success:
+        BDLogger.info("已停止心率测量")
+    case let .failure(error):
+        BDLogger.error("停止心率测量失败: \(error)")
+    }
+}
+```
+
 主动测量以后，如果立刻从戒指读取未上传数据，有可能读取不到最新结果，因为戒指保存会有延迟，用户可以延时几秒获取，或者把测量数据保存到本地数据库，本地数据库已做去重操作，不用担心后续未上传数据上传以后，有重复数据的情况 。以下是样例：
 
 ```java
@@ -262,6 +385,58 @@ public interface IHeartListener {
      */
     void error(int code);
 
+}
+```
+
+**iOS:**
+```Swift
+/// 读取温度
+/// - Parameter completion: 读取温度回调
+/// - BCLTemperatureResponse: 包含温度信息的响应模型
+func readTemperature(completion: @escaping (Result<BCLTemperatureResponse, BCLError>) -> Void)
+```
+
+#### 调用示例
+```Swift
+BCLRingManager.shared.readTemperature { result in
+    switch result {
+    case let .success(response):
+        if let error = response.status.error {
+            switch error {
+            case let .temperature(tempError):
+                switch tempError {
+                case .measuring:
+                    BDLogger.info("测量中，请等待...")
+                    BDLogger.info("温度值：\(response.temperature ?? 0)")
+                    if let temperature = response.temperature, temperature <= 1000 {
+                          BDLogger.info("当前测量进度：\(String(format: "%.2f", Double(temperature) * 0.1))%")
+                      } else {
+                          BDLogger.info("测量中，请等待...\n温度值：\(response.temperature ?? 0)")
+                      }
+                case .charging:
+                    BDLogger.error("设备正在充电，无法测量")
+                case .notWearing:
+                    BDLogger.error("检测未佩戴，测量失败")
+                case .invalid:
+                    BDLogger.error("无效数据")
+                case .busy:
+                    BDLogger.error("设备繁忙")
+                @unknown default:
+                    BDLogger.error("未知温度错误")
+                }
+            default:
+                BDLogger.error("读取温度失败: \(error)")
+            }
+        } else if let temperature = response.temperature {
+            BDLogger.info("测量完成，温度：\(String(format: "%.2f", Double(temperature) * 0.01))℃")
+        } else {
+            self.hideLoading()
+            BDLogger.error("无效的温度数据")
+        }
+    case let .failure(error):
+        // 处理连接错误等其他错误
+        BDLogger.error("读取温度失败: \(error)")
+    }
 }
 ```
 
@@ -361,6 +536,137 @@ public interface IQ2Listener {
    
    }
 </code></pre>
+
+### 开始血氧测量
+
+**iOS:**
+```Swift
+/// 血氧测量
+/// - Parameters:
+///   - collectTime: 采集时间(单位：秒) 默认30s
+///   - collectFrequency: 采集频率(单位：次/秒) 默认25hz
+///   - waveformConfig: 波形配置(0:不上传 1:上传)
+///   - progressConfig: 进度配置(0:不上传 1:上传)
+/// - BCLBloodOxygenResponse: 包含测量结果的响应模型
+func startBloodOxygen(collectTime: Int, collectFrequency: Int, waveformConfig: Int, progressConfig: Int, completion: @escaping (Result<BCLBloodOxygenResponse, BCLError>) -> Void)
+```
+
+#### 调用示例
+```Swift
+// 设置回调
+BCLBloodOxygenResponse.setCallbacks(BCLBloodOxygenCallbacks(
+    onProgress: { progress in
+        BDLogger.info("测量进度: \(progress)%")
+    },
+    onStatusChanged: { status in
+        switch status {
+        case .completed:
+            BDLogger.info("测量完成")
+            BDLogger.info("血氧: \(bloodOxygenValue)%\n心率: \(heartRateValue)次/分\n温度: \(String(format: "%.2f°C", Double(temperatureValue) * 0.01))")
+            // 清理回调
+            BCLBloodOxygenResponse.cleanupCurrentMeasurement()
+        case .measuring:
+            BDLogger.info("测量中...")
+        case .busy:
+            BDLogger.error("设备正忙，无法开始测量")
+            // 清理回调
+            BCLBloodOxygenResponse.cleanupCurrentMeasurement()
+        case .chargingNotAllowed:
+            BDLogger.error("设备正在充电，无法测量")
+            // 清理回调
+            BCLBloodOxygenResponse.cleanupCurrentMeasurement()
+        case .notWearing:
+            BDLogger.error("设备未佩戴，请先佩戴设备")
+            // 清理回调
+            BCLBloodOxygenResponse.cleanupCurrentMeasurement()
+        case .dataCollectionTimeout:
+            BDLogger.error("数据采集超时")
+            // 清理回调
+            BCLBloodOxygenResponse.cleanupCurrentMeasurement()
+        default:
+            break
+        }
+    },
+    onMeasureValue: { bloodOxygen, heartRate, temperature in
+        BDLogger.info("血氧: \(bloodOxygen ?? 0)%")
+        bloodOxygenValue = bloodOxygen ?? 0
+        BDLogger.info("心率: \(heartRate ?? 0)次/分")
+        heartRateValue = heartRate ?? 0
+        // 温度 (需要先解包，然后转换)
+        if let temp = temperature {
+            BDLogger.info("温度：\(String(format: "%.2f°C", Double(temp) * 0.01))")
+            temperatureValue = temp
+        }
+
+    },
+    onPerfusionRate: { rate in
+        BDLogger.info("灌注率: \(rate)")
+    },
+    onBloodPressure: { diastolic, systolic in
+        BDLogger.info("血压: \(systolic)/\(diastolic)mmHg")
+    },
+    onWaveform: { seq, num, datas in
+        // 处理波形数据
+        BDLogger.info("波形数据: 序号\(seq), 数量\(num)")
+        BDLogger.info("波形数据: \(datas)")
+    },
+    onError: { error in
+        BDLogger.error("错误: \(error)")
+        switch error {
+        case .bloodOxygen(.notWearing):
+            BDLogger.error("设备未佩戴，无法测量")
+        case .bloodOxygen(.chargingNotAllowed):
+            BDLogger.error("设备正在充电，无法测量")
+        case .bloodOxygen(.busy):
+            BDLogger.error("设备正忙，无法测量")
+        default:
+            BDLogger.error("测量过程中发生错误: \(error)")
+        }
+    }
+))
+
+// 开始测量
+// 注意：此处的参数需要根据实际需求进行调整
+BCLRingManager.shared.startBloodOxygen(collectTime: 30,
+                                       collectFrequency: 25,
+                                       waveformConfig: 1,
+                                       progressConfig: 1) { result in
+    switch result {
+    case .success:
+        break
+    case let .failure(error):
+        BDLogger.error("启动血氧测量失败: \(error)")
+        if case .bloodOxygen(.measurementStopped) = error { // 停止测量
+            // 用户主动停止测量，无需提示错误
+        }
+        // 发生错误时清理回调
+        BCLBloodOxygenResponse.cleanupCurrentMeasurement()
+    }
+}
+```
+
+### 停止血氧测量
+
+**iOS:**
+```Swift
+/// 停止血氧测量
+/// - Parameter completion: 停止血氧测量回调
+/// - BCLStopBloodOxygenResponse: 包含停止血氧测量结果的响应模型
+func stopBloodOxygen(completion: @escaping (Result<BCLStopBloodOxygenResponse, BCLError>) -> Void)
+```
+
+#### 调用示例
+```Swift
+BCLRingManager.shared.stopBloodOxygen { result in
+    switch result {
+    case .success:
+        BDLogger.info("已停止血氧测量")
+    case let .failure(error):
+        BDLogger.error("停止血氧测量失败: \(error)")
+    }
+}
+```
+
 
 ### **测量血压和血糖（特定固件）**
 
