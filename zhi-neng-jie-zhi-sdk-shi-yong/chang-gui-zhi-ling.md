@@ -210,6 +210,34 @@ public interface ISyncTimeListenerLite {
 }
 ```
 
+**iOS:**
+```Swift
+/// 同步时间
+/// - Parameters:
+///   - date: 时间戳（默认当前时间）
+///   - timeZone: 时区（默认东八区）
+///   - completion: 同步时间回调
+func syncTime(date: Date = Date(),
+                timeZone: BCLRingTimeZone = .East8,
+                completion: @escaping (Result<BCLSyncTimeResponse, BCLError>) -> Void)
+
+/// 获取当前系统时区对应的RingTimeZone
+/// - Returns: 当前系统时区对应的RingTimeZone
+BCLRingTimeZone.getCurrentSystemTimeZone()
+```
+#### 调用示例
+```Swift
+// 同步时间
+BCLRingManager.shared.syncTime(date: Date(), timeZone: BCLRingTimeZone.getCurrentSystemTimeZone()) { (res: Result<BCLSyncTimeResponse, BCLError>) in
+    switch result {
+    case .success(let response):
+        print("同步时间成功: \(response)")
+    case .failure(let error):
+        print("同步时间失败: \(error)")
+    }
+}
+```
+
 ### 读取时间
 
 接口功能：调用此接口会获取戒指当前时间。一般情况下用不到。
@@ -263,6 +291,30 @@ public static long bytesToLong(byte[] buffer) {
 }
 ```
 
+**iOS:**
+```Swift
+/// 读取时间
+/// - Parameter completion: 读取时间回调
+/// - Result: 读取结果
+/// - BCLReadTimeResponse: 包含时间和时区信息的响应模型
+/// - BCLError: 错误信息
+func readTime(completion: @escaping (Result<BCLReadTimeResponse, BCLError>) -> Void)
+```
+#### 调用示例
+```Swift
+/// 读取时间
+BCLRingManager.shared.readTime { res in
+    switch res {
+    case let .success(response):
+        BDLogger.info("timeStamp: \(response.timestamp)")
+        BDLogger.info("timeZone: \(response.ringTimeZone)")
+        BDLogger.info("utcDate: \(response.utcDate)")
+        BDLogger.info("localDate: \(response.localDate)")
+    case let .failure(error):
+        BDLogger.error("读取时间失败: \(error)")
+    }
+}
+```
 ### 版本信息
 
 接口功能：版本信息 ，获取戒指的版本信息。
@@ -303,6 +355,44 @@ public interface IVersionListenerLite {
 
 ```
 
+**iOS:**
+```Swift
+/// 读取固件版本
+/// - Parameter completion: 读取固件版本回调
+/// - Result: 读取结果
+/// - BCLReadFirmwareResponse: 包含固件版本的响应模型
+/// - BCLError: 错误信息
+func readFirmware(completion: @escaping (Result<BCLReadFirmwareResponse, BCLError>) -> Void) 
+
+/// 读取硬件版本
+/// - Parameter completion: 读取硬件版本回调
+/// - Result: 读取结果
+/// - BCLReadHardwareResponse: 包含硬件版本的响应模型
+/// - BCLError: 错误信息
+func readHardware(completion: @escaping (Result<BCLReadHardwareResponse, BCLError>) -> Void) 
+```
+#### 调用示例
+```Swift
+/// 读取硬件版本
+BCLRingManager.shared.readHardware { res in
+    switch res {
+    case let .success(response):
+        BDLogger.info("硬件版本: \(response.hardwareVersion)")
+    case let .failure(error):
+        BDLogger.error("读取硬件版本失败: \(error)")
+    }
+}
+
+/// 读取固件版本
+BCLRingManager.shared.readFirmware { res in
+    switch res {
+    case let .success(response):
+        BDLogger.info("固件版本: \(response.firmwareVersion)")
+    case let .failure(error):
+        BDLogger.error("读取固件版本失败: \(error)")
+    }
+}
+```
 ### 电池电量
 
 接口功能：获取电池电量、 电池状态。
@@ -348,6 +438,41 @@ public interface IBatteryListenerLite {
      * @param electricity 电量百分比
      */
     void battery_push(int type, int electricity);
+}
+```
+
+**iOS:**
+```Swift
+/// 蓝牙设备主动推送电量信息 
+/// - Parameter completion: 主动推送电量信息回调
+/// - Result: 主动推送电量信息结果 0~100电量值范围、101充电中、102充满
+/// - 说明：该推送一般是在戒指充电状态发生变化时会收到推送信息，例如放入充电仓时会收到、由充电仓取下时。一般戒指会推送3-5次这样，避免单次推送无法收到情况。
+BCLRingManager.shared.batteryNotifyBlock: ((Int) -> Void)
+
+/// 主动获取电量
+/// - Parameter completion: 主动获取电量回调
+/// - Result: 获取结果 0~100电量值范围，101充电中，102充满
+/// - BCLReadBatteryResponse: 包含电量的响应模型
+/// - BCLError: 错误信息
+func readBattery(completion: @escaping (Result<BCLReadBatteryResponse, BCLError>) -> Void)
+
+```
+
+#### 调用示例
+```Swift
+/// 监听电量推送Block
+BCLRingManager.shared.batteryNotifyBlock = { batteryLevel in
+    BDLogger.info("电量推送Block: \(batteryLevel)")
+}
+
+/// 主动获取电量
+BCLRingManager.shared.readBattery { res in
+    switch res {
+    case let .success(response):
+        BDLogger.info("电量: \(response.batteryLevel)")
+    case let .failure(error):
+        BDLogger.error("读取电量失败: \(error)")
+    }
 }
 ```
 
@@ -397,6 +522,31 @@ public interface IStepListenerLite {
 }
 ```
 
+**iOS:**
+
+```Swift
+/// 读取实时步数
+/// - Parameter completion: 读取实时步数回调
+/// - Result: 读取结果
+/// - BCLStepCountResponse: 包含实时步数的响应模型
+/// - BCLError: 错误信息
+func readStepCount(completion: @escaping (Result<BCLStepCountResponse, BCLError>) -> Void)
+```
+
+#### 调用示例
+```Swift
+/// 读取实时步数
+BCLRingManager.shared.readStepCount { result in
+    switch result {
+    case let .success(response):
+        BDLogger.info("实时步数: \(response.stepCount)")
+    case let .failure(error):
+        BDLogger.error("读取实时步数失败: \(error)")
+    }
+}
+```
+
+
 ### 清除步数
 
 接口功能：清除步数。
@@ -437,6 +587,30 @@ void clearStepCount(byte data)
      * @param
      */
     void clearStepCount();
+}
+```
+
+**iOS:**
+
+```Swift
+/// 清除实时步数
+/// - Parameter completion: 清除实时步数回调
+/// - Result: 清除结果
+/// - BCLClearStepCountResponse: 包含清除结果的响应模型
+/// - BCLError: 错误信息
+func clearStepCount(completion: @escaping (Result<BCLClearStepCountResponse, BCLError>) -> Void)
+```
+
+#### 调用示例
+```Swift
+/// 清除实时步数
+BCLRingManager.shared.clearStepCount { result in
+    switch result {
+    case .success:
+        BDLogger.info("清除步数成功")
+    case let .failure(error):
+        BDLogger.error("清除步数失败: \(error)")
+    }
 }
 ```
 
@@ -503,6 +677,30 @@ public interface ISystemControlListenerLite {
      * @param name 蓝牙名称
      */
     void readBlueToolName(int len,String name);
+}
+```
+
+**iOS:**
+
+```Swift
+/// 恢复出厂设置
+/// - Parameter completion: 恢复出厂设置回调
+/// - Result: 恢复出厂设置结果
+/// - BCLRestoreFactorySettingsResponse: 包含恢复出厂设置结果的响应模型
+/// - BCLError: 错误信息
+func restoreFactorySettings(completion: @escaping (Result<BCLRestoreFactorySettingsResponse, BCLError>) -> Void)
+```
+
+#### 调用示例
+```Swift
+/// 恢复出厂设置
+BCLRingManager.shared.restoreFactorySettings { res in
+    switch res {
+    case .success:
+        BDLogger.info("恢复出厂设置成功")
+    case let .failure(error):
+        BDLogger.error("恢复出厂设置失败: \(error)")
+    }
 }
 ```
 
@@ -578,6 +776,17 @@ void setCollection(byte result)
 }
 ```
 
+**iOS:**
+
+```Swift
+
+```
+
+#### 调用示例
+```Swift
+
+```
+
 ### 采集周期读取
 
 **android:**
@@ -646,6 +855,17 @@ void getCollection(byte[] bytes)
 }
 ```
 
+**iOS:**
+
+```Swift
+
+```
+
+#### 调用示例
+```Swift
+
+```
+
 ### 一键自检
 
 可以通过指令，对设备状态进行检测
@@ -683,3 +903,14 @@ bit 7：Gsensor故障
 bit 8：puf加密芯片通信故障
 
 bit 9：touch通信故障
+
+**iOS:**
+
+```Swift
+
+```
+
+#### 调用示例
+```Swift
+
+```
