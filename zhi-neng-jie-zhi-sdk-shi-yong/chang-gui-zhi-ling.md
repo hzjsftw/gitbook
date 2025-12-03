@@ -479,6 +479,27 @@ BCLRingManager.shared.readBattery { res in
 }
 ```
 
+**iOS:**
+```Swift
+/// 充电状态
+/// - Parameter completion: 充电状态回调
+/// - BCLReadChargingStateResponse: 包含充电状态的响应模型
+func readChargingState(completion: @escaping (Result<BCLReadChargingStateResponse, BCLError>) -> Void)
+```
+
+#### 调用示例
+```Swift
+BCLRingManager.shared.readChargingState { result in
+    switch result {
+    case .success(let response):
+        print("充电状态: \(response.isCharging ? "充电中" : "未充电")")
+    case .failure(let error):
+        print("读取充电状态失败: \(error)")
+    }
+}
+
+```
+
 ### 读取步数
 
 接口功能：获取当天累计步数。

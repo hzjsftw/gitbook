@@ -33,6 +33,13 @@ public interface IWebLastTimeResult {
 建议在createToken接口调用成功后，调用这个接口，尽量在蓝牙连接之前，获取到时间戳
 ```
 
+**iOS:**
+```Swift
+/// 获取用户最新历史数据
+/// - Parameter completion: 获取用户最新历史数据回调
+func loadUserLatestHistory(completion: @escaping (Result<BCLRingDBModel, BCLError>) -> Void)
+```
+
 ### 上传历史数据
 
 因为睡眠需要历史数据，所以在获取睡眠之前，需要将戒指数据调接口上传到勇芯的服务器，然后再调用接口获取睡眠信息，如果切换用户，建议先把本地数据库里的数据删除，防止把之前用户的数据传到当前用户的信息里，导致计算出错
@@ -145,8 +152,148 @@ public interface IWebHistoryResult {
 }
 
 ```
+**iOS:**
+```Swift
+/// 读取全部历史数据
+/// - Parameters:
+///   - timestamp: 获取指定时间戳之后的数据（默认为0,全部）
+///   - callbacks: 回调集合
+///   - completion: 命令发送结果回调
+func readAllHistoryData(timestamp: TimeInterval = 0, callbacks: BCLDataSyncCallbacks, completion: @escaping (Result<Void, BCLError>) -> Void)
+```
+
+#### 调用示例
+
+```Swift
+// 创建回调结构体
+let callbacks = BCLDataSyncCallbacks(
+    onProgress: { totalNumber, currentIndex, progress, model in
+        BDLogger.info("全部历史同步进度：\(currentIndex)/\(totalNumber) (\(progress)%)")
+        BDLogger.info("当前数据：\(model.localizedDescription)")
+    },
+    onStatusChanged: { status in
+        BDLogger.info("全部历史同步状态变化：\(status)")
+        switch status {
+        case .syncing:
+            BDLogger.info("同步中...")
+        case .noData:
+            BDLogger.info("没有历史数据")
+        case .completed:
+            BDLogger.info("同步完成")
+        case .error:
+            BDLogger.error("同步出错")
+        }
+    },
+    onCompleted: { models in
+        BDLogger.info("全部历史同步完成，共获取 \(models.count) 条记录")
+        BDLogger.info("\(models)")
+        // 注意：如果需要使用云端睡眠算法，可在此处将当前同步完成的历史数据同步上传到云端进而获取睡眠相关数据
+    },
+    onError: { error in
+        BDLogger.error("全部历史同步出错：\(error.localizedDescription)")
+    }
+)
+
+// 调用读取方法
+BCLRingManager.shared.readAllHistoryData(callbacks: callbacks) { result in
+    switch result {
+    case .success:
+        BDLogger.info("开始全部历史数据同步")
+    case let .failure(error):
+        BDLogger.error("启动全部历史同步失败：\(error.localizedDescription)")
+    }
+}
+```
+### 读取未上传数据
+```Swift
+/// 读取未上传数据
+/// - Parameters:
+///   - timestamp: 获取指定时间戳之后的数据（默认为0,仅获取未上传的数据）
+///   - callbacks: 回调集合
+///   - completion: 命令发送结果回调
+func readUnUploadData(timestamp: TimeInterval = 0, callbacks: BCLDataSyncCallbacks, completion: @escaping (Result<Void, BCLError>) -> Void)
+```
+
+#### 调用示例
+```Swift
+let callbacks = BCLDataSyncCallbacks(
+    onProgress: { totalNumber, currentIndex, progress, model in
+        BDLogger.info("同步进度：\(currentIndex)/\(totalNumber) (\(progress)%)")
+        BDLogger.info("当前数据：\(model.localizedDescription)")
+    },
+    onStatusChanged: { status in
+        BDLogger.info("同步状态变化：\(status)")
+        switch status {
+        case .syncing:
+            BDLogger.info("同步中...")
+        case .noData:
+            BDLogger.info("无数据")
+        case .completed:
+            BDLogger.info("同步完成")
+        case .error:
+            BDLogger.error("同步出错")
+        }
+    },
+    onCompleted: { models in
+        BDLogger.info("同步完成，共获取 \(models.count) 条记录")
+        BDLogger.info("\(models)")
+        // 注意：如果需要使用云端睡眠算法，可在此处将当前同步完成的历史数据同步上传到云端进而获取睡眠相关数据
+    },
+    onError: { error in
+        BDLogger.error("同步出错：\(error.localizedDescription)")
+    }
+)
+
+// 调用读取方法
+//  - timestamp: 获取指定时间戳之后的数据（默认为0,仅获取未上传的数据）注意：部分固件可能不支持该过滤参数。
+BCLRingManager.shared.readUnUploadData(timestamp: 0, callbacks: callbacks) { result in
+    switch result {
+    case .success:
+        BDLogger.info("开始数据同步")
+    case let .failure(error):
+        BDLogger.error("启动同步失败：\(error.localizedDescription)")
+    }
+}
+```
+
+### 删除戒指中全部历史数据
+
+**iOS:**
+```Swift
+/// 固件支持二代协议的话，建议调用绑定指令。就不需要调用该方法了。
+/// 删除全部历史数据
+/// - Parameter completion: 删除全部历史数据回调
+/// - BCLDeleteAllHistoryDataResponse: 包含删除结果的响应模型
+func deleteRingAllHistoryData(completion: @escaping (Result<BCLDeleteAllHistoryDataResponse, BCLError>) -> Void)
+```
+
+#### 调用示例
+```Swift
+BCLRingManager.shared.deleteRingAllHistoryData { result in
+    switch result {
+    case .success(_):
+        print("删除历史数据成功")
+    case .failure(let error):
+        print("删除历史数据失败: \(error)")
+    }
+}
+```
+
+**iOS:**
+```Swift
+/// 上传历史数据
+/// - Parameters:
+///   - historyData: BCLRingDBModel数据数组
+///   - mac: 设备MAC地址
+///   - completion: 上传完成回调
+func uploadHistory(historyData: [BCLRingDBModel],
+                   mac: String,
+                   completion: @escaping (Result<Void, BCLError>) -> Void)
+```
 
 如果使用的是二代协议，二代协议是会自动上传历史数据的，需要在页面上设置监听，使用下述方法上传历史数据
+**特别说明：**
+iOS 二代协议连接指令、刷新指令可以获取到戒指的历史数据，需要自行调用上传历史数据接口上传到服务器。
 
 ```java
   /**
@@ -339,6 +486,22 @@ public class Sleep2thBean {
    
 ```
 
+**iOS:**
+```Swift
+/// 获取睡眠数据
+/// - Parameters:
+///   - date: 查询日期
+///   - timeZone: 时区（📢：睡眠数据查询时区需要固定使用东8区）
+///   - completion: 获取睡眠数据回调
+func getSleepData(date: Date, timeZone: BCLRingTimeZone = .East8, completion: @escaping (Result<BCLRingSleepModel, BCLError>) -> Void)
+
+/// 获取睡眠数据（指定时间范围）
+/// - Parameters:
+///   - datas: 日期数据数组["2025-05-01"，"2025-05-02"]
+///   - completion: 获取睡眠数据回调
+func getSleepDataByTimeRange(datas: [String], completion: @escaping (Result<[BCLRingSleepDayModel], BCLError>) -> Void)
+```
+
 如果想要一个时间段内的睡眠描述，可以使用以下接口，这个接口不会返回每天的睡眠详情，否则会返回很慢
 
 <pre class="language-java"><code class="lang-java">//根据日期组合，批量获取睡眠记录，日期格式类似于 "2025-05-11"
@@ -491,6 +654,11 @@ public void initSleepChat( long showStartTime,List<HistoryDataBean> historyDataB
 ```
 
 处理完以后得数据，可以根据sleepType来判断是否睡眠状态数据 1：清醒 2：浅睡 3：深睡 4：快速眼动 用户可以根据这些类别，按照时间排序，计算出清醒等的开始时间和结束时间
+
+**iOS:**
+```Swift
+
+```
 
 ## Gomore睡眠
 

@@ -35,3 +35,30 @@ LogicalApi:
             }
         });
 ```
+### 创建Token
+
+**iOS:**
+```Swift
+/// 创建Token
+/// - Parameters:
+///   - apiKey: API密钥
+///   - userIdentifier: 用户标识
+/// - Parameter completion: 创建Token回调
+func createToken(apiKey: String, userIdentifier: String, completion: @escaping (Result<String, BCLError>) -> Void)
+
+/// 刷新Token
+/// - Parameter completion: 刷新Token回调
+func refreshToken(completion: @escaping (Result<Void, BCLError>) -> Void)
+```
+
+#### 调用示例
+```Swift
+BCLRingManager.shared.createToken(apiKey: "your_api_key", userIdentifier: "user_123") { result in
+    switch result {
+    case .success(let token):
+        print("Token: \(token)")
+    case .failure(let error):
+        print("创建Token失败: \(error)")
+    }
+}
+```

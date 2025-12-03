@@ -32,14 +32,14 @@ layout:
     ```
 *   IOS相关API：
 
-    ```swift
-    /// APP事件-绑定戒指
-    /// - Parameters:
-    ///   - date: 当前时间
-    ///   - timeZone: 时区
-    /// - Parameter completion: 绑定戒指回调
-    BCLRingManager.shared.appEventBindRing(date: Date, timeZone: BCLRingTimeZone, completion: @escaping (Result<BCLBindRingResponse, BCLError>) -> Void)
-    ```
+```swift
+/// APP事件-绑定戒指
+/// - Parameters:
+///   - date: 当前时间
+///   - timeZone: 时区
+/// - Parameter completion: 绑定戒指回调
+BCLRingManager.shared.appEventBindRing(date: Date, timeZone: BCLRingTimeZone, completion: @escaping (Result<BCLBindRingResponse, BCLError>) -> Void)
+```
 
 ### 连接指令
 
@@ -58,15 +58,15 @@ layout:
     ```
 *   IOS相关API：
 
-    ```swift
-    /// APP事件-连接戒指
-    /// - Parameters:
-    ///   - date: 当前时间
-    ///   - timeZone: 时区
-    ///   - callbacks: 回调集合
-    /// - Parameter completion: 连接戒指回调
-    BCLRingManager.shared.appEventConnectRing(date: Date, timeZone: BCLRingTimeZone, callbacks: BCLDataSyncCallbacks, completion: @escaping (Result<BCLConnectRingResponse, BCLError>) -> Void)
-    ```
+```swift
+/// APP事件-连接戒指
+/// - Parameters:
+///   - date: 当前时间
+///   - timeZone: 时区
+///   - callbacks: 回调集合
+/// - Parameter completion: 连接戒指回调
+BCLRingManager.shared.appEventConnectRing(date: Date, timeZone: BCLRingTimeZone, callbacks: BCLDataSyncCallbacks, completion: @escaping (Result<BCLConnectRingResponse, BCLError>) -> Void)
+```
 
 ### 刷新指令
 
@@ -85,12 +85,12 @@ layout:
     ```
 *   IOS相关API：
 
-    ```swift
-      /// APP事件-刷新戒指
-      /// - Parameters:
-      ///   - date: 当前时间
-      ///   - timeZone: 时区
-      ///   - callbacks: 回调集合
-      /// - Parameter completion: 刷新戒指回调
-      BCLRingManager.shared.appEventRefreshRing(date: Date, timeZone: BCLRingTimeZone, callbacks: BCLDataSyncCallbacks, completion: @escaping (Result<BCLRefreshRingResponse, BCLError>) -> Void)
-    ```
+```swift
+  /// APP事件-刷新戒指
+  /// - Parameters:
+  ///   - date: 当前时间
+  ///   - timeZone: 时区
+  ///   - callbacks: 回调集合
+  /// - Parameter completion: 刷新戒指回调
+  BCLRingManager.shared.appEventRefreshRing(date: Date, timeZone: BCLRingTimeZone, callbacks: BCLDataSyncCallbacks, completion: @escaping (Result<BCLRefreshRingResponse, BCLError>) -> Void)
+```

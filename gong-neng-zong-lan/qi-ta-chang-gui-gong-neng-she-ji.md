@@ -136,23 +136,45 @@ icon: rectangles-mixed
     LmAPI.Get_BlueTooth_Name//获取蓝牙名称
     ```
 *   IOS相关API：
+```Swift
+/// 设置蓝牙名称
+/// - Parameter name: 蓝牙名称（字节长度1-12）
+/// - Parameter completion: 设置蓝牙名称回调
+/// - BCLSetBluetoothNameResponse: 包含设置结果的响应模型
+func setBluetoothName(name: String, completion: @escaping (Result<BCLSetBluetoothNameResponse, BCLError>) -> Void)
+```
 
-    ```swift
-    /// 设置蓝牙名称
-    /// - Parameter name: 蓝牙名称
-    /// - Parameter completion: 设置蓝牙名称回调
-    /// - Result: 设置结果
-    /// - BCLSetBluetoothNameResponse: 包含设置结果的响应模型
-    /// - BCLError: 错误信息
-    BCLRingManager.shared.setBluetoothName(name: String, completion: @escaping (Result<BCLSetBluetoothNameResponse, BCLError>) -> Void)
+#### 调用示例
+```Swift
+BCLRingManager.shared.setBluetoothName(name: "MyRing") { result in
+    switch result {
+    case .success(let response):
+        print("设置蓝牙名称成功")
+    case .failure(let error):
+        print("设置蓝牙名称失败: \(error)")
+    }
+}
+```
 
-    /// 获取蓝牙名称
-    /// - Parameter completion: 获取蓝牙名称回调
-    /// - Result: 获取结果
-    /// - BCLReadBluetoothNameResponse: 包含获取结果的响应模型
-    /// - BCLError: 错误信息
-    BCLRingManager.shared.getBluetoothName(completion: @escaping (Result<BCLReadBluetoothNameResponse, BCLError>) -> Void)
-    ```
+**iOS:**
+```Swift
+/// 获取蓝牙名称
+/// - Parameter completion: 获取蓝牙名称回调
+/// - BCLReadBluetoothNameResponse: 包含获取结果的响应模型
+func getBluetoothName(completion: @escaping (Result<BCLReadBluetoothNameResponse, BCLError>) -> Void)
+```
+
+#### 调用示例
+```Swift
+BCLRingManager.shared.getBluetoothName { result in
+    switch result {
+    case .success(let response):
+        print("蓝牙名称: \(response.name)")
+    case .failure(let error):
+        print("获取蓝牙名称失败: \(error)")
+    }
+}
+```
 
 ### 测量间隔
 
@@ -164,23 +186,22 @@ icon: rectangles-mixed
     ```
 *   IOS相关API：
 
-    ```swift
-    /// 设置采集周期
-    /// - Parameter period: 采集周期（单位：秒）最小值为60
-    /// - Parameter completion: 设置采集周期回调
-    /// - Result: 设置结果
-    /// - BCLSetCollectPeriodResponse: 包含设置结果的响应模型
-    /// - BCLError: 错误信息
-    BCLRingManager.shared.setCollectPeriod(period: Int, completion: @escaping (Result<BCLSetCollectPeriodResponse, BCLError>) -> Void)
+```swift
+/// 设置采集周期
+/// - Parameter period: 采集周期（单位：秒）最小值为60
+/// - Parameter completion: 设置采集周期回调
+/// - Result: 设置结果
+/// - BCLSetCollectPeriodResponse: 包含设置结果的响应模型
+/// - BCLError: 错误信息
+BCLRingManager.shared.setCollectPeriod(period: Int, completion: @escaping (Result<BCLSetCollectPeriodResponse, BCLError>) -> Void)
 
-    /// 获取采集周期
-    /// - Parameter completion: 获取采集周期回调
-    /// - Result: 获取结果
-    /// - BCLGetCollectPeriodResponse: 包含采集周期的响应模型
-    /// - BCLError: 错误信息
-    BCLRingManager.shared.getCollectPeriod(completion: @escaping (Result<BCLGetCollectPeriodResponse, BCLError>) -> Void)
-
-    ```
+/// 获取采集周期
+/// - Parameter completion: 获取采集周期回调
+/// - Result: 获取结果
+/// - BCLGetCollectPeriodResponse: 包含采集周期的响应模型
+/// - BCLError: 错误信息
+BCLRingManager.shared.getCollectPeriod(completion: @escaping (Result<BCLGetCollectPeriodResponse, BCLError>) -> Void)
+```
 
 ### 用户信息
 
@@ -199,3 +220,47 @@ icon: rectangles-mixed
     LmAPI.GET_USER_INFO//获取个人信息
     ```
 * IOS相关API：
+**iOS:**
+```Swift
+/// 设置个人信息
+/// - Parameters:
+///   - sex: 性别（0：女、1：男）
+///   - age: 年龄(单位：月)
+///   - height: 身高(单位：cm)
+///   - weight: 体重(单位：kg)
+///   - completion: 设置个人信息回调
+/// - BCLSetPersonalInformationResponse: 包含设置结果的响应模型
+func setPersonalInformation(sex: Int, age: Int, height: Int, weight: Int, completion: @escaping (Result<BCLSetPersonalInformationResponse, BCLError>) -> Void)
+```
+
+#### 调用示例
+```Swift
+BCLRingManager.shared.setPersonalInformation(sex: 1, age: 300, height: 175, weight: 70) { result in
+    switch result {
+    case .success(let response):
+        print("设置个人信息成功")
+    case .failure(let error):
+        print("设置个人信息失败: \(error)")
+    }
+}
+```
+
+**iOS:**
+```Swift
+/// 获取个人信息
+/// - Parameter completion: 获取个人信息回调
+/// - BCLReadPersonalInformationResponse: 包含个人信息的响应模型
+func getPersonalInformation(completion: @escaping (Result<BCLReadPersonalInformationResponse, BCLError>) -> Void)
+```
+
+#### 调用示例
+```Swift
+BCLRingManager.shared.getPersonalInformation { result in
+    switch result {
+    case .success(let response):
+        print("性别: \(response.sex), 年龄: \(response.age)月, 身高: \(response.height)cm, 体重: \(response.weight)kg")
+    case .failure(let error):
+        print("获取个人信息失败: \(error)")
+    }
+}
+```

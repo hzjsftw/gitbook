@@ -47,3 +47,12 @@ LogicalApi:
 接口返回的是原始历史数据，客户端可以根据自己需求，比如计算每天24小时，各个小时的步数，可以计算某个小时0分到59分之内的步数，累加(步数是65535，是主动测量或者周期测量的特殊标志，需要排除掉)，算作该小时的步数
 
 ### IOS提供的接口
+```swift
+/// 查询步数信息 （特定固件、特定场景使用）
+/// - Parameter mac: 设备的mac地址
+/// - Parameter completion: 查询步数信息回调
+/// - Result: 查询结果
+/// - Int: 步数信息
+/// - BCLError: 错误信息
+func queryStepInfo(mac: String, completion: @escaping (Result<Int, BCLError>) -> Void) 
+```

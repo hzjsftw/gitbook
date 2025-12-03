@@ -42,3 +42,24 @@ public class Firmware {
 ```
 
 ### IOS提供的接口
+
+**iOS:**
+```Swift
+/// 固件版本列表
+/// - Parameters:
+///   - category: 查询参数
+///   - completion: 完成回调
+func getFirmwareVersionList(category: String, completion: @escaping (Result<[FirmwareVersionItem], BCLError>) -> Void)
+```
+
+**iOS:**
+```Swift
+/// 固件下载
+/// - Parameters:
+///   - url: 固件下载地址
+///   - fileName: 固件文件名
+///   - destinationPath: 固件文件保存路径
+///   - progress: 固件下载进度回调
+/// - Parameter completion: 固件下载回调
+func downloadFirmware(url: String, fileName: String, destinationPath: String, progress: @escaping (Double) -> Void, completion: @escaping (Result<String, BCLError>) -> Void)
+```
