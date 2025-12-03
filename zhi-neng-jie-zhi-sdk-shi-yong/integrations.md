@@ -753,3 +753,37 @@ BLOOD_PRESSURE_APP(byte collectionTime,byte waveformConfiguration,byte progressC
      */
 <strong>LogicalApi.getBloodPressureOrSugar(String mac, String waveFormValue, String testType,IWebBloodPressureAndSugarResult webApiResult)
 </strong></code></pre>
+
+### 开始PWTT测量
+
+**iOS:**
+```Swift
+/// PWTT测量-开始
+/// - Parameters:
+///   - collectTime: 采集时间 默认30s，0为一直采集
+///   - collectFrequency: 采集频率 默认100Hz
+///   - waveformConfig: 波形配置 0:不上传、1:上传
+/// - Parameter completion: 开始测量回调
+func startPWTT(collectTime: Int, collectFrequency: Int, waveformConfig: Int, completion: @escaping (Result<BCLTakePWTTResponse, BCLError>) -> Void)
+```
+
+#### 调用示例
+```Swift
+BCLRingManager.shared.startPWTT(collectTime: 30, collectFrequency: 100, waveformConfig: 1) { result in
+    switch result {
+    case .success(let response):
+        print("PWTT测量: \(response)")
+    case .failure(let error):
+        print("PWTT测量失败: \(error)")
+    }
+}
+```
+
+### 停止PWTT测量
+
+**iOS:**
+```Swift
+/// PWTT测量-停止
+/// - Parameter completion: 停止测量回调
+func stopPWTT(completion: @escaping (Result<BCLStopPWTTResponse, BCLError>) -> Void)
+```

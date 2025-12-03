@@ -110,3 +110,63 @@ LmAPI.CONTROL_AUDIO_ADPCM(byte data)
 * 充电的时候呼吸灯
 * 蓝牙连接亮蓝灯2s
 * 断开连接闪烁3次蓝灯
+
+### 控制PCM格式音频传输
+
+**iOS:**
+```Swift
+/// 音频传输 - 控制PCM格式音频传输
+/// - Parameters:
+///   - isOpen: 是否打开
+/// - Parameter completion: 控制PCM格式音频传输回调
+func controlPCMFormatAudio(isOpen: Bool, completion: @escaping (Result<BCLControlPCMFormatResponse, BCLError>) -> Void)
+```
+
+### 控制ADPCM格式音频传输
+
+**iOS:**
+```Swift
+/// 音频传输 - 控制ADPCM格式音频传输
+/// - Parameters:
+///   - isOpen: 是否打开
+/// - Parameter completion: 控制ADPCM格式音频传输回调
+func controlADPCMFormatAudio(isOpen: Bool, completion: @escaping (Result<BCLControlADPCMFormatResponse, BCLError>) -> Void)
+```
+
+### 主动推送音频信息
+
+**iOS:**
+```Swift
+/// 音频传输 - 设置主动推送音频信息
+/// - Parameters:
+///   - audioType: 音频类型 .pcm .adpcm
+/// - Parameter completion: 设置主动推送音频信息回调
+func setActivePushAudioInfo(audioType: BCLAudioType, completion: @escaping (Result<BCLSetActivePushAudioInfoResponse, BCLError>) -> Void)
+
+/// 音频传输 - 获取主动推送音频信息
+/// - Parameter completion: 获取主动推送音频信息回调
+func getActivePushAudioInfo(completion: @escaping (Result<BCLGetActivePushAudioInfoResponse, BCLError>) -> Void)
+```
+
+### 音频格式转换
+
+**iOS:**
+```Swift
+/// 音频格式转换 - 将ADPCM格式音频数据转换为PCM格式
+/// - Parameter adpcmData: ADPCM格式的音频数据
+/// - Returns: PCM格式的音频数据，转换失败返回nil
+func convertAdpcmToPcm(adpcmData: Data) -> Data?
+```
+
+### 开始录音（固件定制：Z5J）
+**iOS:**
+```Swift
+/// 音频传输 - 戒指开始录音
+/// - Parameters:
+///   - isOpen: 是否打开录音 true:打开 false:关闭
+///   - totalDuration: 总录音时长，单位秒
+///   - sliceDuration: 切片保存时长，单位秒
+///   - completion: 戒指开始录音回调
+/// - BCLRingStartRecordingResponse: 包含状态的响应模型(0:失败 1:成功)
+func ringStartRecording(isOpen: Bool, totalDuration: UInt32, sliceDuration: UInt32, completion: @escaping (Result<BCLRingStartRecordingResponse, BCLError>) -> Void)
+```

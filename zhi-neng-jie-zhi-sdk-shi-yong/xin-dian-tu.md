@@ -36,3 +36,39 @@ LogicalApi.startECGActivity(TestActivity2.this);
 
 ```
 
+**iOS:**
+```Swift
+/// 心电图-采集人体心电
+/// - Parameter completion: 采集人体心电回调
+func startTakeECG(completion: @escaping (Result<BCLTakeECGResponse, BCLError>) -> Void)
+```
+
+#### 调用示例
+```Swift
+BCLRingManager.shared.startTakeECG { res in
+    switch res {
+    case let .success(response):
+        // 数据范围统计
+        if !response.ecgValues.isEmpty {
+            let minVal = response.ecgValues.min() ?? 0
+            let maxVal = response.ecgValues.max() ?? 0
+            let avgVal = response.ecgValues.reduce(0, +) / response.ecgValues.count
+            BDLogger.info("[原始数据统计] 最小值: \(minVal), 最大值: \(maxVal), 平均值: \(avgVal)")
+        }
+    case let .failure(error):
+        BDLogger.error("开始测量失败: \(error)")
+    }
+}
+```
+
+```Swift
+/// 心电图-采集模拟信号
+/// - Parameter completion: 采集模拟信号回调
+func startTakeECGSimulator(completion: @escaping (Result<BCLTakeECGSimulatorResponse, BCLError>) -> Void)
+```
+
+```Swift
+/// 心电图-停止采集
+/// - Parameter completion: 停止采集回调
+func stopECG(completion: @escaping (Result<BCLStopECGResponse, BCLError>) -> Void)
+```

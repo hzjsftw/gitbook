@@ -379,3 +379,207 @@ temper2，类型：有符号短整型
 格式化系统
 
 <figure><img src="../.gitbook/assets/格式化系统.png" alt=""><figcaption></figcaption></figure>
+
+### iOS 获取文件列表
+
+```Swift
+/// 获取文件列表
+/// - Parameter completion: 获取文件列表回调
+/// - BCLRequestFileListResponse: 包含获取文件列表结果的响应模型
+func getFileList(completion: @escaping (Result<BCLRequestFileListResponse, BCLError>) -> Void)
+```
+
+#### 调用示例
+```Swift
+BCLRingManager.shared.getFileList { [weak self] res in
+    guard let self = self else { return }
+
+    switch res {
+    case let .success(response):
+        BDLogger.info("获取文件系统列表成功: \(response)")
+        BDLogger.info("文件系统列表-总个数: \(response.fileTotalCount ?? 0)")
+        BDLogger.info("文件系统列表-当前索引: \(response.fileIndex ?? 0)")
+        BDLogger.info("文件系统列表-文件大小: \(response.fileSize ?? 0)")
+        BDLogger.info("文件系统列表-用户ID: \(response.userId ?? "")")
+        BDLogger.info("文件系统列表-日期: \(response.fileDate ?? "")")
+        BDLogger.info("文件系统列表-文件名: \(response.fileName ?? "")")
+        BDLogger.info("文件系统列表-文件类型: \(response.fileType ?? "")")
+
+        // 记录期望的文件总数
+        if let totalCount = response.fileTotalCount, self.expectedFileCount == 0 {
+            self.expectedFileCount = totalCount
+            // 如果没有文件，直接提示
+            if totalCount == 0 {
+                BDLogger.info("当前没有文件可供下载")
+                return
+            }
+        }
+
+        // 收集文件信息
+        if let fileName = response.fileName, !fileName.isEmpty {
+            let fileInfo = FileInfoModel(
+                fileName: fileName,
+                userId: response.userId,
+                fileDate: response.fileDate,
+                fileSize: response.fileSize,
+                fileType: response.fileType,
+                isSelected: false
+            )
+            // 保存文件信息到数组
+
+            // 检查是否已经收集完所有文件
+            if self.collectedFiles.count >= self.expectedFileCount {
+                BDLogger.info("所有文件信息收集完成，共 \(self.collectedFiles.count) 个文件")
+            }
+        }
+
+    case let .failure(error):
+        BDLogger.error("获取文件系统列表失败: \(error)")
+    }
+}
+```
+
+### 获取文件数据
+
+**iOS:**
+```Swift
+/// 获取文件数据
+/// - Parameters:
+///   - fileName: 文件名
+///   - completion: 获取文件数据回调
+/// - Result: 获取文件数据结果
+/// - BCLRequestFileDataResponse: 包含获取文件数据结果的响应模型
+/// - BCLError: 错误信息
+func getFileData(fileName: String, completion: @escaping (Result<BCLRequestFileDataResponse, BCLError>) -> Void)
+```
+
+#### 调用示例
+```Swift
+BCLRingManager.shared.getFileData(fileName: fileName) { res in
+    switch res {
+    case let .success(response):
+        BDLogger.info("获取文件数据成功: \(response)")
+        BDLogger.info("文件数据-状态: \(response.fileSystemStatus ?? 0)")
+        BDLogger.info("文件数据-大小: \(response.fileSize ?? 0)")
+        BDLogger.info("文件数据-总包数: \(response.totalNumber ?? 0)")
+        BDLogger.info("文件数据-当前包号: \(response.currentNumber ?? 0)")
+        BDLogger.info("文件数据-当前包长度: \(response.currentLength ?? 0)")
+        guard let type = response.fileType else {
+            BDLogger.info("未知的文件类型")
+            return
+        }
+        switch type {
+        case "1": BDLogger.info("文件数据:三轴数据-数据：\(response.fileDataType1 ?? [])")
+        case "2": BDLogger.info("文件数据:六轴数据-数据：\(response.fileDataType2 ?? [])")
+        case "3": BDLogger.info("文件数据:PPG数据红外+红色+x加速度+y加速度+z加速度-数据：\(response.fileDataType3 ?? [])")
+        case "4": BDLogger.info("文件数据:PPG数据绿色-数据：\(response.fileDataType4 ?? [])")
+        case "5": BDLogger.info("文件数据:PPG数据红外-数据：\(response.fileDataType5 ?? [])")
+        case "6": BDLogger.info("文件数据:温度数据红外-数据：\(response.fileDataType6 ?? [])")
+        case "7":
+            // (时间戳,[(绿色+红色+红外+加速度X+加速度Y+加速度Z+陀螺仪X+陀螺仪Y+陀螺仪Z+温度0+温度1+温度2)])
+            BDLogger.info("文件内容----时间戳：\(response.fileDataType7?.0 ?? 0)")
+            BDLogger.info("文件内容----数据：\(response.fileDataType7?.1 ?? [])")
+        case "8":
+            // adpcm音频
+            if let data = response.fileDataType8 {
+                let preview = data.map { String(format: "%02x", $0) }
+                BDLogger.info("文件数据:adpcm音频，大小:\(data.count)字节，字节内容:\(preview)")
+            } else {
+                BDLogger.info("文件数据:adpcm音频：无数据")
+            }
+        case "9":
+            // opus音频
+            if let data = response.fileDataType9 {
+                let preview = data.map { String(format: "%02x", $0) }
+                BDLogger.info("文件数据:opus音频，大小:\(data.count)字节，字节内容:\(preview)")
+            } else {
+                BDLogger.info("文件数据:opus音频：无数据")
+            }
+        case "10", "A", "a":
+            if let climbingData = response.fileDataType10 {
+                for (macAddress, utcTime, laccValue) in climbingData {
+                    BDLogger.info("文件数据:攀岩项目数据，MAC:\(macAddress)，时间:\(utcTime)，LACC:\(laccValue)")
+                }
+            } else {
+                BDLogger.info("文件数据:攀岩项目数据：无数据")
+            }
+        default:
+            BDLogger.info("未知的文件类型")
+        }
+    case let .failure(error):
+        BDLogger.error("获取文件数据失败: \(error)")
+    }
+}
+```
+
+### 删除文件
+
+**iOS:**
+```Swift
+/// 删除文件
+/// - Parameters:
+///   - fileName: 文件名
+///   - completion: 删除文件回调
+func deleteFile(fileName: String, completion: @escaping (Result<BCLDeleteFileResponse, BCLError>) -> Void)
+```
+
+#### 调用示例
+```Swift
+
+```
+
+### 格式化文件系统
+
+**iOS:**
+```Swift
+/// 格式化文件系统
+/// - Parameter completion: 格式化文件系统回调
+func formatFileSystem(completion: @escaping (Result<BCLFormatFileSystemResponse, BCLError>) -> Void)
+```
+
+#### 调用示例
+```Swift
+BCLRingManager.shared.formatFileSystem { res in
+    switch res {
+    case let .success(response):
+        if let result = response.formatResult, result == 1 {
+            BDLogger.info("格式化文件系统成功: \(response)")
+        } else {
+            BDLogger.info("格式化文件系统失败: \(response)")
+        }
+    case let .failure(error):
+        BDLogger.error("格式化文件系统失败: \(error)")
+    }
+}
+```
+
+### 获取文件系统信息
+
+**iOS:**
+```Swift
+/// 获取文件系统信息
+/// - Parameter completion: 获取文件系统信息回调
+func getFileSystemInfo(completion: @escaping (Result<BCLGetFileSystemInfoResponse, BCLError>) -> Void)
+```
+
+### 获取文件系统状态
+
+**iOS:**
+```Swift
+/// 获取文件系统状态
+func getFileSystemStatus(completion: @escaping (Result<BCLGetFileSystemStatusResponse, BCLError>) -> Void)
+```
+
+### 自动记录采集数据模式
+
+**iOS:**
+```Swift
+/// 获取自动记录采集数据模式
+func getAutoRecordDataMode(completion: @escaping (Result<BCLGetAutoRecordDataModeResponse, BCLError>) -> Void)
+
+/// 设置自动记录采集数据模式
+/// - Parameters:
+///   - type: 0：停止自动记录采集信息、1：开启自动记录三轴信息、2：开启自动记录六轴信息、3：开启自动记录spo2信息、4：开启自动记录hr信息、5：开启自动记录红外信息、6：开启自动记温度信息
+func setAutoRecordDataMode(type: Int, completion: @escaping (Result<BCLSetAutoRecordDataModeResponse, BCLError>) -> Void)
+```
+
