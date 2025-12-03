@@ -69,6 +69,54 @@ icon: hand
     public static void SET_HID(int touchMode,int gestureMode, Context context,IHIDListenerLite listenerLite)
 ```
 
+**iOS:**
+```Swift
+/// 设置HID模式
+/// - Parameters:
+///   - touchMode: 触摸模式 0:刷视屏模式、1:拍照模式、2:音乐模式、3:PPT模式、4:上传实时音频模式 255:关闭
+///   - gestureMode: 手势模式 0:刷视频模式、1:拍照模式、2:音乐模式、3:PPT模式、4:打响指（拍照）模式 255:关闭
+///   - systemType: 系统类型 0:Android 1:iOS 2:鸿蒙 3:Windows
+///   - deviceModelName: 设备型号名称
+///   - screenHeightPixel: 屏幕高度像素
+///   - screenWidthPixel: 屏幕宽度像素
+/// - Parameter completion: 设置HID模式回调
+func setHIDMode(touchMode: Int, gestureMode: Int, systemType: Int, deviceModelName: String, screenHeightPixel: Int, screenWidthPixel: Int, completion: @escaping (Result<BCLSetHIDModeResponse, BCLError>) -> Void)
+```
+
+#### 调用示例
+```Swift
+BCLRingManager.shared.setHIDMode(
+    touchMode: 0,
+    gestureMode: 1,
+    systemType: 1,
+    deviceModelName: BCLRingManager.shared.getMobileDeviceModelName(),
+    screenHeightPixel: BCLRingManager.shared.getMobileDeviceScreenHeightPixel(),
+    screenWidthPixel: BCLRingManager.shared.getMobileDeviceScreenWidthPixel()
+) { result in
+    switch result {
+    case .success(_):
+        print("设置HID模式成功")
+    case .failure(let error):
+        print("设置HID模式失败: \(error)")
+    }
+}
+```
+
+**iOS:**
+```Swift
+/// 获取当前手机设备型号名称
+/// - Returns: 当前手机设备型号名称
+func getMobileDeviceModelName() -> String
+
+/// 获取当前手机设备屏幕宽度像素
+/// - Returns: 当前手机设备屏幕宽度像素
+func getMobileDeviceScreenWidthPixel() -> Int
+
+/// 获取当前手机设备屏幕高度像素
+/// - Returns: 当前手机设备屏幕高度像素
+func getMobileDeviceScreenHeightPixel() -> Int
+```
+
 ### 获取HID功能码
 
 获取连接戒指支持的HID功能，只有支持的功能，才能通过设置戒指的HID模式的方法进行设置
@@ -192,6 +240,13 @@ LmAPI.GET_HID_CODE((byte)0x00);
  }
 ```
 
+**iOS:**
+```Swift
+/// 获取HID功能码
+/// - Parameter completion: 获取HID功能码回调
+func getHIDFunctionCode(completion: @escaping (Result<BCLGetHIDFunctionCodeResponse, BCLError>) -> Void)
+```
+
 ### 获取HID
 
 获取当前戒指的HID模式，触摸各功能和手势各功能的开关状态
@@ -224,4 +279,29 @@ LmAPI.GET_HID();
 
 ```java
  public static void GET_HID(IHIDListenerLite listenerLite)
+```
+
+**iOS:**
+```Swift
+/// 获取当前HID模式
+/// - Parameter completion: 获取当前HID模式回调
+func getCurrentHIDMode(completion: @escaping (Result<BCLGetCurrentHIDModeResponse, BCLError>) -> Void)
+```
+
+### 手势功能设置（定制功能：Z4I）
+
+**iOS:**
+```Swift
+/// 设置手势功能
+/// - Parameters:
+///   - swipeUpGesture: 上滑手势  1：音乐暂停/开始、2：音乐下一首、3：音乐上一首、4: 音量+、5：音量-、6：拍照、255:关闭
+///   - swipeDownGesture: 下滑手势
+///   - snapGesture: 打响指手势
+///   - pinchGesture: 捏一捏手势
+/// - Parameter completion: 设置手势功能回调
+func setGestureFunction(swipeUpGesture: Int, swipeDownGesture: Int, snapGesture: Int, pinchGesture: Int, completion: @escaping (Result<BCLSetGestureFunctionResponse, BCLError>) -> Void)
+
+/// 读取手势功能
+/// - Parameter completion: 读取手势功能回调
+func readGestureFunction(completion: @escaping (Result<BCLReadGestureFunctionResponse, BCLError>) -> Void)
 ```
