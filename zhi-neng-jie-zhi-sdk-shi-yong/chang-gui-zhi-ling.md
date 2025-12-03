@@ -449,6 +449,9 @@ public interface IBatteryListenerLite {
 /// - 说明：该推送一般是在戒指充电状态发生变化时会收到推送信息，例如放入充电仓时会收到、由充电仓取下时。一般戒指会推送3-5次这样，避免单次推送无法收到情况。
 BCLRingManager.shared.batteryNotifyBlock: ((Int) -> Void)
 
+/// 电量推送观察者（供外部订阅）
+public var batteryNotifyObservable: Observable<Int>
+
 /// 主动获取电量
 /// - Parameter completion: 主动获取电量回调
 /// - Result: 获取结果 0~100电量值范围，101充电中，102充满
@@ -614,6 +617,25 @@ BCLRingManager.shared.clearStepCount { result in
 }
 ```
 
+### 步数推送（定制：Z5I）
+接口功能：戒指主动推送步数。
+
+**iOS:**
+```Swift
+/// 步数推送观察者（供外部订阅）
+public var stepNotifyObservable: Observable<Int>
+
+/// 步数推送变化回调
+public var stepNotifyBlock: ((Int) -> Void)?
+```
+
+#### 调用示例
+```Swift
+BCLRingManager.shared.stepNotifyBlock = { steps in
+    print("步数推送: \(steps)")
+}
+```
+
 ### 恢复出厂设置
 
 接口功能：恢复出厂设置
@@ -681,25 +703,21 @@ public interface ISystemControlListenerLite {
 ```
 
 **iOS:**
-
 ```Swift
 /// 恢复出厂设置
 /// - Parameter completion: 恢复出厂设置回调
-/// - Result: 恢复出厂设置结果
 /// - BCLRestoreFactorySettingsResponse: 包含恢复出厂设置结果的响应模型
-/// - BCLError: 错误信息
 func restoreFactorySettings(completion: @escaping (Result<BCLRestoreFactorySettingsResponse, BCLError>) -> Void)
 ```
 
 #### 调用示例
 ```Swift
-/// 恢复出厂设置
-BCLRingManager.shared.restoreFactorySettings { res in
-    switch res {
-    case .success:
-        BDLogger.info("恢复出厂设置成功")
-    case let .failure(error):
-        BDLogger.error("恢复出厂设置失败: \(error)")
+BCLRingManager.shared.restoreFactorySettings { result in
+    switch result {
+    case .success(let response):
+        print("恢复出厂设置成功")
+    case .failure(let error):
+        print("恢复出厂设置失败: \(error)")
     }
 }
 ```
@@ -777,14 +795,24 @@ void setCollection(byte result)
 ```
 
 **iOS:**
-
 ```Swift
-
+/// 设置采集周期
+/// - Parameter period: 采集周期（单位：秒）最小值为60
+/// - Parameter completion: 设置采集周期回调
+/// - BCLSetCollectPeriodResponse: 包含设置结果的响应模型
+func setCollectPeriod(period: Int, completion: @escaping (Result<BCLSetCollectPeriodResponse, BCLError>) -> Void)
 ```
 
 #### 调用示例
 ```Swift
-
+BCLRingManager.shared.setCollectPeriod(period: 300) { result in
+    switch result {
+    case .success(let response):
+        print("设置采集周期成功")
+    case .failure(let error):
+        print("设置采集周期失败: \(error)")
+    }
+}
 ```
 
 ### 采集周期读取
@@ -856,14 +884,23 @@ void getCollection(byte[] bytes)
 ```
 
 **iOS:**
-
 ```Swift
-
+/// 获取采集周期
+/// - Parameter completion: 获取采集周期回调
+/// - BCLGetCollectPeriodResponse: 包含采集周期的响应模型
+func getCollectPeriod(completion: @escaping (Result<BCLGetCollectPeriodResponse, BCLError>) -> Void)
 ```
 
 #### 调用示例
 ```Swift
-
+BCLRingManager.shared.getCollectPeriod { result in
+    switch result {
+    case .success(let response):
+        print("采集周期: \(response.period)秒")
+    case .failure(let error):
+        print("获取采集周期失败: \(error)")
+    }
+}
 ```
 
 ### 一键自检
@@ -905,12 +942,21 @@ bit 8：puf加密芯片通信故障
 bit 9：touch通信故障
 
 **iOS:**
-
 ```Swift
-
+/// 一键自检
+/// - Parameter completion: 一键自检回调
+/// - BCLFixtureTestingOneKeySelfInspectionResponse: 包含一键自检结果的响应模型
+func oneKeySelfInspection(completion: @escaping (Result<BCLFixtureTestingOneKeySelfInspectionResponse, BCLError>) -> Void)
 ```
 
 #### 调用示例
 ```Swift
-
+BCLRingManager.shared.oneKeySelfInspection { result in
+    switch result {
+    case .success(let response):
+        print("自检结果: \(response)")
+    case .failure(let error):
+        print("自检失败: \(error)")
+    }
+}
 ```

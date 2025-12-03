@@ -22,6 +22,17 @@ icon: hand-holding-droplet
     public static void BLOOD_PRESSURE_APP(byte collectionTime, byte waveformConfiguration, byte progressConfiguration, IBloodPressureAPPListener iBloodPressureAPPListener) {
 ```
 
+**iOS:**
+```Swift
+/// 血压测量
+/// - Parameters:
+///   - collectTime: 采集时间(单位：秒)
+///   - waveformConfig: 波形配置(0:不上传 1:上传)
+///   - progressConfig: 进度配置(0:不上传 1:上传)
+/// - BCLBloodPressureResponse: 包含测量结果的响应模型
+func startBloodPressure(collectTime: Int, waveformConfig: Int, progressConfig: Int, completion: @escaping (Result<BCLBloodPressureResponse, BCLError>) -> Void)
+```
+
 然后调用服务器接口，获取血压或者血糖
 
 LogicalApi
@@ -93,3 +104,22 @@ getBloodPressureOrSugar(String mac, String waveFormValue, String testType,IWebBl
 ```
 
 ### IOS提供的接口
+
+**iOS:**
+```Swift
+/// 上传血压测量数据
+/// - Parameters:
+///   - mac: 设备MAC地址
+///   - waveData: 波形数据[(红色、红外、accX、accY、accZ)]
+///   - completion: 上传血压测量数据回调，返回(收缩压, 舒张压)
+func uploadBloodPressureData(mac: String,
+                             waveData: [(Int, Int, Int, Int, Int)],
+                             completion: @escaping (Result<(Int, Int), BCLError>) -> Void)
+
+/// 上传血糖测量数据
+/// - Parameters:
+///   - mac: 设备MAC地址
+///   - waveData: 波形数据[(红色、红外、accX、accY、accZ)]
+///   - completion: 上传血糖测量数据回调，返回血糖值
+func uploadBloodGlucoseData(mac: String, waveData: [(Int, Int, Int, Int, Int)], completion: @escaping (Result<Double, BCLError>) -> Void)
+```

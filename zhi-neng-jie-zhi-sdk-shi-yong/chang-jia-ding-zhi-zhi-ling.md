@@ -66,6 +66,30 @@ LmAPI.GET_REAL_TIME_BP((byte) 0x30, (byte) 1, (byte) 1, new IRealTimePPGB
 }
 ```
 
+**iOS:**
+```Swift
+/// 血压测量
+/// - Parameters:
+///   - collectTime: 采集时间(单位：秒)
+///   - waveformConfig: 波形配置(0:不上传 1:上传)
+///   - progressConfig: 进度配置(0:不上传 1:上传)
+/// - BCLBloodPressureResponse: 包含测量结果的响应模型
+func startBloodPressure(collectTime: Int, waveformConfig: Int, progressConfig: Int, completion: @escaping (Result<BCLBloodPressureResponse, BCLError>) -> Void)
+```
+
+#### 调用示例
+```Swift
+BCLRingManager.shared.startBloodPressure(collectTime: 30, waveformConfig: 1, progressConfig: 1) { result in
+    switch result {
+    case .success(let response):
+        print("血压: \(response.systolic)/\(response.diastolic) mmHg")
+        // 此处波形数据需要提交到服务端进行血压计算后获取结果
+    case .failure(let error):
+        print("血压测量失败: \(error)")
+    }
+}
+```
+
 接口功能：停止采集
 
 **android：**\
@@ -105,6 +129,26 @@ LmAPI.STOP_REAL_TIME_BP()
     void resultData(String bpData);
 
     void  stopRealTimeBP();
+}
+```
+
+**iOS:**
+```Swift
+/// 停止血压测量
+/// - Parameter completion: 停止血压测量回调
+/// - BCLStopBloodPressureResponse: 包含停止血压测量结果的响应模型
+func stopBloodPressure(completion: @escaping (Result<BCLStopBloodPressureResponse, BCLError>) -> Void)
+```
+
+#### 调用示例
+```Swift
+BCLRingManager.shared.stopBloodPressure { result in
+    switch result {
+    case .success(_):
+        print("停止血压测量成功")
+    case .failure(let error):
+        print("停止血压测量失败: \(error)")
+    }
 }
 ```
 
