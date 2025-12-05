@@ -57,6 +57,12 @@ layout:
     private int gomoreSleep;//gomore睡眠算法
 ```
 
+### 与传统指令的对比
+
+{% content-ref url="../zhi-neng-jie-zhi-sdk-shi-yong/sdk-zhi-ling-jie-shao.md" %}
+[sdk-zhi-ling-jie-shao.md](../zhi-neng-jie-zhi-sdk-shi-yong/sdk-zhi-ling-jie-shao.md)
+{% endcontent-ref %}
+
 ### 具体使用方式
 
 {% content-ref url="../zhi-neng-jie-zhi-sdk-shi-yong/er-dai-xie-yi.md" %}
