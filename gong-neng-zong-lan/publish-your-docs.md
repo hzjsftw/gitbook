@@ -18,9 +18,9 @@ layout:
     visible: true
 ---
 
-# sdk二代指令简介
+# sdk二代协议简介
 
-### 二代指令优势
+### 二代协议势
 
 以android为例，一个指令，可以获取很多配置，可以在连接或刷新的时候，省略掉获取版本号，获取电量，获取充电状态，获取采集周期，获取HID配置，一键自检，当前计步以及设备支持哪些功能的指令，提高连接速度。
 
@@ -56,6 +56,12 @@ layout:
     private int fileSystem;//文件系统
     private int gomoreSleep;//gomore睡眠算法
 ```
+
+### 具体使用方式
+
+{% content-ref url="../zhi-neng-jie-zhi-sdk-shi-yong/er-dai-xie-yi.md" %}
+[er-dai-xie-yi.md](../zhi-neng-jie-zhi-sdk-shi-yong/er-dai-xie-yi.md)
+{% endcontent-ref %}
 
 ### 绑定指令
 

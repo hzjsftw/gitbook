@@ -6,7 +6,7 @@
 
 * [智能戒指的方案设计](gong-neng-zong-lan/quickstart.md)
 * [sdk API总览](gong-neng-zong-lan/sdk-api-zong-lan.md)
-* [sdk二代指令简介](gong-neng-zong-lan/publish-your-docs.md)
+* [sdk二代协议简介](gong-neng-zong-lan/publish-your-docs.md)
 * [设备物理连接](gong-neng-zong-lan/she-bei-wu-li-lian-jie.md)
 * [健康统计图设计](gong-neng-zong-lan/jian-kang-tong-ji-tu-she-ji.md)
 * [其他常规功能设计](gong-neng-zong-lan/qi-ta-chang-gui-gong-neng-she-ji.md)
