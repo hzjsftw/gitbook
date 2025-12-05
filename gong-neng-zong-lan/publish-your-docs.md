@@ -30,7 +30,7 @@ layout:
     ```java
     LmAPI.APP_BIND(IBindConnectRefreshListenerLite listenerLite)
     ```
-*   IOS相关API：
+* IOS相关API：
 
 ```swift
 /// APP事件-绑定戒指
@@ -45,7 +45,7 @@ BCLRingManager.shared.appEventBindRing(date: Date, timeZone: BCLRingTimeZone, co
 
 * 触发条件：在账户已经绑定过戒指的情况下打开APP。
 * 执行操作：设备连接，发送“连接事件”请求，等待接受“连接事件”应答。
-* 说明：获取设备在未连接状态下产生的数据记录，同步事件，软硬件版本号，当前步数，电量，功能配置。
+* 说明：获取设备在未连接状态下产生的数据记录，同时间，软硬件版本号，当前步数，电量，功能配置。
 *   安卓相关API：
 
     ```java
@@ -56,7 +56,7 @@ BCLRingManager.shared.appEventBindRing(date: Date, timeZone: BCLRingTimeZone, co
     */
     LmAPI.APP_CONNECT(long timeMillis,IBindConnectRefreshListenerLite listenerLite) 
     ```
-*   IOS相关API：
+* IOS相关API：
 
 ```swift
 /// APP事件-连接戒指
@@ -83,7 +83,7 @@ BCLRingManager.shared.appEventConnectRing(date: Date, timeZone: BCLRingTimeZone,
     */
     LmAPI.APP_REFRESH(long timeMillis,IBindConnectRefreshListenerLite listenerLite) 
     ```
-*   IOS相关API：
+* IOS相关API：
 
 ```swift
   /// APP事件-刷新戒指

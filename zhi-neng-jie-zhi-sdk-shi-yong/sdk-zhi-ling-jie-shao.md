@@ -18,13 +18,11 @@ icon: triangle-instrument
 
 正常设备连接以后，需要获取多个指令，获取戒指信息，流程图如下（公版App的，用户可以根据需要选择指令，一般获取历史记录放在最后，时间比较长，而且获取历史记录期间，不允许主动测量，会报繁忙）
 
-<figure><img src="../.gitbook/assets/chipletRing一代协议指令顺序.png" alt=""><figcaption></figcaption></figure>
-
-
+<figure><img src="../.gitbook/assets/chipletRing一代协议指令顺序 (1).png" alt=""><figcaption></figcaption></figure>
 
 ### 二代协议流程图（建议新客户使用）
 
-<figure><img src="../.gitbook/assets/chipletRing重来你.png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/chipletRing重来你 (1).png" alt=""><figcaption></figcaption></figure>
 
 <figure><img src="../.gitbook/assets/戒指绑定.png" alt=""><figcaption></figcaption></figure>
 
@@ -56,7 +54,7 @@ icon: triangle-instrument
 这些指令，是用户可以通过指令，控制戒指进行体征数据的测量，包括：
 
 * **测量心率**
-* &#x20;**测量温度**
+* **测量温度**
 * **测量血氧**
 * **测量血压和血糖（特定固件）**
 
@@ -106,7 +104,7 @@ icon: triangle-instrument
 
 我们为特定厂家，定制了一些指令，仅供定制厂家使用，包括：
 
-* &#x20;**实时PPG血压测量**
+* **实时PPG血压测量**
 * **6轴协议**
 * **寿世PPG波形传输**
 
