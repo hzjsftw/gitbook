@@ -300,11 +300,11 @@ LmAPI.CLEAN_HISTORY（）
 public static void CLEAN_HISTORY()
 ```
 
-### 二代协议特殊处理
+### 复合指令特殊处理
 
 **android：**
 
-二代协议会自动上传历史数据，需要在页面上设置监听历史数据上传，否则会有null异常，在Activity里进行监听，通过LmAPI或者LmAPILite调用，样例：
+复合指令会自动上传历史数据，需要在页面上设置监听历史数据上传，否则会有null异常，在Activity里进行监听，通过LmAPI或者LmAPILite调用，样例：
 
 ```java
 private void READ_HISTORY_AUTO() {
@@ -342,4 +342,4 @@ private void READ_HISTORY_AUTO() {
 }
 ```
 
-除非有特殊情况，比如需要手动获取历史数据，使用二代协议，一般不需要再重复使用《读取戒指历史数据》
+除非有特殊情况，比如需要手动获取历史数据，使复合指令，一般不需要再重复使用《读取戒指历史数据》
