@@ -38,10 +38,6 @@ layout:
 
 我们也提供了上传历史数据到勇芯服务器的接口，和拉取最后一条数据的接口，上传到我方服务器目的是计算睡眠和Timeline，这部分只做一个简介，具体内容请查看《升级服务》部分。
 
-{% content-ref url="broken-reference" %}
-[Broken link](broken-reference)
-{% endcontent-ref %}
-
 **android:**
 
 ```java
@@ -216,11 +212,11 @@ public class HistoryDataBean{
 
 1.App启动，首先清除本地数据库里的内容，从服务器拉取48小时内保存到本地，根据本地数据库里的数据，显示首页内容，同时获取睡眠数据
 
-2.其他页面涉及到历史数据的地方，都从云端拉取&#x20;
+2.其他页面涉及到历史数据的地方，都从云端拉取
 
 3.获取最后一条记录，解析出时间戳time
 
-4.戒指连接成功，根据time，调用sdk的获取记录的api，LmAPI.READ\_HISTORY\_UPDATE\_TO\_SERVER&#x20;
+4.戒指连接成功，根据time，调用sdk的获取记录的api，LmAPI.READ\_HISTORY\_UPDATE\_TO\_SERVER
 
 5.上传成功以后，重新获取睡眠记录
 
@@ -236,7 +232,7 @@ LmAPI.READ_HISTORY(byte type, long timeMillis,IHistoryListener iHistoryListener)
 
 type: 1,获取全部历史记录；0，获取未上传的历史记录。读取过为上传历史记录，下次读取的时候，就会从上次读取时间以后算起，如果想要将之前的数据也拿到，可以在 progress自己记录，本地数据库也保存了数据，也可以通过DataApi.instance.queryHistoryData查询到。
 
-&#x20;timeMillis：秒级时间戳，0是默认所有未上传数据，传值以后，会上报该时间以后的数据，即使timeMillis在上次上传数据的时间之前 返回值：
+timeMillis：秒级时间戳，0是默认所有未上传数据，传值以后，会上报该时间以后的数据，即使timeMillis在上次上传数据的时间之前 返回值：
 
 ```java
 LmAPI.READ_HISTORY(type, new IHistoryListener() {
