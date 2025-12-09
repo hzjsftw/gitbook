@@ -30,7 +30,7 @@ icon: triangle-instrument
 
 ## 指令分类
 
-### 常规指令
+### 常规指令(<mark style="color:red;">不推荐</mark>)
 
 这些指令，属于戒指的一些常规操作，包括：
 
