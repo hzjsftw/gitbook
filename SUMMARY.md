@@ -19,7 +19,7 @@
 * [Android公版app的重连](zhi-neng-jie-zhi-sdk-shi-yong/images-and-media.md)
 * [Android 前台服务](zhi-neng-jie-zhi-sdk-shi-yong/android-qian-tai-fu-wu.md)
 * [sdk指令介绍](zhi-neng-jie-zhi-sdk-shi-yong/sdk-zhi-ling-jie-shao.md)
-* [二代协议](zhi-neng-jie-zhi-sdk-shi-yong/er-dai-xie-yi.md)
+* [复合指令](zhi-neng-jie-zhi-sdk-shi-yong/er-dai-xie-yi.md)
 * [常规指令](zhi-neng-jie-zhi-sdk-shi-yong/chang-gui-zhi-ling.md)
 * [历史数据相关](zhi-neng-jie-zhi-sdk-shi-yong/interactive-blocks.md)
 * [主动测量指令](zhi-neng-jie-zhi-sdk-shi-yong/integrations.md)
