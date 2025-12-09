@@ -1,5 +1,6 @@
 ---
 description: 鉴于有些用户需要查询服务器上，已经保存的用户历史数据，特提供一些方法
+icon: rectangle-vertical-history
 ---
 
 # 获取历史记录
