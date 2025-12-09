@@ -1,9 +1,9 @@
 ---
-description: 常规指令是属于戒指的一些常规操作，用户可以选择性使用
+description: 常规指令是属于戒指的一些常规操作，用户可以选择性使用，一般情况下，复合指令已经满足需求。
 icon: map
 ---
 
-# 常规指令
+# 常规指令(不推荐)
 
 **注：无特殊标记的情况下，本SDK中返回的值皆为小端模式**
 
@@ -211,7 +211,8 @@ public interface ISyncTimeListenerLite {
 ```
 
 **iOS:**
-```Swift
+
+```swift
 /// 同步时间
 /// - Parameters:
 ///   - date: 时间戳（默认当前时间）
@@ -225,8 +226,10 @@ func syncTime(date: Date = Date(),
 /// - Returns: 当前系统时区对应的RingTimeZone
 BCLRingTimeZone.getCurrentSystemTimeZone()
 ```
+
 #### 调用示例
-```Swift
+
+```swift
 // 同步时间
 BCLRingManager.shared.syncTime(date: Date(), timeZone: BCLRingTimeZone.getCurrentSystemTimeZone()) { (res: Result<BCLSyncTimeResponse, BCLError>) in
     switch result {
@@ -262,8 +265,6 @@ void syncTime(byte datum,byte[] time)
 | datum | byte    | 0或1                                                  | 0代表同步成功 1代表读取时间              |
 | time  | byte\[] | \[48, -23, -1, 83, -111, 1, 0, 0, 8] = 1723691166000 | 读取时间成功，需转化为时间戳(小端模式，最后一位为时区) |
 
-
-
 简化版本
 
 ```java
@@ -292,7 +293,8 @@ public static long bytesToLong(byte[] buffer) {
 ```
 
 **iOS:**
-```Swift
+
+```swift
 /// 读取时间
 /// - Parameter completion: 读取时间回调
 /// - Result: 读取结果
@@ -300,8 +302,10 @@ public static long bytesToLong(byte[] buffer) {
 /// - BCLError: 错误信息
 func readTime(completion: @escaping (Result<BCLReadTimeResponse, BCLError>) -> Void)
 ```
+
 #### 调用示例
-```Swift
+
+```swift
 /// 读取时间
 BCLRingManager.shared.readTime { res in
     switch res {
@@ -315,6 +319,7 @@ BCLRingManager.shared.readTime { res in
     }
 }
 ```
+
 ### 版本信息
 
 接口功能：版本信息 ，获取戒指的版本信息。
@@ -356,7 +361,8 @@ public interface IVersionListenerLite {
 ```
 
 **iOS:**
-```Swift
+
+```swift
 /// 读取固件版本
 /// - Parameter completion: 读取固件版本回调
 /// - Result: 读取结果
@@ -371,8 +377,10 @@ func readFirmware(completion: @escaping (Result<BCLReadFirmwareResponse, BCLErro
 /// - BCLError: 错误信息
 func readHardware(completion: @escaping (Result<BCLReadHardwareResponse, BCLError>) -> Void) 
 ```
+
 #### 调用示例
-```Swift
+
+```swift
 /// 读取硬件版本
 BCLRingManager.shared.readHardware { res in
     switch res {
@@ -393,6 +401,7 @@ BCLRingManager.shared.readFirmware { res in
     }
 }
 ```
+
 ### 电池电量
 
 接口功能：获取电池电量、 电池状态。
@@ -442,7 +451,8 @@ public interface IBatteryListenerLite {
 ```
 
 **iOS:**
-```Swift
+
+```swift
 /// 蓝牙设备主动推送电量信息 
 /// - Parameter completion: 主动推送电量信息回调
 /// - Result: 主动推送电量信息结果 0~100电量值范围、101充电中、102充满
@@ -462,7 +472,8 @@ func readBattery(completion: @escaping (Result<BCLReadBatteryResponse, BCLError>
 ```
 
 #### 调用示例
-```Swift
+
+```swift
 /// 监听电量推送Block
 BCLRingManager.shared.batteryNotifyBlock = { batteryLevel in
     BDLogger.info("电量推送Block: \(batteryLevel)")
@@ -480,7 +491,8 @@ BCLRingManager.shared.readBattery { res in
 ```
 
 **iOS:**
-```Swift
+
+```swift
 /// 充电状态
 /// - Parameter completion: 充电状态回调
 /// - BCLReadChargingStateResponse: 包含充电状态的响应模型
@@ -488,7 +500,8 @@ func readChargingState(completion: @escaping (Result<BCLReadChargingStateRespons
 ```
 
 #### 调用示例
-```Swift
+
+```swift
 BCLRingManager.shared.readChargingState { result in
     switch result {
     case .success(let response):
@@ -548,7 +561,7 @@ public interface IStepListenerLite {
 
 **iOS:**
 
-```Swift
+```swift
 /// 读取实时步数
 /// - Parameter completion: 读取实时步数回调
 /// - Result: 读取结果
@@ -558,7 +571,8 @@ func readStepCount(completion: @escaping (Result<BCLStepCountResponse, BCLError>
 ```
 
 #### 调用示例
-```Swift
+
+```swift
 /// 读取实时步数
 BCLRingManager.shared.readStepCount { result in
     switch result {
@@ -569,7 +583,6 @@ BCLRingManager.shared.readStepCount { result in
     }
 }
 ```
-
 
 ### 清除步数
 
@@ -616,7 +629,7 @@ void clearStepCount(byte data)
 
 **iOS:**
 
-```Swift
+```swift
 /// 清除实时步数
 /// - Parameter completion: 清除实时步数回调
 /// - Result: 清除结果
@@ -626,7 +639,8 @@ func clearStepCount(completion: @escaping (Result<BCLClearStepCountResponse, BCL
 ```
 
 #### 调用示例
-```Swift
+
+```swift
 /// 清除实时步数
 BCLRingManager.shared.clearStepCount { result in
     switch result {
@@ -639,10 +653,12 @@ BCLRingManager.shared.clearStepCount { result in
 ```
 
 ### 步数推送（定制：Z5I）
+
 接口功能：戒指主动推送步数。
 
 **iOS:**
-```Swift
+
+```swift
 /// 步数推送观察者（供外部订阅）
 public var stepNotifyObservable: Observable<Int>
 
@@ -651,7 +667,8 @@ public var stepNotifyBlock: ((Int) -> Void)?
 ```
 
 #### 调用示例
-```Swift
+
+```swift
 BCLRingManager.shared.stepNotifyBlock = { steps in
     print("步数推送: \(steps)")
 }
@@ -670,7 +687,7 @@ LmAPI.RESET()
 ```
 
 参数说明：无\
-返回值：无 ，有回调reset方法即认为成功&#x20;
+返回值：无 ，有回调reset方法即认为成功
 
 ```java
 void reset(byte[] data);
@@ -724,7 +741,8 @@ public interface ISystemControlListenerLite {
 ```
 
 **iOS:**
-```Swift
+
+```swift
 /// 恢复出厂设置
 /// - Parameter completion: 恢复出厂设置回调
 /// - BCLRestoreFactorySettingsResponse: 包含恢复出厂设置结果的响应模型
@@ -732,7 +750,8 @@ func restoreFactorySettings(completion: @escaping (Result<BCLRestoreFactorySetti
 ```
 
 #### 调用示例
-```Swift
+
+```swift
 BCLRingManager.shared.restoreFactorySettings { result in
     switch result {
     case .success(let response):
@@ -816,7 +835,8 @@ void setCollection(byte result)
 ```
 
 **iOS:**
-```Swift
+
+```swift
 /// 设置采集周期
 /// - Parameter period: 采集周期（单位：秒）最小值为60
 /// - Parameter completion: 设置采集周期回调
@@ -825,7 +845,8 @@ func setCollectPeriod(period: Int, completion: @escaping (Result<BCLSetCollectPe
 ```
 
 #### 调用示例
-```Swift
+
+```swift
 BCLRingManager.shared.setCollectPeriod(period: 300) { result in
     switch result {
     case .success(let response):
@@ -905,7 +926,8 @@ void getCollection(byte[] bytes)
 ```
 
 **iOS:**
-```Swift
+
+```swift
 /// 获取采集周期
 /// - Parameter completion: 获取采集周期回调
 /// - BCLGetCollectPeriodResponse: 包含采集周期的响应模型
@@ -913,7 +935,8 @@ func getCollectPeriod(completion: @escaping (Result<BCLGetCollectPeriodResponse,
 ```
 
 #### 调用示例
-```Swift
+
+```swift
 BCLRingManager.shared.getCollectPeriod { result in
     switch result {
     case .success(let response):
@@ -963,7 +986,8 @@ bit 8：puf加密芯片通信故障
 bit 9：touch通信故障
 
 **iOS:**
-```Swift
+
+```swift
 /// 一键自检
 /// - Parameter completion: 一键自检回调
 /// - BCLFixtureTestingOneKeySelfInspectionResponse: 包含一键自检结果的响应模型
@@ -971,7 +995,8 @@ func oneKeySelfInspection(completion: @escaping (Result<BCLFixtureTestingOneKeyS
 ```
 
 #### 调用示例
-```Swift
+
+```swift
 BCLRingManager.shared.oneKeySelfInspection { result in
     switch result {
     case .success(let response):
