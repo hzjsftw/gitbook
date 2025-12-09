@@ -1,6 +1,6 @@
 ---
 description: >-
-  因为版本问题，目前的指令分为两类，一种是一代协议，一种是二代协议。一代协议是把每个蓝牙协议，封装为一个方法，优势是简单明了，缺点是调用指令多，流程复杂，有bug难调试。二代指令是复合指令，是一个指令，包含之前的多个一代指令，优点是与蓝牙通信简单，一个指令可以获取多个信息。
+  因为版本问题，目前的指令分为两类，一种是常规指令，一种是复合指令。常规指令是把每个蓝牙协议，封装为一个方法，优势是简单明了，缺点是调用指令多，流程复杂，有bug难调试。复合指令，是一个指令，包含之前的多个一代指令，优点是与蓝牙通信简单，一个指令可以获取多个信息。
 icon: triangle-instrument
 ---
 
@@ -14,13 +14,13 @@ icon: triangle-instrument
 
 ## 设备连接后指令调用链
 
-### 一代协议流程图（<mark style="color:red;">仅供老客户参考，新客户不建议使用</mark>）
+### 常规指令流程图（<mark style="color:red;">仅供参考，不推荐，容易出Bug，难以管控</mark>）
 
 正常设备连接以后，需要获取多个指令，获取戒指信息，流程图如下（公版App的，用户可以根据需要选择指令，一般获取历史记录放在最后，时间比较长，而且获取历史记录期间，不允许主动测量，会报繁忙）
 
 <figure><img src="../.gitbook/assets/chipletRing一代协议指令顺序 (1).png" alt=""><figcaption></figcaption></figure>
 
-### 二代协议流程图（建议新客户使用）
+### 复合指令流程图（<mark style="color:red;">推荐使用</mark>）
 
 <figure><img src="../.gitbook/assets/chipletRing重来你 (1).png" alt=""><figcaption></figcaption></figure>
 
