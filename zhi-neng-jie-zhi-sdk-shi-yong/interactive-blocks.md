@@ -38,6 +38,10 @@ layout:
 
 我们也提供了上传历史数据到勇芯服务器的接口，和拉取最后一条数据的接口，上传到我方服务器目的是计算睡眠和Timeline，这部分只做一个简介，具体内容请查看《升级服务》部分。
 
+{% content-ref url="/broken/pages/UM3MKKpg8WUFrgab9yGK" %}
+[Broken link](/broken/pages/UM3MKKpg8WUFrgab9yGK)
+{% endcontent-ref %}
+
 **android:**
 
 ```java
@@ -220,7 +224,13 @@ public class HistoryDataBean{
 
 5.上传成功以后，重新获取睡眠记录
 
-### 读取戒指历史数据
+### 读取戒指历史数据（<mark style="color:red;">不推荐</mark>）
+
+历史记录通过复合指令的连接和刷新指令获取即可，基本上不会用到以下指令，除非需要获取全部历史记录，这个调用的时候，需要注意不要产生多条指令并行的情况，参照
+
+{% content-ref url="zhi-ling-shi-yong-zhu-yi-dian-zhong-yao.md" %}
+[zhi-ling-shi-yong-zhu-yi-dian-zhong-yao.md](zhi-ling-shi-yong-zhu-yi-dian-zhong-yao.md)
+{% endcontent-ref %}
 
 **android:**
 
