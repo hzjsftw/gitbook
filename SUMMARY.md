@@ -10,6 +10,7 @@
 * [设备物理连接](gong-neng-zong-lan/she-bei-wu-li-lian-jie.md)
 * [健康统计图设计](gong-neng-zong-lan/jian-kang-tong-ji-tu-she-ji.md)
 * [其他常规功能设计](gong-neng-zong-lan/qi-ta-chang-gui-gong-neng-she-ji.md)
+* [参考demo](gong-neng-zong-lan/can-kao-demo.md)
 
 ## 智能戒指SDK使用
 
