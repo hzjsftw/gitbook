@@ -19,6 +19,14 @@ layout:
 
 # 智能戒指的方案设计
 
+### 指令使用注意点
+
+鉴于用户经常出现指令调用出问题的时候，建议先查看一下指令使用的注意点，如果开发中，出现不好排查的Bug，也可以参考注意点，自我排查一下
+
+{% content-ref url="../zhi-neng-jie-zhi-sdk-shi-yong/zhi-ling-shi-yong-zhu-yi-dian-zhong-yao.md" %}
+[zhi-ling-shi-yong-zhu-yi-dian-zhong-yao.md](../zhi-neng-jie-zhi-sdk-shi-yong/zhi-ling-shi-yong-zhu-yi-dian-zhong-yao.md)
+{% endcontent-ref %}
+
 ### 戒指功能框架
 
 <figure><img src="../.gitbook/assets/ring_kuangjia1.png" alt=""><figcaption></figcaption></figure>

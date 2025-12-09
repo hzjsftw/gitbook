@@ -21,7 +21,6 @@
 * [sdk指令介绍](zhi-neng-jie-zhi-sdk-shi-yong/sdk-zhi-ling-jie-shao.md)
 * [指令使用注意点（重要）](zhi-neng-jie-zhi-sdk-shi-yong/zhi-ling-shi-yong-zhu-yi-dian-zhong-yao.md)
 * [复合指令](zhi-neng-jie-zhi-sdk-shi-yong/er-dai-xie-yi.md)
-* [常规指令(不推荐)](zhi-neng-jie-zhi-sdk-shi-yong/chang-gui-zhi-ling.md)
 * [历史数据相关](zhi-neng-jie-zhi-sdk-shi-yong/interactive-blocks.md)
 * [主动测量指令](zhi-neng-jie-zhi-sdk-shi-yong/integrations.md)
 * [HID手势指令](zhi-neng-jie-zhi-sdk-shi-yong/hid-shou-shi-zhi-ling.md)
@@ -31,6 +30,7 @@
 * [心电图](zhi-neng-jie-zhi-sdk-shi-yong/xin-dian-tu.md)
 * [厂家定制指令](zhi-neng-jie-zhi-sdk-shi-yong/chang-jia-ding-zhi-zhi-ling.md)
 * [获取蓝牙信号](zhi-neng-jie-zhi-sdk-shi-yong/huo-qu-lan-ya-xin-hao.md)
+* [常规指令(不推荐)](zhi-neng-jie-zhi-sdk-shi-yong/chang-gui-zhi-ling.md)
 
 ## 升级服务
 
