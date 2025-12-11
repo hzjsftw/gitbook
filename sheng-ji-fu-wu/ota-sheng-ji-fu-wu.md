@@ -359,4 +359,291 @@ private BluetoothAdapter.LeScanCallback leScanCallback = new BluetoothAdapter.Le
 };
 ```
 
-### IOS提供的接口
+### IOS_OTA升级说明
+1、首先，通过SDK的接口调用，检查当前固价版本是否为最新的。
+2、如果不是最新版本，接口会返回最新的部件版本号、文件名和下载地址等信息。
+3、然后，使用SDK提供的下载接口，从云端下载最新的固件文件
+4、可以通过SDK提供的接口来检查固件升级的类型。（Nordic、Apollo、Phy）
+5、根据对应的固件升级类型，然后执行相应的提供的固件升级接口，进行固件升级。
+
+
+**iOS:*
+```Swift
+/// 固件版本更新检查
+/// - Parameters:
+///   - version: 当前固件版本号
+/// - Parameter completion: 固件版本更新检查回调
+func checkFirmwareUpdate(version: String, completion: @escaping (Result<BCLFirmwareVersionInfo, BCLError>) -> Void)
+```
+### 调用示例
+```Swift
+BCLRingManager.shared.checkFirmwareUpdate(version: "5.5.1.6Z2Y") { result in
+    switch result {
+    case let .success(versionInfo):
+        // 有新版本
+        if versionInfo.hasNewVersion {
+            BDLogger.info("""
+            ✅ 发现新版本：
+            - 版本号：\(versionInfo.version ?? "")
+            - 下载地址：\(versionInfo.downloadUrl ?? "")
+            - 文件名：\(versionInfo.fileName ?? "")
+            """)
+            // 这里可以调用下载固件接口，下载最新固件，然后进行升级
+        } else {// 已是最新版本
+            BDLogger.info("✅ 当前已是最新版本")
+        }
+        BDLogger.info("📝 消息：\(String(describing: versionInfo.version))")
+    case let .failure(error):
+        switch error {
+        case let .network(.invalidParameters(message)):
+            BDLogger.error("❌ 参数无效，请检查版本号格式: \(message)")
+        case let .network(.httpError(code)):
+            BDLogger.error("❌ HTTP请求失败：状态码 \(code)")
+        case let .network(.serverError(code, message)):
+            BDLogger.error("❌ 服务器错误：[\(code)] \(message)")
+        case .network(.invalidResponse):
+            BDLogger.error("❌ 响应数据无效")
+        case let .network(.decodingError(error)):
+            BDLogger.error("❌ 数据解析失败：\(error.localizedDescription)")
+        case let .network(.networkError(message)):
+            BDLogger.error("❌ 网络错误：\(message)")
+        case let .network(.tokenError(message)):
+            BDLogger.error("❌ Token异常：\(message)")
+        default:
+            BDLogger.error("❌ 其他错误：\(error)")
+        }
+    }
+}
+```
+
+**iOS:*
+```Swift
+/// 固件下载
+/// - Parameters:
+///   - url: 固件下载地址
+///   - fileName: 固件文件名
+///   - destinationPath: 固件文件保存路径
+///   - progress: 固件下载进度回调
+/// - Parameter completion: 固件下载回调
+func downloadFirmware(url: String, fileName: String, destinationPath: String, progress: @escaping (Double) -> Void, completion: @escaping (Result<String, BCLError>) -> Void)
+```
+### 调用示例
+```Swift
+let fileName = "2.7.4.8Z27.hex16"
+let downloadUrl = "http://221.226.159.58:22222/profile/upload/2025/04/01/2.7.4.8Z27.hex16"
+//  固件下载保存路径
+let destinationPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
+BCLRingManager.shared.downloadFirmware(url: downloadUrl, fileName: fileName, destinationPath: destinationPath, progress: { progress in
+    BDLogger.info("固件下载进度：\(progress)")
+}, completion: { result in
+    switch result {
+    case let .success(filePath):
+        BDLogger.info("固件下载成功：\(filePath)")
+    case let .failure(error):
+        BDLogger.error("固件下载失败：\(error)")
+    }
+})
+```
+
+**iOS:*
+```Swift
+/// 获取固件升级类型
+/// - Parameters:
+///   - firmwareVersion: 固件版本号()
+///   - completion: 获取结果回调
+func getOTAType(firmwareVersion: String?, completion: @escaping (BCLOTAType) -> Void)
+```
+### 调用示例
+```Swift
+BCLRingManager.shared.getOTAType(firmwareVersion: "5.5.1.6Z2Y") { response in
+    BDLogger.info("固件升级类型:\(response.rawValue)")
+    switch response.rawValue {
+    case 0:
+        BDLogger.error("固件升级类型: 未知")
+        break
+    case 1:
+        BDLogger.info("固件升级类型: Apollo")
+        // Apollo固件升级 查看以下方法
+//                    func apolloUpgradeFirmware(filePath: String, progressHandler: ((Float) -> Void)? = nil, completion: @escaping (Result<Void, BCLError>) -> Void)
+        break
+    case 2:
+        BDLogger.info("固件升级类型: Nordic")
+        // Nordic固件升级 查看以下方法
+//                    func nrfUpgradeFirmware(filePath: String, fileName: String, progressHandler: ((Int) -> Void)? = nil, completion: @escaping (Result<BCLNrfUpgradeState.Stage, BCLError>) -> Void)
+        break
+    case 3:
+        BDLogger.info("固件升级类型: Phy")
+        // Phy固件升级 查看以下方法
+//                    func phyUpgradeFirmware(filePath: String, progressHandler: ((Double) -> Void)? = nil, completion: @escaping (Result<BCLPhyUpgradeState, BCLError>) -> Void)
+        break
+    default:
+        break
+    }
+}
+```
+
+**iOS:*
+```Swift
+/// Apollo 固件升级接口
+/// - Parameters:
+///   - filePath: 固件文件路径
+///   - progressHandler: 进度回调，返回 0-100 的进度值
+///   - completion: 完成回调，返回成功或失败
+func apolloUpgradeFirmware(filePath: String, progressHandler: ((Float) -> Void)? = nil, completion: @escaping (Result<Void, BCLError>) -> Void)
+```
+### 调用示例
+```Swift
+let fileurl = URL(fileURLWithPath: "固件文件保存路径")
+BCLRingManager.shared.apolloUpgradeFirmware(filePath: fileurl.path, progressHandler: { [weak self] progress in
+    BDLogger.info("Apollo升级进度：\(progress)%")
+    self?.showLoading("升级进度：\(progress)%")
+},
+completion: { [weak self] result in
+    self?.hideLoading()
+    switch result {
+    case .success:
+        BDLogger.info("Apollo固件升级成功")
+        self?.showSuccess("Apollo固件升级成功")
+    case let .failure(error):
+        BDLogger.error("Apollo固件升级失败：\(error)")
+        self?.showError("升级失败：\(error.localizedDescription)")
+    }
+}
+)
+```
+
+**iOS:*
+```Swift
+/// Nordic 固件升级接口
+/// - Parameters:
+///   - filePath: 固件文件路径
+///   - progressHandler: 进度回调，返回 0-100 的进度值
+///   - completion: 完成回调，返回成功或失败
+func nrfUpgradeFirmware(filePath: String, fileName: String, progressHandler: ((Int) -> Void)? = nil, completion: @escaping (Result<BCLNrfUpgradeState.Stage, BCLError>) -> Void)
+```
+### 调用示例
+```Swift
+let fileName = ""
+let fileURL = URL(fileURLWithPath: "固件文件保存路径")
+// 开始Nordic固件升级会自动断开连接后并重新连接戒指
+BCLRingManager.shared.nrfUpgradeFirmware(filePath: fileURL.path, fileName: fileName) { [weak self] progress in
+    BDLogger.info("Nordic升级进度：\(progress)%")
+    self?.showLoading("升级进度：\(progress)%")
+} completion: { [weak self] res in
+    switch res {
+    case let .success(state):
+        if state == .rebooting {
+            BDLogger.info("Nordic固件升级-设备重启中")
+            self?.showLoading("设备重启中")
+        } else if state == .completed {
+            BDLogger.info("Nordic固件升级成功")
+            self?.hideLoading()
+            self?.showSuccess("Nordic固件升级成功")
+        }
+    case let .failure(error):
+        BDLogger.error("Nordic固件升级失败：\(error)")
+        self?.hideLoading()
+        self?.showError("升级失败：\(error.localizedDescription)")
+    }
+}
+```
+
+**iOS:*
+```Swift
+/// Phy 固件升级接口
+/// - Parameters:
+///   - filePath: 固件文件路径
+///   - progressHandler: 进度回调，返回 0-100 的进度值
+///   - completion: 完成回调，返回成功或失败
+func phyUpgradeFirmware(filePath: String, progressHandler: @escaping (Double) -> Void, completion: @escaping (Result<BCLPhyUpgradeState, BCLError>) -> Void)
+```
+### 调用示例
+```Swift
+// 如果开启了自动重连，需要先关掉
+BCLRingManager.shared.isAutoReconnectEnabled = false
+let fileURL = URL(fileURLWithPath: "固件文件保存路径")
+BCLRingManager.shared.phyUpgradeFirmware(filePath: fileURL.path) { [weak self] progress in
+    let progressPercent = Int(progress * 100)
+    BDLogger.info("Phy升级进度：\(progressPercent)%")
+    self?.showLoading("升级进度：\(progressPercent)%")
+} completion: { [weak self] res in
+    self?.hideLoading()
+    switch res {
+    case let .success(state):
+        BDLogger.info("Phy固件升级成功：\(state)")
+        self?.showSuccess("Phy固件升级成功")
+        // 升级成功后，需要重新连接戒指，根据需要决定是否开启自动重连功能（注意此处）
+        //  BCLRingManager.shared.startConnect(macAddress: deviceMacAddress, isAutoReconnect: true)
+    case let .failure(error):
+        BDLogger.error("Phy固件升级失败：\(error)")
+        self?.showError("升级失败：\(error.localizedDescription)")
+        // 升级失败后，可以尝试使用 PHY Boot 模式固件升级接口进行恢复升级
+    }
+}
+```
+
+**iOS:*
+```Swift
+/// PHY Boot模式固件升级接口
+/// 用于处理PHY固件升级过程中断导致设备卡在boot模式的情况
+/// - Parameters:
+///   - filePath: 固件文件路径
+///   - device: Boot模式设备信息
+///   - peripheral: Boot模式外设对象
+///   - progressHandler: 升级进度回调，返回 0-100 的进度值
+///   - completion: 升级状态回调
+func phyBootModeUpgrade(filePath: String, device: BCLDeviceInfoModel, peripheral: CBPeripheral, progressHandler: @escaping (Double) -> Void, completion: @escaping (Result<BCLPhyBootModeUpgradeState, BCLError>) -> Void)
+```
+### 调用示例
+```Swift
+// 📢注意：因phy固件戒指升级中断、失败会导致戒指进入boot模式，所以需要通过蓝牙搜索找到该戒指并进行连接后再执行phyBootModeUpgrade进行固件升级
+BCLRingManager.shared.stopScan()
+BCLRingManager.shared.startScan { [weak self] result in
+    guard let self = self else { return }
+    switch result {
+    case let .success(deviceList):
+        for deviceInfo in deviceList {
+          //  扫描到PHY Boot模式设备
+          if deviceInfo.isphyBootMode {
+              BDLogger.info("扫描到PHY Boot模式设备：\(deviceInfo.name ?? "")，mac：\(deviceInfo.macAddress ?? "")")
+              // 停止扫描
+              BCLRingManager.shared.stopScan()
+              AppRingManager.shared.connectBluetoothDevice(deviceInfo: deviceInfo) { [weak self] status, _ in
+                // 通过deviceInfo.isPhyBootMode判断戒指是否处于phyBoot模式
+                //  处理phyBoot模式固件升级
+                guard !deviceInfo.isPhyBootMode else {
+                    // 📢注意：此处在连接成功之后需要延迟1s进行Phy固件的boot模式固件升级
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
+                        // 如果开启了自动重连，需要先关掉
+                        BCLRingManager.shared.isAutoReconnectEnabled = false
+                        let fileURL = URL(fileURLWithPath: "固件文件保存路径")
+                        let currentDevice = BCLRingManager.shared.currentConnectedDevice
+                        BCLRingManager.shared.phyBootModeUpgrade(filePath: fileURL.path, device: currentDevice, peripheral: currentDevice.peripheral) { [weak self] progress in
+                            BDLogger.info("PHY Boot Mode升级进度：\(Int(progress))%")
+                            self?.showLoading("升级进度：\(Int(progress))%")
+                        } completion: { [weak self] res in
+                            self?.hideLoading()
+                            switch res {
+                            case let .success(response):
+                                BDLogger.info("PHY Boot Mode升级成功：\(response)")
+                                self?.showSuccess("PHY Boot Mode固件升级成功")
+                                // 升级成功后，需要重新连接戒指，根据需要决定是否开启自动重连功能（注意此处）
+                                //  BCLRingManager.shared.startConnect(macAddress: deviceMacAddress, isAutoReconnect: true)
+                            case let .failure(error):
+                                BDLogger.error("PHY Boot Mode升级失败：\(error)")
+                                self?.showError("升级失败：\(error.localizedDescription)")
+                            }
+                        }
+                    }
+                  return
+                }
+              }
+           }
+        }
+    case let .failure(error):
+        BDLogger.error("扫描设备失败：\(error)")
+    }
+}
+```
+
+
