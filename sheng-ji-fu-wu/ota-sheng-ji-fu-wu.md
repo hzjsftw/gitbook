@@ -361,13 +361,16 @@ private BluetoothAdapter.LeScanCallback leScanCallback = new BluetoothAdapter.Le
 
 ### IOS_OTA升级说明
 1、首先，通过SDK的接口调用，检查当前固价版本是否为最新的。
+
 2、如果不是最新版本，接口会返回最新的部件版本号、文件名和下载地址等信息。
+
 3、然后，使用SDK提供的下载接口，从云端下载最新的固件文件
+
 4、可以通过SDK提供的接口来检查固件升级的类型。（Nordic、Apollo、Phy）
+
 5、根据对应的固件升级类型，然后执行相应的提供的固件升级接口，进行固件升级。
 
-
-**iOS:*
+**iOS:固件版本更新检查**
 ```Swift
 /// 固件版本更新检查
 /// - Parameters:
@@ -416,7 +419,7 @@ BCLRingManager.shared.checkFirmwareUpdate(version: "5.5.1.6Z2Y") { result in
 }
 ```
 
-**iOS:*
+**iOS:固件文件下载**
 ```Swift
 /// 固件下载
 /// - Parameters:
@@ -445,7 +448,7 @@ BCLRingManager.shared.downloadFirmware(url: downloadUrl, fileName: fileName, des
 })
 ```
 
-**iOS:*
+**iOS:固件升级类型获取**
 ```Swift
 /// 获取固件升级类型
 /// - Parameters:
@@ -482,7 +485,7 @@ BCLRingManager.shared.getOTAType(firmwareVersion: "5.5.1.6Z2Y") { response in
 }
 ```
 
-**iOS:*
+**iOS:Apollo固件升级**
 ```Swift
 /// Apollo 固件升级接口
 /// - Parameters:
@@ -512,7 +515,7 @@ completion: { [weak self] result in
 )
 ```
 
-**iOS:*
+**iOS:Nordic固件升级**
 ```Swift
 /// Nordic 固件升级接口
 /// - Parameters:
@@ -548,7 +551,7 @@ BCLRingManager.shared.nrfUpgradeFirmware(filePath: fileURL.path, fileName: fileN
 }
 ```
 
-**iOS:*
+**iOS:Phy固件升级**
 ```Swift
 /// Phy 固件升级接口
 /// - Parameters:
@@ -582,7 +585,7 @@ BCLRingManager.shared.phyUpgradeFirmware(filePath: fileURL.path) { [weak self] p
 }
 ```
 
-**iOS:*
+**iOS:PHY Boot模式固件升级**
 ```Swift
 /// PHY Boot模式固件升级接口
 /// 用于处理PHY固件升级过程中断导致设备卡在boot模式的情况
