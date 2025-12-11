@@ -5,6 +5,10 @@ icon: hand
 
 # HID手势指令
 
+### 演示视频
+
+[http://221.226.159.58:11111/api/profile/upload/video/hid.mp4](http://221.226.159.58:11111/api/profile/upload/video/hid.mp4)
+
 ### 设置戒指的HID模式
 
 **android：**
@@ -70,7 +74,8 @@ icon: hand
 ```
 
 **iOS:**
-```Swift
+
+```swift
 /// 设置HID模式
 /// - Parameters:
 ///   - touchMode: 触摸模式 0:刷视屏模式、1:拍照模式、2:音乐模式、3:PPT模式、4:上传实时音频模式 255:关闭
@@ -84,7 +89,8 @@ func setHIDMode(touchMode: Int, gestureMode: Int, systemType: Int, deviceModelNa
 ```
 
 #### 调用示例
-```Swift
+
+```swift
 BCLRingManager.shared.setHIDMode(
     touchMode: 0,
     gestureMode: 1,
@@ -103,7 +109,8 @@ BCLRingManager.shared.setHIDMode(
 ```
 
 **iOS:**
-```Swift
+
+```swift
 /// 获取当前手机设备型号名称
 /// - Returns: 当前手机设备型号名称
 func getMobileDeviceModelName() -> String
@@ -241,7 +248,8 @@ LmAPI.GET_HID_CODE((byte)0x00);
 ```
 
 **iOS:**
-```Swift
+
+```swift
 /// 获取HID功能码
 /// - Parameter completion: 获取HID功能码回调
 func getHIDFunctionCode(completion: @escaping (Result<BCLGetHIDFunctionCodeResponse, BCLError>) -> Void)
@@ -282,7 +290,8 @@ LmAPI.GET_HID();
 ```
 
 **iOS:**
-```Swift
+
+```swift
 /// 获取当前HID模式
 /// - Parameter completion: 获取当前HID模式回调
 func getCurrentHIDMode(completion: @escaping (Result<BCLGetCurrentHIDModeResponse, BCLError>) -> Void)
@@ -291,7 +300,8 @@ func getCurrentHIDMode(completion: @escaping (Result<BCLGetCurrentHIDModeRespons
 ### 手势功能设置（定制功能：Z4I）
 
 **iOS:**
-```Swift
+
+```swift
 /// 设置手势功能
 /// - Parameters:
 ///   - swipeUpGesture: 上滑手势  1：音乐暂停/开始、2：音乐下一首、3：音乐上一首、4: 音量+、5：音量-、6：拍照、255:关闭
