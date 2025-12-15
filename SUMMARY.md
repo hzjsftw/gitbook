@@ -49,3 +49,4 @@
 * [连接问题](chang-jian-wen-ti/lian-jie-wen-ti.md)
 * [指令相关问题](chang-jian-wen-ti/zhi-ling-xiang-guan-wen-ti.md)
 * [睡眠问题](chang-jian-wen-ti/shui-mian-wen-ti.md)
+* [待机时间短](chang-jian-wen-ti/dai-ji-shi-jian-duan.md)
