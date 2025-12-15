@@ -1,5 +1,6 @@
 ---
 description: 有些情况下，如果app处理不当，会导致待机很短
+icon: battery-low
 ---
 
 # 待机时间短
