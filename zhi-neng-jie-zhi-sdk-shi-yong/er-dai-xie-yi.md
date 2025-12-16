@@ -83,7 +83,8 @@ LmAPILite.READ_HISTORY_AUTO(IHistoryListenerLite iHistoryListener)
 public class SystemControlBean {
    private String firmwareVersion;//固件版本号
     private String hardwareVersion;//硬件版本号
-    private byte battery;//电量
+    private byte battery;//电量（正常电量：0~100，101为充电中，电量无效，102为充电完成，电量无效
+）
     private byte chargingStatus;//充电状态(0未充电，1充电中，充满电)
     private String collectionInterval;//当前采集间隔
     private byte[] HID_CODE;//当前HID功能码
