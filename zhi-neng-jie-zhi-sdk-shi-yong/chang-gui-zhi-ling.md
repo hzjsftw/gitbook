@@ -444,7 +444,7 @@ public interface IBatteryListenerLite {
 
     /**
      * 主动推送电量信息的回调
-     * @param type 0x02电量推
+     * @param type 0x02电量推送
      * @param electricity 电量百分比
      */
     void battery_push(int type, int electricity);
