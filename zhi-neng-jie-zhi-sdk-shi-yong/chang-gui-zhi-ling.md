@@ -411,10 +411,10 @@ BCLRingManager.shared.readFirmware { res in
 接口声明：
 
 ```java
-LmAPI.GET_BATTERY((byte) 0x00);  //0x00获取电量，0x01获取充电状态
+LmAPI.GET_BATTERY((byte) 0x00);  //0x00获取电量，0x01获取充电状态，0x02电量推送
 ```
 
-参数说明：type：0x00获取电量 ，0x01获取充电状态\
+参数说明：type：0x00获取电量 ，0x01获取充电状态，0x01获取充电状态，0x02当戒指未复位，充电状态发生变化的时候，蓝牙连接中，戒指主动进行电量推送，间隔1s发送三次\
 返回值
 
 ```java
@@ -430,7 +430,8 @@ void battery(byte status, byte datum)
 简化版本
 
 ```java
-//type 电池类型，0读取电量(充电中和充电完成，电量无效) 1充电状态，电量无效
+//type 电池类型，0读取电量(充电中和充电完成，电量无效) 1充电状态，电量无效，2，0x02当戒指未复位，充电状态发生变化的时候，
+//蓝牙连接中，戒指主动进行电量推送，间隔1s发送三次
 static void GET_BATTERY(int type, IBatteryListenerLite listenerLite)
 
 public interface IBatteryListenerLite {
@@ -442,8 +443,8 @@ public interface IBatteryListenerLite {
     void battery(int type, int electricity);
 
     /**
-     * 主动推送电量信息
-     * @param type 获取电量还是获取充电状态 0是电量，1是充电状态
+     * 主动推送电量信息的回调
+     * @param type 0x02电量推
      * @param electricity 电量百分比
      */
     void battery_push(int type, int electricity);
