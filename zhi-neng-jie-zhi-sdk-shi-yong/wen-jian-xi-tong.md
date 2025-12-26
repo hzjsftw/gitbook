@@ -28,8 +28,8 @@ GET\_FILE\_CONTENT的参数需要依赖GET\_FILE\_LIST的file回调，根据Stri
       // 分割字符串
      String[] parts = withoutExtension.split("_");
      // 获取最后一个部分，即 "7"
-     String result = parts[parts.length - 1];
-     fileType= Integer.parseInt(result);     
+     String fileType= parts[parts.length - 1];
+     
 ```
 
 ```java
@@ -62,23 +62,23 @@ public interface IFileListListener {
 
 目前支持的文件类型：
 
-&#x20;1:三轴数据&#x20;
+1:三轴数据
 
 2:六轴数据
 
-&#x20;3:PPG数据红外+红色+三轴(spo2)&#x20;
+3:PPG数据红外+红色+三轴(spo2)
 
-4:PPG数据绿色&#x20;
+4:PPG数据绿色
 
-5:PPG数据红外&#x20;
+5:PPG数据红外
 
 6:温度数据红外
 
-&#x20;7:红外+红色+绿色+温度+三轴
+7:红外+红色+绿色+温度+三轴
 
-&#x20;8:adpcm音频
+8:adpcm音频
 
-&#x20;9:opus音频
+9:opus音频
 
 ### 本地录音文件
 
@@ -219,8 +219,8 @@ public interface FileResponseCallback {
       // 分割字符串
      String[] parts = withoutExtension.split("_");
      // 获取最后一个部分，即 "8"
-     String result = parts[parts.length - 1];
-     fileType= Integer.parseInt(result);         
+     String fileType= parts[parts.length - 1];
+          
 ```
 
 文件内容解析样例：
@@ -382,7 +382,7 @@ temper2，类型：有符号短整型
 
 ### iOS 获取文件列表
 
-```Swift
+```swift
 /// 获取文件列表
 /// - Parameter completion: 获取文件列表回调
 /// - BCLRequestFileListResponse: 包含获取文件列表结果的响应模型
@@ -390,7 +390,8 @@ func getFileList(completion: @escaping (Result<BCLRequestFileListResponse, BCLEr
 ```
 
 #### 调用示例
-```Swift
+
+```swift
 BCLRingManager.shared.getFileList { [weak self] res in
     guard let self = self else { return }
 
@@ -442,7 +443,8 @@ BCLRingManager.shared.getFileList { [weak self] res in
 ### 获取文件数据
 
 **iOS:**
-```Swift
+
+```swift
 /// 获取文件数据
 /// - Parameters:
 ///   - fileName: 文件名
@@ -454,7 +456,8 @@ func getFileData(fileName: String, completion: @escaping (Result<BCLRequestFileD
 ```
 
 #### 调用示例
-```Swift
+
+```swift
 BCLRingManager.shared.getFileData(fileName: fileName) { res in
     switch res {
     case let .success(response):
@@ -515,7 +518,8 @@ BCLRingManager.shared.getFileData(fileName: fileName) { res in
 ### 删除文件
 
 **iOS:**
-```Swift
+
+```swift
 /// 删除文件
 /// - Parameters:
 ///   - fileName: 文件名
@@ -524,21 +528,23 @@ func deleteFile(fileName: String, completion: @escaping (Result<BCLDeleteFileRes
 ```
 
 #### 调用示例
-```Swift
 
+```swift
 ```
 
 ### 格式化文件系统
 
 **iOS:**
-```Swift
+
+```swift
 /// 格式化文件系统
 /// - Parameter completion: 格式化文件系统回调
 func formatFileSystem(completion: @escaping (Result<BCLFormatFileSystemResponse, BCLError>) -> Void)
 ```
 
 #### 调用示例
-```Swift
+
+```swift
 BCLRingManager.shared.formatFileSystem { res in
     switch res {
     case let .success(response):
@@ -556,7 +562,8 @@ BCLRingManager.shared.formatFileSystem { res in
 ### 获取文件系统信息
 
 **iOS:**
-```Swift
+
+```swift
 /// 获取文件系统信息
 /// - Parameter completion: 获取文件系统信息回调
 func getFileSystemInfo(completion: @escaping (Result<BCLGetFileSystemInfoResponse, BCLError>) -> Void)
@@ -565,7 +572,8 @@ func getFileSystemInfo(completion: @escaping (Result<BCLGetFileSystemInfoRespons
 ### 获取文件系统状态
 
 **iOS:**
-```Swift
+
+```swift
 /// 获取文件系统状态
 func getFileSystemStatus(completion: @escaping (Result<BCLGetFileSystemStatusResponse, BCLError>) -> Void)
 ```
@@ -573,7 +581,8 @@ func getFileSystemStatus(completion: @escaping (Result<BCLGetFileSystemStatusRes
 ### 自动记录采集数据模式
 
 **iOS:**
-```Swift
+
+```swift
 /// 获取自动记录采集数据模式
 func getAutoRecordDataMode(completion: @escaping (Result<BCLGetAutoRecordDataModeResponse, BCLError>) -> Void)
 
@@ -582,4 +591,3 @@ func getAutoRecordDataMode(completion: @escaping (Result<BCLGetAutoRecordDataMod
 ///   - type: 0：停止自动记录采集信息、1：开启自动记录三轴信息、2：开启自动记录六轴信息、3：开启自动记录spo2信息、4：开启自动记录hr信息、5：开启自动记录红外信息、6：开启自动记温度信息
 func setAutoRecordDataMode(type: Int, completion: @escaping (Result<BCLSetAutoRecordDataModeResponse, BCLError>) -> Void)
 ```
-
