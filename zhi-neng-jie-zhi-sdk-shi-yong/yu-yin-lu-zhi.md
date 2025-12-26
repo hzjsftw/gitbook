@@ -181,6 +181,14 @@ private AdPcmTool adPcmTool = new AdPcmTool();
 adPcmTool.resetAllDecoders();
 ```
 
+3.双麦克风16k音频
+
+双声道解码：
+
+```java
+byte[] bytesDual = adPcmTool.decodeADPCMDualChannel(bytes, bytes.length);
+```
+
 ## ios:
 
 ### 控制PCM格式音频传输
