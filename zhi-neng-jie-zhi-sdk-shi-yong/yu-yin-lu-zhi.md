@@ -5,7 +5,7 @@ icon: microphone-lines
 
 # 语音录制
 
-**android:**
+## **android:**
 
 ### 获取主动推送音频信息
 
@@ -33,7 +33,7 @@ LmAPI.GET_CONTROL_AUDIO_ADPCM();
 
 ### 设置主动推送音频信息
 
-接口功能：设置主动推送音频信息，如果是pcm格式，建议设置成adpcm，防止丢包&#x20;
+接口功能：设置主动推送音频信息，如果是pcm格式，建议设置成adpcm，防止丢包
 
 接口声明：
 
@@ -42,9 +42,9 @@ LmAPI.GET_CONTROL_AUDIO_ADPCM();
 LmAPI.CONTROL_AUDIO_ADPCM_AUDIO((byte) 0x1);
 ```
 
-### 控制音频传输&#x20;
+### 控制音频传输
 
-接口功能：控制音频传输&#x20;
+接口功能：控制音频传输
 
 接口声明：
 
@@ -86,22 +86,44 @@ LmAPI.CONTROL_AUDIO_ADPCM(byte data)
 
 
  public interface IAudioListenerLite {
-     /**
-      *控制音频传输
-      * @param bytes
-      */
-     void controlAudioResult(byte[] bytes);
- 
-     /**
-      *获取主动推送音频信息
-      */
-     void getControlAudioAdpcmResult(boolean adpcm);
- 
-     /**
-      *获取主动推送音频信息
-      */
-     void pushAudioInformationResult(boolean success);
- }
+    /**
+     *控制音频传输
+     * @param bytes 音频数据，普通音频戒指，解码过的数据
+     */
+    void controlAudioResult(byte[] bytes);
+
+    /**
+     *控制音频传输
+     * @param bytes 音频数据，原始数据，定制戒指转码需要使用
+     */
+    void controlAudioRawDataResult(byte[] bytes);
+
+    /**
+     * 获取主动推送音频信息
+     * @param adpcm 是否adpcm格式
+     */
+    void getControlAudioAdpcmResult(boolean adpcm);
+
+    /**
+     * 获取主动推送音频信息
+     * @param success 是否成功
+     */
+    void pushAudioInformationResult(boolean success);
+
+
+    /**
+     * 戒指主动推送音频完成(touch拿开)
+        讯飞定制
+     */
+    void TOUCH_AUDIO_FINISH_XUN_FEI();
+
+
+
+    /**
+     * 开始/停止录音
+     */
+    void recordingResult(boolean result);
+}
 ```
 
 录音戒指灯光含义：
@@ -111,10 +133,13 @@ LmAPI.CONTROL_AUDIO_ADPCM(byte data)
 * 蓝牙连接亮蓝灯2s
 * 断开连接闪烁3次蓝灯
 
+## ios:
+
 ### 控制PCM格式音频传输
 
 **iOS:**
-```Swift
+
+```swift
 /// 音频传输 - 控制PCM格式音频传输
 /// - Parameters:
 ///   - isOpen: 是否打开
@@ -125,7 +150,8 @@ func controlPCMFormatAudio(isOpen: Bool, completion: @escaping (Result<BCLContro
 ### 控制ADPCM格式音频传输
 
 **iOS:**
-```Swift
+
+```swift
 /// 音频传输 - 控制ADPCM格式音频传输
 /// - Parameters:
 ///   - isOpen: 是否打开
@@ -136,7 +162,8 @@ func controlADPCMFormatAudio(isOpen: Bool, completion: @escaping (Result<BCLCont
 ### 主动推送音频信息
 
 **iOS:**
-```Swift
+
+```swift
 /// 音频传输 - 设置主动推送音频信息
 /// - Parameters:
 ///   - audioType: 音频类型 .pcm .adpcm
@@ -151,7 +178,8 @@ func getActivePushAudioInfo(completion: @escaping (Result<BCLGetActivePushAudioI
 ### 音频格式转换
 
 **iOS:**
-```Swift
+
+```swift
 /// 音频格式转换 - 将ADPCM格式音频数据转换为PCM格式
 /// - Parameter adpcmData: ADPCM格式的音频数据
 /// - Returns: PCM格式的音频数据，转换失败返回nil
@@ -159,8 +187,10 @@ func convertAdpcmToPcm(adpcmData: Data) -> Data?
 ```
 
 ### 开始录音（固件定制：Z5J）
+
 **iOS:**
-```Swift
+
+```swift
 /// 音频传输 - 戒指开始录音
 /// - Parameters:
 ///   - isOpen: 是否打开录音 true:打开 false:关闭
