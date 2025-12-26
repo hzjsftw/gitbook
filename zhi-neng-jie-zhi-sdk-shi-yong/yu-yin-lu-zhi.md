@@ -137,7 +137,9 @@ LmAPI.CONTROL_AUDIO_ADPCM(byte data)
 
 固件目前分为三种音频，一种是普通的单麦克风8k音频，一种是高清单麦克风8k音频，一种是双麦克风16k音频，分别对应着三种解码方式
 
-1.CONTROL\_AUDIO(byte\[] bytes) 返回，LmAPI需要自己解码
+1.普通的单麦克风8k音频：
+
+CONTROL\_AUDIO(byte\[] bytes) 返回，LmAPI需要自己解码，LmApiLite已经封装了解码方式，返回的是解码后的数据，不需要手动解码
 
 ```java
 @Override
@@ -146,6 +148,10 @@ LmAPI.CONTROL_AUDIO_ADPCM(byte data)
  byte[] adToPcm = new AdPcmTool().adpcmToPcmFromJNI(bytes);
   }
 ```
+
+2.高清单麦克风8k音频
+
+z
 
 ## ios:
 
