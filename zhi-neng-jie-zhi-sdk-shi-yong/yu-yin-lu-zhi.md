@@ -175,6 +175,12 @@ private AdPcmTool adPcmTool = new AdPcmTool();
  byte[] bytesMono = adPcmTool.decodeADPCMMonoChannel(bytes, bytes.length);
 ```
 
+解码完，进行资源释放
+
+```java
+adPcmTool.resetAllDecoders();
+```
+
 ## ios:
 
 ### 控制PCM格式音频传输
