@@ -169,6 +169,12 @@ CONTROL\_AUDIO(byte\[] bytes) 返回，LmAPI需要自己解码，LmApiLite已经
 private AdPcmTool adPcmTool = new AdPcmTool();
 ```
 
+单声道解码：
+
+```java
+ byte[] bytesMono = adPcmTool.decodeADPCMMonoChannel(bytes, bytes.length);
+```
+
 ## ios:
 
 ### 控制PCM格式音频传输
