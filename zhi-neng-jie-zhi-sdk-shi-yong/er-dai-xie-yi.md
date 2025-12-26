@@ -105,6 +105,13 @@ public class SystemControlBean {
     private int bloodSugar;//血糖
     private int fileSystem;//文件系统
     private int gomoreSleep;//固件是否支持gomore睡眠算法,1支持0不支持
+    private int gomoreAge;//gomore用户信息年龄（0-99）
+    private int gomoreSex;//gomore用户信息性别（0女性，1男性）
+    private int gomoreHeight;//gomore用户信息身高（100-220 cm）
+    private int gomoreWeight;//gomore用户信息体重（10-150 kg）
+    private int gomoreMaxHeartRate;//gomore用户信息最大心率值（138-220，-1无效）
+    private int gomoreNormalHeartRate;//gomore用户信息常态心率值（40-100，-1无效）
+    private int gomoreOxygen;//gomore用户信息最大摄氧量（ml/kg/min，-1无效）
     }
     //简化版本的实体类
     public class SystemControlBean {
@@ -138,6 +145,13 @@ public class SystemControlBean {
     private int bloodSugar;//血糖
     private int fileSystem;//文件系统
     private int gomoreSleep;//gomore睡眠算法
+    private int gomoreAge;//gomore用户信息年龄（0-99）
+    private int gomoreSex;//gomore用户信息性别（0女性，1男性）
+    private int gomoreHeight;//gomore用户信息身高（100-220 cm）
+    private int gomoreWeight;//gomore用户信息体重（10-150 kg）
+    private int gomoreMaxHeartRate;//gomore用户信息最大心率值（138-220，-1无效）
+    private int gomoreNormalHeartRate;//gomore用户信息常态心率值（40-100，-1无效）
+    private int gomoreOxygen;//gomore用户信息最大摄氧量（ml/kg/min，-1无效）
     }
     
  //简化版本
