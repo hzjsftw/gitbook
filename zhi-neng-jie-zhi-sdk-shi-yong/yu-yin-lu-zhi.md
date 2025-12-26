@@ -133,6 +133,20 @@ LmAPI.CONTROL_AUDIO_ADPCM(byte data)
 * 蓝牙连接亮蓝灯2s
 * 断开连接闪烁3次蓝灯
 
+### 音频转码
+
+固件目前分为三种音频，一种是普通的单麦克风8k音频，一种是高清单麦克风8k音频，一种是双麦克风16k音频，分别对应着三种解码方式
+
+1.CONTROL\_AUDIO(byte\[] bytes) 返回，LmAPI需要自己解码
+
+```java
+@Override
+   public void CONTROL_AUDIO(byte[] bytes) {
+       //通过以上设置，默认都是adpcm格式
+ byte[] adToPcm = new AdPcmTool().adpcmToPcmFromJNI(bytes);
+  }
+```
+
 ## ios:
 
 ### 控制PCM格式音频传输
