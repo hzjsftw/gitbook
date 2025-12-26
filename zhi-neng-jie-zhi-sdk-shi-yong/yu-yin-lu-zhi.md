@@ -151,7 +151,23 @@ CONTROL\_AUDIO(byte\[] bytes) 返回，LmAPI需要自己解码，LmApiLite已经
 
 2.高清单麦克风8k音频
 
-z
+这个需要原始数据，因为涉及到资源释放，sdk不好把握时机，需要用户自己调用方法解码，原始数据返回：
+
+如果用的是LmAPI，CONTROL\_AUDIO(byte\[] bytes)就是原始数据，如果是LmApiLite，
+
+```java
+ void controlAudioRawDataResult(byte[] bytes);
+```
+
+返回的是原始数据
+
+解码逻辑：
+
+先初始化工具
+
+```java
+private AdPcmTool adPcmTool = new AdPcmTool();
+```
 
 ## ios:
 
