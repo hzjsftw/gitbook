@@ -15,6 +15,7 @@
 ## 智能戒指SDK使用
 
 * [SDK移植](zhi-neng-jie-zhi-sdk-shi-yong/editor.md)
+* [协议开发指南](zhi-neng-jie-zhi-sdk-shi-yong/xie-yi-kai-fa-zhi-nan.md)
 * [公版APP连接部分流程图](zhi-neng-jie-zhi-sdk-shi-yong/gong-ban-app-lian-jie-bu-fen-liu-cheng-tu.md)
 * [蓝牙连接与断连](zhi-neng-jie-zhi-sdk-shi-yong/markdown.md)
 * [Android公版app的重连](zhi-neng-jie-zhi-sdk-shi-yong/images-and-media.md)
