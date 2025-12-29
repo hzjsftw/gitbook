@@ -101,6 +101,8 @@ public interface ISyncTimeListenerLite {
 
 ```
 
+接收返回的指令，读取第二个字节cmd，区分是哪一组数据，根据第三个字节，Subcmd区分是哪个指令，然后进行解析
+
 ```java
  
  switch (data[2]) {
@@ -118,6 +120,20 @@ public interface ISyncTimeListenerLite {
 
                     }
                     break;
+                    
+                    
+/**
+     * byte[]转换为long
+     * @param buffer
+     * @return
+     */
+    public static long BytesToLong(byte[] buffer) {
+        long  values = 0;
+        for (int i = buffer.length-1; i >= 0; i--) {
+            values <<= 8; values|= (buffer[i] & 0xff);
+        }
+        return values;
+    }
 ```
 
 除非特殊规定，发送的指令都是小端模式，
