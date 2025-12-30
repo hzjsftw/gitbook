@@ -40,7 +40,7 @@ LogicalApi.getTimeLineWithHistory(startTime, endTime, new IWebTimeLineResult() {
 public class MovementSegment {
     private  long startTime;    //运动段起始时间
     private  long endTime;      //运动段结束时间
-    private  String type;       //"walk" or "run"
+    private  String type;       //"walk" or "run" or "sit"
 
     public long getStartTime() {
         return startTime;
