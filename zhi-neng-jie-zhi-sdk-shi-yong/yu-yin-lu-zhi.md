@@ -262,3 +262,39 @@ func convertAdpcmToPcm(adpcmData: Data) -> Data?
 /// - BCLRingStartRecordingResponse: 包含状态的响应模型(0:失败 1:成功)
 func ringStartRecording(isOpen: Bool, totalDuration: UInt32, sliceDuration: UInt32, completion: @escaping (Result<BCLRingStartRecordingResponse, BCLError>) -> Void)
 ```
+
+### 双麦克风16k音频解码
+
+**iOS:**
+
+```swift
+/// 初始化立体声ADPCM处理器
+///
+/// 在开始立体声音频解码之前调用此方法初始化处理器。
+/// 处理器会维护左右声道的独立编解码状态。
+///
+/// - Returns: 初始化是否成功
+func initStereoAdpcmProcessor() -> Bool
+
+
+/// 立体声ADPCM解码 - 将立体声ADPCM格式音频数据转换为PCM格式
+///
+/// 将交错格式的立体声ADPCM数据解码为交错格式的立体声PCM数据。
+/// 如果处理器未初始化，会自动进行初始化。
+///
+/// - Parameters:
+///   - adpcmData: 立体声ADPCM格式的音频数据（交错格式：左0,右0,左1,右1...）
+///   - sampleCount: 每个声道的样本数
+/// - Returns: 解码后的立体声PCM数据（交错格式：L0,R0,L1,R1...），转换失败返回nil
+///
+/// - Note: 输出PCM数据大小为 sampleCount * 2(声道) * 2(字节) = sampleCount * 4 字节
+func decodeStereoAdpcm(adpcmData: Data, sampleCount: Int) -> Data?
+
+
+/// 立体声ADPCM传输完成
+///
+/// 当音频传输完成时调用此方法，会重置处理器状态以准备下一次传输。
+/// 对应Android端的 `dualChannelTransferFinish` 方法。
+func stereoAdpcmTransferFinish()
+
+```
