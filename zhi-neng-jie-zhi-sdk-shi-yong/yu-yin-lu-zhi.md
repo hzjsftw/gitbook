@@ -290,6 +290,17 @@ func initStereoAdpcmProcessor() -> Bool
 /// - Note: 输出PCM数据大小为 sampleCount * 2(声道) * 2(字节) = sampleCount * 4 字节
 func decodeStereoAdpcm(adpcmData: Data, sampleCount: Int) -> Data?
 
+/// 单声道ADPCM解码（8K高清音频）
+///
+/// 将单声道ADPCM数据解码为单声道16位PCM数据。
+/// 如果处理器未初始化，会自动进行初始化。
+///
+/// - Parameter adpcmData: 单声道ADPCM格式数据（每字节包含2个4位样本）
+/// - Returns: PCM格式音频数据（16位有符号整数），失败返回nil
+///
+/// - Note: 输出PCM数据大小为 adpcmData.count * 2(样本) * 2(字节) = adpcmData.count * 4 字节
+func decodeMonoAdpcm(adpcmData: Data) -> Data?
+
 
 /// 立体声ADPCM传输完成
 ///
