@@ -59,7 +59,7 @@ DataApi.instance.deleteHistoryData();
 LmAPI:
 
 /**
-     * 读取戒指本地历史数据
+     * 读取戒指本地历史数据上传到服务器
      * @param type (byte) 0x00是未上传历史，(byte) 0x01是所有历史
      * @param timeMillis 获取时间戳以后的历史记录，秒级时间戳
      * @param mMac 对应的mac地址
@@ -153,6 +153,34 @@ public interface IWebHistoryResult {
 }
 
 ```
+
+如果使用的是二代协议，二代协议是会自动上传历史数据的，需要在页面上设置监听，使用下述方法上传历史数据 **特别说明：** iOS 二代协议连接指令、刷新指令可以获取到戒指的历史数据，需要自行调用上传历史数据接口上传到服务器。
+
+```java
+  /**
+     * 二代协议会自动上传历史数据到服务器，需要在页面上监听该接口
+     */
+    public static void READ_HISTORY_AUTO_UPDATE_TO_SERVER(  String mMac, IHistoryListenerLite listenerLite, IWebHistoryResult mWebHistoryResult) {
+        iHistoryListener = listenerLite;
+        iWebHistoryResult = mWebHistoryResult;
+        mac=mMac;
+        uploadHistoryData.clear();
+
+    }
+```
+
+二代协议的时间戳控制，是通过来控制的。具体用法参照
+
+{% content-ref url="../zhi-neng-jie-zhi-sdk-shi-yong/er-dai-xie-yi.md" %}
+[er-dai-xie-yi.md](../zhi-neng-jie-zhi-sdk-shi-yong/er-dai-xie-yi.md)
+{% endcontent-ref %}
+
+```java
+public static void APP_CONNECT(long timeMillis)
+public static void APP_REFRESH(long timeMillis)
+```
+
+
 
 **iOS:**
 
@@ -300,31 +328,7 @@ func uploadHistory(historyData: [BCLRingDBModel],
                    completion: @escaping (Result<Void, BCLError>) -> Void)
 ```
 
-如果使用的是二代协议，二代协议是会自动上传历史数据的，需要在页面上设置监听，使用下述方法上传历史数据 **特别说明：** iOS 二代协议连接指令、刷新指令可以获取到戒指的历史数据，需要自行调用上传历史数据接口上传到服务器。
 
-```java
-  /**
-     * 二代协议会自动上传历史数据到服务器，需要在页面上监听该接口
-     */
-    public static void READ_HISTORY_AUTO_UPDATE_TO_SERVER(  String mMac, IHistoryListenerLite listenerLite, IWebHistoryResult mWebHistoryResult) {
-        iHistoryListener = listenerLite;
-        iWebHistoryResult = mWebHistoryResult;
-        mac=mMac;
-        uploadHistoryData.clear();
-
-    }
-```
-
-二代协议的时间戳控制，是通过来控制的。具体用法参照
-
-{% content-ref url="../zhi-neng-jie-zhi-sdk-shi-yong/er-dai-xie-yi.md" %}
-[er-dai-xie-yi.md](../zhi-neng-jie-zhi-sdk-shi-yong/er-dai-xie-yi.md)
-{% endcontent-ref %}
-
-```java
-public static void APP_CONNECT(long timeMillis)
-public static void APP_REFRESH(long timeMillis)
-```
 
 ### 历史数据字段
 
