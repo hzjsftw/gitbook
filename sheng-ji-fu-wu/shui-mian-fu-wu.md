@@ -706,6 +706,25 @@ LogicalApi.goMoreAuthorizationKey(String mac, String companyApiKey , GoMoreUtils
 
 ### 指令
 
+如果要保证睡眠准确性，需要在授权以后，设置一下用户信息
+
+```java
+LmAPI 或者 LmAPILite 调用SET_GOMORE_USER();
+
+    /**
+     *  gomore设置个人信息
+     * @param age 年龄（0-99）
+     * @param sex 性别（0女性，1男性）
+     * @param height 身高（100-220 cm） 小于100设置为100
+     * @param weight 体重（10-150 kg）
+     * @param maximumHeartRate 最大心率值（138-220） 不设置就设为-1
+     * @param normalHeartRate 常态心率值（40-100） 不设置就设为-1
+     * @param maximalOxygenUptake 最大摄氧量（ml/kg/min） 不设置就设为-1
+     * @param listenerLite
+     */
+    public static void SET_GOMORE_USER(int age,int sex,int height,int weight,int maximumHeartRate,int normalHeartRate,int maximalOxygenUptake,IGoMoreUserListener listenerLite) {
+```
+
 通过蓝牙指令获取gomore睡眠结果
 
 ```java
