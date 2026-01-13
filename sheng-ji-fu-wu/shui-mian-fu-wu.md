@@ -706,7 +706,7 @@ LogicalApi.goMoreAuthorizationKey(String mac, String companyApiKey , GoMoreUtils
 
 ### 指令
 
-如果要保证睡眠准确性，需要在授权以后，设置一下用户信息
+如果要保证睡眠准确性，需要在授权以后，设置一下用户信息。
 
 ```java
 LmAPI 或者 LmAPILite 调用SET_GOMORE_USER();
@@ -724,6 +724,12 @@ LmAPI 或者 LmAPILite 调用SET_GOMORE_USER();
      */
     public static void SET_GOMORE_USER(int age,int sex,int height,int weight,int maximumHeartRate,int normalHeartRate,int maximalOxygenUptake,IGoMoreUserListener listenerLite) {
 ```
+
+复合指令在Gomore固件里，返回戒指里保存的用户信息，可以与自己的用户信息对比，如果不一致，调用指令，进行设置
+
+{% content-ref url="../zhi-neng-jie-zhi-sdk-shi-yong/er-dai-xie-yi.md" %}
+[er-dai-xie-yi.md](../zhi-neng-jie-zhi-sdk-shi-yong/er-dai-xie-yi.md)
+{% endcontent-ref %}
 
 通过蓝牙指令获取gomore睡眠结果
 
