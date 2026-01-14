@@ -44,6 +44,7 @@ sdk在releases里
 **注意事项：因Xcode不同版本中使用到的Swift编译器版本问题，可能会导致集成后编译错误，可以联系我们提供对应的SDK库**
 
 ### 库文件添加
+
 ```pod
 # SDK用到的库
 pod 'Foil', '~> 5.1.2'
@@ -116,16 +117,16 @@ LmAPILite.setDebug(true);
 AppConfig.setOverseas(true);
 ```
 
-2.在BaseActivity类中启用监听，该监听用于监听蓝牙连接状态和戒指的应答 **注：若重复调用监听LmAPI.addWLSCmdListener(this, this)会出现重复现象**
+2.在BaseActivity类中启用监听，该监听用于监听蓝牙连接状态和戒指的应答&#x20;
 
 ```java
 如果是一般模式，可以实现IResponseListener，是简化模式，就实现IResponseListenerLite
 BaseActivity implements IResponseListener
 
 一般模式：
-在onCreate里调用注册
+在onResume里调用注册
 LmAPI.addWLSCmdListener(this, this);
-在onDestroy里清除监听
+在onStop里清除监听
 LmAPI.removeWLSCmdListener(this)
 简化模式换成LmAPILite即可，后续调用指令都使用LmAPILite开头
 ```
@@ -133,7 +134,8 @@ LmAPI.removeWLSCmdListener(this)
 **IOS：**
 
 1、初始化相关配置
-```Swift
+
+```swift
 // 配置网络地址（国外地址：.overseas、国内地址：.domestic（默认））
 // 如果是提供给国外用户使用，需要设置为国外地址
 BCLRingManager.shared.networkRegion = .overseas
