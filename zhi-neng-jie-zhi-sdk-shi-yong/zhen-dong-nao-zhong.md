@@ -17,6 +17,19 @@ icon: clock-two
 
 简化版方法名与正常版一致
 
+```java
+LmAPI或者LmAPILite 
+/**
+     * 设置线性马达参数
+     * @param pattern 模式
+     * @param dutyCycle 占空比
+     * @param sequence 序列执行次数
+     * @param repetitions 序列中周期重复次数
+     */
+    public static void SET_GOMORE_LINEAR(int pattern,int dutyCycle,int sequence,int repetitions) 
+
+```
+
 ### 定制闹钟
 
 接口功能：通过定制闹钟的方式，让戒指定时震动，只支持5个闹钟
@@ -123,7 +136,8 @@ public interface IAlarmClockListenerLite {
 ### 定时振动（倒计时）
 
 **iOS:**
-```Swift
+
+```swift
 /// 震动马达-定时振动（倒计时）
 /// - Parameters:
 ///   - seconds: 振动时间
@@ -143,7 +157,8 @@ public enum BCLVibrationMotorType: Int {
 ```
 
 #### 调用示例
-```Swift
+
+```swift
 BCLRingManager.shared.linearMotorTimerVibration(seconds: 5, type: .normal) { result in
     switch result {
     case .success(_):
@@ -157,7 +172,8 @@ BCLRingManager.shared.linearMotorTimerVibration(seconds: 5, type: .normal) { res
 ### 立即振动
 
 **iOS:**
-```Swift
+
+```swift
 /// 震动马达-立即振动
 /// - Parameters:
 ///   - type: 振动类型
@@ -166,7 +182,8 @@ func linearMotorImmediateVibration(type: BCLVibrationMotorType, completion: @esc
 ```
 
 #### 调用示例
-```Swift
+
+```swift
 BCLRingManager.shared.linearMotorImmediateVibration(type: .normal) { result in
     switch result {
     case .success(_):
@@ -180,7 +197,8 @@ BCLRingManager.shared.linearMotorImmediateVibration(type: .normal) { result in
 ### 设置闹钟
 
 **iOS:**
-```Swift
+
+```swift
 /// 设置闹钟
 /// - Parameters:
 ///   - items: 闹钟数据(最多5个)
@@ -190,7 +208,8 @@ func setAlarmClock(items: [BCLAlarmClockData], completion: @escaping (Result<BCL
 ```
 
 #### 调用示例
-```Swift
+
+```swift
 let alarmClock1 = BCLAlarmClockData(timestamp: "2025-06-24 12:33:00".toDate("yyyy-MM-dd HH:mm:ss", region: .local)?.date.timeIntervalSince1970 ?? 0,
                                     repeatType: .once,
                                     vibrationEffect: .strong,
@@ -264,7 +283,8 @@ BCLRingManager.shared.setAlarmClock(items: [alarmClock1, alarmClock2, alarmClock
 ### 26.2 读取闹钟
 
 **iOS:**
-```Swift
+
+```swift
 /// 读取闹钟
 /// - Parameters:
 ///   - completion: 读取闹钟回调
@@ -273,7 +293,8 @@ func readAlarmClock(completion: @escaping (Result<BCLReadAlarmClockResponse, BCL
 ```
 
 #### 调用示例
-```Swift
+
+```swift
 BCLRingManager.shared.readAlarmClock { res in
     switch res {
     case let .success(response):
@@ -300,7 +321,8 @@ BCLRingManager.shared.readAlarmClock { res in
 ### 26.3 节假日日期设置
 
 **iOS:**
-```Swift
+
+```swift
 /// 设置节假日日期
 /// - Parameters:
 ///   - holidayData: 节假日日期数据
@@ -315,7 +337,8 @@ func readHoliday(year: Int, completion: @escaping (Result<BCLReadHolidayResponse
 ```
 
 #### 调用示例
-```Swift
+
+```swift
 // 注意：此处智能节假日配置仅为示例，具体可以配置内容可通过云端接口进行获取
 let holidayData = BCLHolidayData(year: 2025, nonWeekendHolidayCount: 18, nonWeekendHolidayDays: [1, 28, 29, 30, 31, 34, 35, 94, 121, 122, 125, 153, 274, 275, 276, 279, 280, 281], workDaysCount: 5, workDays: [26, 39, 117, 271, 284])
 BCLRingManager.shared.setHoliday(holidayData: holidayData) { res in
