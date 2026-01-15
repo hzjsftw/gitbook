@@ -124,7 +124,8 @@ AppConfig.setOverseas(true);
 BaseActivity implements IResponseListener
 
 一般模式：
-在onResume里调用注册
+在onResume里调用注册，先移除一下，防止弹出配对框，导致onResume重复调用，多次注册
+LmAPI.removeWLSCmdListener(this);
 LmAPI.addWLSCmdListener(this, this);
 在onStop里清除监听
 LmAPI.removeWLSCmdListener(this)
