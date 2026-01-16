@@ -573,6 +573,68 @@ public class Sleep2thBean {
 
 **iOS:**
 
+```数据结构
+/// 睡眠模型
+ public class BCLRingSleepModel {
+    /// 睡眠时长（小时）（不包含清醒时间）
+     public var hours: Int = 0
+    /// 睡眠时长（分钟）（不包含清醒时间）
+     public var minutes: Int = 0
+    /// 睡眠总时长（秒）（包含清醒时间）
+     public var sleepTime: Int64 = 0
+    /// 睡眠时长（秒）
+     public var seconds: Int64 = 0
+    /// 深度睡眠时间
+     public var deepTime: Int64 = 0
+    /// 浅度睡眠时间
+     public var lowTime: Int64 = 0
+    /// 眼动时间
+     public var ydTime: Int64 = 0
+    /// 清醒时间
+     public var qxTime: Int64 = 0
+    /// 入睡时间戳（第一次入睡时间）
+     public var startTime: Int64 = 0
+    /// 清醒时间戳 （最后一次醒来时间）
+     public var endTime: Int64 = 0
+    /// 实际睡眠时长
+     public var sjTime: Int64 = 0
+    /// 睡眠效率
+     public var xiaolv: Double = 0.0
+    /// 深睡比例
+     public var shenshui: Double = 0.0
+    /// 睡眠得分
+     public var score: Int = 0
+    /// 清醒次数（传统睡眠返回）
+     public var wakeupCount: Int = 0
+    /// 入睡后的总清醒时间（单位分钟），gomore算法使用
+     public var waso: Int = 0
+    /// 睡眠数据类型：1是1代睡眠，2是2代睡眠，3是gomore算法
+     public var sleepDataType: Int = 0
+    /// 平均体温
+     public var resultTemperture: Double = 0.0
+    /// 小睡时长（小时）- 小睡使用shortSleepList
+     public var xshours: Int = 0
+    /// 小睡时长（分钟）- 小睡使用shortSleepList
+     public var xsminutes: Int = 0
+    /// 小睡总时长（小时）- 小睡使用shortSleepList
+     public var xsAllhours: String?
+    /// 小睡总时长（分钟）- 小睡使用shortSleepList
+     public var xsAllminutes: String?
+    /// 最大摄氧量
+     public var voMax: Int = 0
+    /// 计算睡眠产生的日志
+     public var sleepLog: String?
+    /// 历史数据列表
+     public var historyBeanList: [BCLRingDBModel]?
+    /// 无睡眠的原因
+     public var noSleepResult: String?
+    /// 短睡眠列表（目前只有gomore支持，传统算法后续支持）
+     public var shortSleepList: [BCLRingSleepModel]?
+    /// 睡眠数据列表
+     public var sleepDataList: [BCLRingDBModel] = []
+}
+```
+
 ```swift
 /// 获取睡眠数据
 /// - Parameters:
@@ -743,7 +805,78 @@ public void initSleepChat( long showStartTime,List<HistoryDataBean> historyDataB
 
 **iOS:**
 
+图表绘制：先将数据进行预处理，处理代码是：
+
 ```swift
+func caculateSleepChartDatas(needToRenderSleepDatas: [BCLRingDBModel]) -> [[String: Int]] {
+        var startTime = 0 // 入睡开始时间，用于判断
+        var startDataX = 0
+        var endDataX = 0
+        var preSleepDataY = -1
+        var preModel: BCLRingDBModel?
+        let renderSleepdatas = needToRenderSleepDatas
+        // 0代表曲线上的深睡  1代表曲线上的浅睡 2代表曲线上的眼动 3代表曲线上的清醒
+        let sleepDataYDict: [Int: Int] = [3: 0, 2: 1, 4: 2, 1: 3]
+        var sleepChartDatas: [[String: Int]] = []
+
+        renderSleepdatas.enumerated().forEach { index, model in
+            // 防止第一个睡眠数据和第二个睡眠数据不同时，会遗漏掉第一个数据
+            if index == 1
+                && model.sleepType != 0
+                && model.sleepType != preModel!.sleepType
+                && isHourInRange(timestamp: TimeInterval(startTime), hourCondition1: 18, hourCondition2: 4) {
+                let currentSleepDataY = sleepDataYDict[preModel!.sleepType ?? 0]!
+                endDataX = 5 * 60
+                sleepChartDatas.append(["x": startDataX, "x2": endDataX, "y": currentSleepDataY])
+                startDataX = endDataX
+                // endDataX += 5 * 60 //用秒数做x轴
+                preSleepDataY = currentSleepDataY
+            }
+
+            if index == 0 { // 第一个肯定有效
+                startTime = Int(model.time ?? 0)
+                startDataX = 0
+                endDataX = 0
+                preSleepDataY = sleepDataYDict[model.sleepType ?? 0]!
+                preModel = model
+            } else if model.sleepType != 0 { // 有效
+                let currentSleepDataY = sleepDataYDict[model.sleepType ?? 0]!
+                if preSleepDataY != currentSleepDataY, startDataX < endDataX { // 转折点
+                    sleepChartDatas.append(["x": startDataX, "x2": endDataX, "y": preSleepDataY])
+                    // 起点重新计算
+                    startDataX = endDataX
+                }
+                endDataX += Int(model.time! - (preModel!.time!)) // 用秒数做x轴
+                preSleepDataY = currentSleepDataY
+                preModel = model
+            } else { // 睡眠点无效
+                if preSleepDataY != -1, startDataX < endDataX { // 前一个睡眠点不是无效点，记录下来
+                    sleepChartDatas.append(["x": startDataX, "x2": endDataX, "y": preSleepDataY])
+                }
+                // 起点和结束点一起前进
+                endDataX += Int(model.time ?? 0 - (preModel!.time ?? 0))
+                startDataX = endDataX
+                preSleepDataY = -1
+                preModel = model
+            }
+        }
+        if startDataX < endDataX { // 闭环
+            sleepChartDatas.append(["x": startDataX, "x2": endDataX, "y": preSleepDataY])
+        }
+        return sleepChartDatas
+    }
+
+    func isHourInRange(timestamp: TimeInterval, hourCondition1: Int, hourCondition2: Int) -> Bool {
+        // 将秒时间戳转换为日期对象
+        let date = Date(timeIntervalSince1970: timestamp)
+        // 创建一个日历对象
+        let calendar = Calendar.current
+        // 获取日期对象的小时
+        let hour = calendar.component(.hour, from: date)
+        // 判断小时是否超出指定范围内,入睡时间应该在18点之后或者凌晨4点之前
+        // 夜间清醒2-4之间可以有120分钟
+        return hour >= hourCondition1 || hour <= hourCondition2
+    }
 ```
 
 ## Gomore睡眠
@@ -796,7 +929,7 @@ LmAPI 或者 LmAPILite 调用SET_GOMORE_USER();
      * @param maximalOxygenUptake 最大摄氧量（ml/kg/min） 不设置就设为-1
      * @param listenerLite
      */
-    public static void SET_GOMORE_USER(int age,int sex,int height,int weight,int maximumHeartRate,int normalHeartRate,int maximalOxygenUptake,IGoMoreUserListener listenerLite) {
+    public static void SET_GOMORE_USER(int age,int sex,int height,int weight,int maximumHeartRate,int normalHeartRate,int maximalOxygenUptake,IGoMoreUserListener listenerLite) 
 ```
 
 复合指令在Gomore固件里，返回戒指里保存的用户信息，可以与自己的用户信息对比，如果不一致，调用指令，进行设置
@@ -902,3 +1035,149 @@ LogicalApi.getSleepDataWithGoMoreBatch(List<String> dates, IWebSleepResult webAp
     }
 
 ```
+
+## Gomore-iOS相关接口
+
+### 授权相关接口
+
+```Swift
+    /// GoMore一键授权
+    /// 整合授权状态查询、pKey申请、授权、保存等操作的一键式接口
+    /// - Parameters:
+    ///   - companyKey: 公司API密钥
+    ///   - progress: 进度回调，返回当前执行步骤
+    ///   - completion: 完成回调，返回授权结果或错误
+    /// - Note: 该接口会自动完成以下流程：
+    ///   1. 查询设备授权状态获取mcuId
+    ///   2. 查询服务端pKey状态
+    ///   3. 如果服务端有pKey则直接返回已授权
+    ///   4. 如果服务端没有pKey则申请新pKey
+    ///   5. 发送pKey到设备完成授权
+    ///   6. 保存授权信息到服务端
+    func checkAndAuthorizeGoMore(companyKey: String,
+                                  progress: @escaping (BCLGoMoreAuthStep) -> Void,
+                                  completion: @escaping (Result<BCLGoMoreAuthResult, BCLError>) -> Void)
+
+    /// 查询GoMore授权状态
+    /// - Parameter completion: 查询结果回调
+    /// - Result: 查询结果
+    /// - BCLGoMoreAuthStatusResponse: 包含授权状态和MCU ID的响应模型
+    /// - BCLError: 错误信息
+    func queryGoMoreAuthStatus(completion: @escaping (Result<BCLGoMoreAuthStatusResponse, BCLError>) -> Void)
+
+    /// 下发GoMore授权PKey
+    /// - Parameters:
+    ///   - pKey: 64字节的授权密钥字符串
+    ///   - completion: 下发结果回调
+    /// - Result: 下发结果
+    /// - BCLGoMorePKeyResponse: 包含授权状态和MCU ID的响应模型
+    /// - BCLError: 错误信息
+    func sendGoMorePKey(pKey: String, completion: @escaping (Result<BCLGoMorePKeyResponse, BCLError>) -> Void)
+
+    /// 查询Gomore PKey授权状态
+    /// - Parameters:
+    ///   - deviceId: 设备标识符（如 "0102030405060708"）
+    ///   - completion: 完成回调
+    /// - Result: 查询结果
+    ///   - String?: 授权密钥（pKey）表示已授权，nil表示未授权
+    ///   - BCLError: 错误信息
+    /// - Note: 用于查询Gomore戒指在服务端的授权信息状态
+    func getGomorePKeyStatus(deviceId: String, completion: @escaping (Result<String?, BCLError>) -> Void)
+
+    /// 请求Gomore PKey授权信息
+    /// - Parameters:
+    ///   - deviceId: 设备标识符
+    ///   - apiKey: API密钥
+    ///   - completion: 完成回调，如果有pKey则返回pKey，否则返回nil授权信息获取失败
+    /// - Note: 获取Gomore认证密钥，用于后续Gomore相关操作
+    func requestGomorePKey(deviceId: String, apiKey: String, completion: @escaping (Result<String?, BCLError>) -> Void)
+
+    /// 保存Gomore PKey
+    /// - Parameters:
+    ///   - companyApiKey: 公司API密钥
+    ///   - deviceId: 设备标识符
+    ///   - mac: 设备MAC地址
+    ///   - pkey: Gomore PKey
+    ///   - completion: 完成回调
+    /// - Note: 将Gomore设备信息保存到服务器
+    func saveGomorePKey(companyApiKey: String, deviceId: String, mac: String, pkey: String, completion: @escaping (Result<Void, BCLError>) -> Void)
+
+```
+
+### Gomore个人信息相关接口
+
+```Swift
+    /// GoMore设置个人信息
+    /// - Parameters:
+    ///   - age: 年龄（10-99）
+    ///   - gender: 性别（0女性，1男性）
+    ///   - height: 身高（100-220 cm）
+    ///   - weight: 体重（10-150 kg）
+    ///   - maxHeartRate: 最大心率值（nil或<0表示无效）
+    ///   - normalHeartRate: 常态心率值（nil或<0表示无效）
+    ///   - maxOxygenUptake: 最大摄氧量（nil或<0表示无效）
+    ///   - completion: 设置个人信息回调
+    /// - Result: 设置结果
+    /// - BCLGoMoreSetPersonalInformationResponse: 包含设置结果的响应模型
+    /// - BCLError: 错误信息
+    func goMoreSetPersonalInformation(age: UInt8, gender: UInt8, height: UInt8, weight: UInt8, maxHeartRate: Int16?, normalHeartRate: Int8?, maxOxygenUptake: Int8?, completion: @escaping (Result<BCLGoMoreSetPersonalInformationResponse, BCLError>) -> Void)
+
+    /// GoMore获取个人信息
+    /// - Parameter completion: 获取个人信息回调
+    /// - Result: 获取结果
+    /// - BCLGoMoreReadPersonalInformationResponse: 包含个人信息的响应模型
+    /// - BCLError: 错误信息
+    func goMoreGetPersonalInformation(completion: @escaping (Result<BCLGoMoreReadPersonalInformationResponse, BCLError>) -> Void)
+
+```
+
+
+### 睡眠数据相关接口
+
+```Swift
+    /// 读取GoMore睡眠数据（读取戒指中的数据集）
+    /// - Parameter completion: 读取GoMore睡眠数据回调
+    /// - Result: 读取结果
+    /// - BCLGoMoreSleepDataResponse: GoMore睡眠数据响应
+    ///   - sleepModels: [BCLGoMoreSleepModel] - 睡眠数据模型列表
+    /// - BCLError: 错误信息
+    func readGoMoreSleepData(completion: @escaping (Result<BCLGoMoreSleepDataResponse, BCLError>) -> Void)
+
+    /// 上传GoMore睡眠数据到服务器
+    /// - Parameters:
+    ///  - sleepModels: 睡眠数据模型列表
+    ///  - completion: 上传结果回调
+    ///  - Result: 上传结果
+    ///  - Void: 无返回值
+    ///  - BCLError: 错误信息
+    func uploadGoMoreSleepData(sleepModels: [BCLGoMoreSleepModel], completion: @escaping (Result<Void, BCLError>) -> Void)
+
+    /// 获取Gomore睡眠详情数据
+    /// - Parameters:
+    ///   - date: 查询日期（本地自然日时间，按调用端本机时区理解）
+    ///   - userId: 用户ID（可选，默认为nil）
+    ///   - completion: 完成回调，返回睡眠详情数据或错误
+    /// - Note: 返回的 BCLRingSleepModel 包含睡眠统计信息和睡眠数据列表
+    func getGoMoreSleepData(date: Date, userId: String? = nil, completion: @escaping (Result<BCLRingSleepModel, BCLError>) -> Void)
+
+    /// 批量获取Gomore睡眠数据
+    /// - Parameters:
+    ///   - dates: 日期数组，格式为 "yyyy-MM-dd"，如 ["2025-12-28", "2025-12-29"]
+    ///   - userId: 用户ID（可选，默认为nil）
+    ///   - completion: 完成回调，返回睡眠数据摘要数组或错误
+    /// - Note: 返回的 BCLRingSleepDayModel 包含每日睡眠统计摘要
+    func getGoMoreSleepDataBatch(dates: [String], userId: String? = nil, completion: @escaping (Result<[BCLRingSleepDayModel], BCLError>) -> Void)
+
+```
+
+
+### 注意事项
+1、Gomore戒指绑定成功之后需要检查授权状态，可以调用checkAndAuthorizeGoMore接口进行处理。
+
+2、Gomore戒指连接成功之后需要核对用户个人信息，age、gender、height、weight、maxHeartRate、normalHeartRate、maxOxygenUptake，如果不一致，需要调用goMoreSetPersonalInformation接口进行设置。确保在合理范围内，不然会影响睡眠计算等。（复合指令中绑定、连接、刷新接口会返回戒指中的用户信息，可以自行进行对比）
+
+3、Gomore戒指睡眠数据读取，需要先调用readGoMoreSleepData接口，读取戒指中的数据集，然后调用uploadGoMoreSleepData接口，将数据上传到服务器。
+
+4、查询用户睡眠数据可直接调用getGoMoreSleepData接口，获取睡眠详情数据。
+
+5、查询用户睡眠数据批量可直接调用getGoMoreSleepDataBatch接口，获取睡眠数据摘要数组。
