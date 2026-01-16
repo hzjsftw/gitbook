@@ -1170,8 +1170,7 @@ LogicalApi.getSleepDataWithGoMoreBatch(List<String> dates, IWebSleepResult webAp
 
 ```
 
-
-### 注意事项
+### 注意事项:iOS端
 1、Gomore戒指绑定成功之后需要检查授权状态，可以调用checkAndAuthorizeGoMore接口进行处理。
 
 2、Gomore戒指连接成功之后需要核对用户个人信息，age、gender、height、weight、maxHeartRate、normalHeartRate、maxOxygenUptake，如果不一致，需要调用goMoreSetPersonalInformation接口进行设置。确保在合理范围内，不然会影响睡眠计算等。（复合指令中绑定、连接、刷新接口会返回戒指中的用户信息，可以自行进行对比）
@@ -1181,3 +1180,5 @@ LogicalApi.getSleepDataWithGoMoreBatch(List<String> dates, IWebSleepResult webAp
 4、查询用户睡眠数据可直接调用getGoMoreSleepData接口，获取睡眠详情数据。
 
 5、查询用户睡眠数据批量可直接调用getGoMoreSleepDataBatch接口，获取睡眠数据摘要数组。
+
+6、接口使用示例可以参考Demo工程
