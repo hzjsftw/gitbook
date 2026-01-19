@@ -30,6 +30,7 @@
 * [震动，闹钟](zhi-neng-jie-zhi-sdk-shi-yong/zhen-dong-nao-zhong.md)
 * [文件系统](zhi-neng-jie-zhi-sdk-shi-yong/wen-jian-xi-tong.md)
 * [心电图](zhi-neng-jie-zhi-sdk-shi-yong/xin-dian-tu.md)
+* [运动模式](zhi-neng-jie-zhi-sdk-shi-yong/yun-dong-mo-shi.md)
 * [厂家定制指令](zhi-neng-jie-zhi-sdk-shi-yong/chang-jia-ding-zhi-zhi-ling.md)
 * [获取蓝牙信号](zhi-neng-jie-zhi-sdk-shi-yong/huo-qu-lan-ya-xin-hao.md)
 * [常规指令(不推荐)](zhi-neng-jie-zhi-sdk-shi-yong/chang-gui-zhi-ling.md)
