@@ -502,6 +502,83 @@ func uploadHistory(historyData: [BCLRingDBModel],
     }
 ```
 
+### 历史数据字段-iOS
+
+```swift
+
+/// 历史数据结构
+@objc public class BCLRingDBModel: NSObject, Codable {
+    /// 总数据包数
+    public var totalNumber: Int?
+    /// 当前第几包
+    public var indexNumber: Int?
+    /// 当前记录时间
+    public var time: Int64?
+    /// 今天累计步数
+    public var stepCount: Int?
+    /// 心率
+    public var heartRate: Int?
+    /// 血氧
+    public var bloodOxygen: Int?
+    /// 心率变异性
+    public var heartRateVariability: Int?
+    /// 精神压力指数
+    public var stressIndex: Int?
+    /// 温度
+    public var temperature: Int?
+    /// 运动激烈程度  0：静止
+    public var exerciseIntensity: Int?
+    /// 睡眠类型 0：无效、1：清醒、2：浅睡、3：深睡、4.眼动期
+    public var sleepType: Int?
+    /// 主动测量标志位
+    public var measureMarker: Int?
+    /// 预留
+    public var reserve: Int?
+    /// RR间期
+    public var rrCount: Int?
+    /// RR数组数据
+    public var rrBytes: Data?
+    /// 测量类型
+    public var measureType: Int?
+    /// 单位时间计步（5分钟清除一次）
+    public var stepsPerUnitTime: Int?
+    /// 运行累计标志：0-255累加循环，重启归零
+    public var accumulationFlag: Int?
+    /// 电量：0-100%
+    public var batteryLevel: Int?
+    /// 电池电压：4266=4.266V，精度0.001V（毫伏）
+    public var batteryVoltage: Int?
+    /// 未佩戴原因：0-光学, 1-算法
+    public var notWornReason: Int?
+    /// 记录校准标志：0-已校准, 1-未校准
+    public var recordCalibrationFlag: Int?
+    /// 环境光强度系数：0-100%
+    public var ambientLightIntensityFactor: Int?
+    /// 温度数据（原始数据：第1字节=温度个数N，后续N*2字节=温度值数组）
+    public var temperatureData: Data?
+
+    /// 步频 - 五分钟内最大值，单位步/min
+    public var stepRateMax: Int?
+    /// 步频 - 五分钟内最小值，单位步/min
+    public var stepRateMin: Int?
+    /// 呼吸率：7-25
+    public var breathingRate: Int?
+    /// 呼吸率置信度：0-100
+    public var breathingRateConfidence: Int?
+    /// 运动状态：0-久坐, 1-走路, 2-跑步
+    public var activityStatus: Int?
+    /// 总卡路里，全天累加，零点清零，单位千卡
+    public var totalCalories: Int?
+    /// 基础代谢卡路里，全天累加，零点清零，单位千卡
+    public var basalMetabolicCalories: Int?
+    /// 运动卡路里，全天累加，零点清零，单位千卡
+    public var exerciseCalories: Int?
+    /// 硬件ADT值（Analog-to-Digital Threshold）
+    public var hardAdt: Int?
+}
+
+```
+
 ### 获取睡眠
 
 **android:**
