@@ -6,7 +6,7 @@ icon: arrow-progress
 
 # 公版APP连接部分流程图
 
-#### <mark style="color:red;">绑定，连接，刷新部分的指令操作，强烈建议使用二代协议。加快连接速度，减少指令冲突。</mark>
+#### <mark style="color:red;">绑定，连接，刷新部分的指令操作，强烈建议使用复合指令。加快连接速度，减少指令冲突。</mark>
 
 {% content-ref url="er-dai-xie-yi.md" %}
 [er-dai-xie-yi.md](er-dai-xie-yi.md)
