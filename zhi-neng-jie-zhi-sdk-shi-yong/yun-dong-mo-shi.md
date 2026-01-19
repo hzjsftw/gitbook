@@ -44,7 +44,7 @@ public interface ISportListenerLite {
      * @param sportType 运动类型
      * @param step 步数
      * @param heart 心率
-     * @param calorie 卡路里
+     * @param calorie 卡路里(暂不支持，默认为0)
      * @param time 时间
      */
     void onSport(int sportType,int step , int heart,int calorie,long time);
