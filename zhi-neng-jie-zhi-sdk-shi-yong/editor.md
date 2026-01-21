@@ -107,6 +107,8 @@ Privacy - Bluetooth Always Usage Description
 
 1.在Application的onCreate方法中进行初始化
 
+<mark style="color:red;">建议新客户直接使用LmAPILite简化版本</mark>
+
 ```java
 LmAPI.init(this);
 LmAPI.setDebug(true);
