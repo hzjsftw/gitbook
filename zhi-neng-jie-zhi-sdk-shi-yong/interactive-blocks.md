@@ -44,9 +44,13 @@ layout:
 
 **android:**
 
+获取历史数据有两种方式，一种是主动触发指令（READ\_HISTORY\_UPDATE\_TO\_SERVER），这个一般不建议用，建议使用复合指令，指令数量少，好维护，会主动上传未上传的历史数据，只需要在页面监听（READ\_HISTORY\_AUTO\_UPDATE\_TO\_SERVER）方法即可
+
 ```java
    //如需使用更精准的睡眠算法，获取戒指历史数据时，请调用该指令(LmAPI.READ_HISTORY不支持上传服务器操作)，这个支持一代协议,(byte) 0x00是未上传历史，(byte) 0x01是所有历史，正常情况下传0x00就可以了
-   LmAPI.READ_HISTORY_UPDATE_TO_SERVER((byte) 0x00,  mac, new IHistoryListener() {
+   //如果使用复合指令的话，不需要主动触发，使用READ_HISTORY_AUTO_UPDATE_TO_SERVER(String mMac, IHistoryListener listener, IWebHistoryResult mWebHistoryResult)
+   //会自动上传未上传历史数据，只需要在页面上监听即可。
+    LmAPI.READ_HISTORY_UPDATE_TO_SERVER((byte) 0x00,  mac, new IHistoryListener() {
                     @Override
                     public void error(int code) {
                         if (code == 3) {
