@@ -17,7 +17,8 @@ icon: tennis-ball
     }
 
     /**
-     * 获取历史运动模式，断点续传
+     * 获取历史运动模式，断点续传，手机和戒指断连的时候，戒指还在记录运动信息，
+     下次打开app，获取运动历史，会把里边积攒的数据传到app里
      */
     public static void HIS_SPORT(ISportListenerLite listenerLite) {
         iSportListenerLite = listenerLite;
@@ -42,7 +43,7 @@ public interface ISportListenerLite {
 
     /**
      * 运动模式
-     * @param sportType 运动类型
+     * @param sportType 运动类型(1.主动推送，2断点续传)
      * @param step 步数
      * @param heart 心率
      * @param calorie 卡路里(暂不支持，默认为0)
