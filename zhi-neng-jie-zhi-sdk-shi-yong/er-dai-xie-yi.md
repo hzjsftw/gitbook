@@ -92,7 +92,7 @@ public class SystemControlBean {
     private byte battery;//电量（正常电量：0~100，101为充电中，电量无效，102为充电完成，电量无效
 ）
     private byte chargingStatus;//充电状态(0未充电，1充电中，充满电)
-    private String collectionInterval;//当前采集间隔
+    private String collectionInterval;//当前采集间隔(秒)
     private byte[] HID_CODE;//当前HID功能码
     private byte[] HID_MODE;//当前HID模式
     private byte heartRate;//心率曲线支持
