@@ -77,6 +77,12 @@ LmAPI.READ_HISTORY_AUTO(IHistoryListener iHistoryListener)
 LmAPILite.READ_HISTORY_AUTO(IHistoryListenerLite iHistoryListener)
 ```
 
+如果需要获取睡眠，就需要将数据传入到服务器，上边的方法就不合适了，需要调用新的方法，请查看《历史数据相关》的《如何保存到服务器》部分
+
+{% content-ref url="interactive-blocks.md" %}
+[interactive-blocks.md](interactive-blocks.md)
+{% endcontent-ref %}
+
 ### 实体类描述
 
 ```java
