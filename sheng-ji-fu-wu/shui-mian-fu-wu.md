@@ -158,15 +158,10 @@ public interface IWebHistoryResult {
 
 ```java
   /**
-     * 二代协议会自动上传历史数据到服务器，需要在页面上监听该接口
+     * LmAPILite或者LmAPI，二代协议会自动上传历史数据到服务器，需要在页面上监听该接口
      */
-    public static void READ_HISTORY_AUTO_UPDATE_TO_SERVER(  String mMac, IHistoryListenerLite listenerLite, IWebHistoryResult mWebHistoryResult) {
-        iHistoryListener = listenerLite;
-        iWebHistoryResult = mWebHistoryResult;
-        mac=mMac;
-        uploadHistoryData.clear();
-
-    }
+    public static void READ_HISTORY_AUTO_UPDATE_TO_SERVER(  String mMac, IHistoryListenerLite listenerLite, IWebHistoryResult mWebHistoryResult) ;
+    
 ```
 
 二代协议的时间戳控制，是通过来控制的。具体用法参照
@@ -179,8 +174,6 @@ public interface IWebHistoryResult {
 public static void APP_CONNECT(long timeMillis)
 public static void APP_REFRESH(long timeMillis)
 ```
-
-
 
 **iOS:**
 
@@ -327,8 +320,6 @@ func uploadHistory(historyData: [BCLRingDBModel],
                    mac: String,
                    completion: @escaping (Result<Void, BCLError>) -> Void)
 ```
-
-
 
 ### 历史数据字段
 
@@ -1117,7 +1108,7 @@ LogicalApi.getSleepDataWithGoMoreBatch(List<String> dates, IWebSleepResult webAp
 
 ### 授权相关接口
 
-```Swift
+```swift
     /// GoMore一键授权
     /// 整合授权状态查询、pKey申请、授权、保存等操作的一键式接口
     /// - Parameters:
@@ -1183,7 +1174,7 @@ LogicalApi.getSleepDataWithGoMoreBatch(List<String> dates, IWebSleepResult webAp
 
 ### Gomore个人信息相关接口
 
-```Swift
+```swift
     /// GoMore设置个人信息
     /// - Parameters:
     ///   - age: 年龄（10-99）
@@ -1208,10 +1199,9 @@ LogicalApi.getSleepDataWithGoMoreBatch(List<String> dates, IWebSleepResult webAp
 
 ```
 
-
 ### 睡眠数据相关接口
 
-```Swift
+```swift
     /// 读取GoMore睡眠数据（读取戒指中的数据集）
     /// - Parameter completion: 读取GoMore睡眠数据回调
     /// - Result: 读取结果
@@ -1248,6 +1238,7 @@ LogicalApi.getSleepDataWithGoMoreBatch(List<String> dates, IWebSleepResult webAp
 ```
 
 ### 注意事项:iOS端
+
 1、Gomore戒指绑定成功之后需要检查授权状态，可以调用checkAndAuthorizeGoMore接口进行处理。
 
 2、Gomore戒指连接成功之后需要核对用户个人信息，age、gender、height、weight、maxHeartRate、normalHeartRate、maxOxygenUptake，如果不一致，需要调用goMoreSetPersonalInformation接口进行设置。确保在合理范围内，不然会影响睡眠计算等。（复合指令中绑定、连接、刷新接口会返回戒指中的用户信息，可以自行进行对比）
