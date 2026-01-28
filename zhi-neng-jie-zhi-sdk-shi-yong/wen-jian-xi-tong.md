@@ -251,24 +251,90 @@ public interface FileResponseCallback {
 
 因篇幅限制，不会把所有解析都写在文档里，可以加入技术对接群，本公司提供蓝牙协议文档，技术人员可以提供解析样例代码
 
-文件内容解析样例：
+类型是7的文件内容解析样例：
 
 ```java
  public void onFileDataReceived(byte[] data) 这个回调里会返回文件原始值，然后下边是解析：
+ 
  byte[] contentDataByte=new byte[data.length - 4-17];
  System.arraycopy(data, 21, contentDataByte, 0, contentDataByte.length);
- List<String[]> contentQingHua = LmApiDataUtils.fileContentQingHua(contentDataByte);
+```
+
+固件为了传输速度，每一条数据并不是标准的解析长度，所以要把所有文件内容保存到本地txt文件里，读取完以后，再次读取出来解析，文件内容，每条长度是158
+
+```java
+  String safeFileName = fileInfo.fileName.replace(":", "_");
+                List<String[]> allContent = new ArrayList<>();
+
+                String fileType= FileUtils.getFileType(safeFileName);
+                //先清理txt缓存的内容
+                CsvWriter.clearOutputFile(RingFileListActivity.this,safeFileName);
+                // 1. 先收集所有数据
+                for (int i = 0; i < fileInfo.fileDataPackets.size(); i++) {
+                    byte[] packetData = fileInfo.fileDataPackets.get(i);
+                    byte[] contentDataByte = new byte[packetData.length - 17];
+                    System.arraycopy(packetData, 17, contentDataByte, 0, contentDataByte.length);
+                    List<String[]> fileContent = new ArrayList<>();
+                    if(fileType.equals("7")){
+
+                        String str_data = CMDUtils.toHexString(contentDataByte);
+                        Logger.show("文件采集", "===文件内容=== " + str_data);
+
+                        CsvWriter.appendToTxt(RingFileListActivity.this, safeFileName,str_data);
+                        //fileContent = LmApiDataUtils.fileContentQingHua(contentDataByte);
+                    }else if(fileType.equals("9")){
+                        fileContent = LmApiDataUtils.fileContentType9(contentDataByte);
+                        allContent.addAll(fileContent);
+
+                    }
+                }
+                //是7类型，从缓存里获取所有数据
+                if(fileType.equals("7")) {
+                    String fromTxt = CsvWriter.readFromTxt(RingFileListActivity.this, safeFileName);
+                    //每158个字节转码一次
+                    byte[] bytes = CMDUtils.hexString2Bytes(fromTxt);
+
+                    // 存储所有转换结果的列表
+                    List<List<String[]>> allResults = new ArrayList<>();
+
+                    // 计算总段数
+                    int totalSegments = bytes.length / 158;
+
+                    // 按158字节分段处理
+                    for(int i = 0; i < totalSegments; ++i) {
+                        // 计算当前段的起始位置
+                        int start = i * 158;
+                        int end = Math.min(start + 158, bytes.length);
+
+                        // 提取当前158字节段
+                        byte[] segment = new byte[end - start];
+                        System.arraycopy(bytes, start, segment, 0, segment.length);
+
+                        // 对当前段进行转码
+                        List<String[]> segmentResult = LmApiDataUtils.fileContentQingHua(segment);
+                        allResults.add(segmentResult);
+                    }
+                    //合并到一个列表
+                    for(List<String[]> segmentList : allResults) {
+                        if(segmentList != null) {
+                            allContent.addAll(segmentList);
+                        }
+                    }
+
+
+
+                }
 ```
 
 解析内容源码，可以自己改造成需要的：
 
 ```java
 //完整信息内容解析
- public static List<String[]> fileContentQingHua(byte[] contentByte) {
+     public static List<String[]> fileContentQingHua(byte[] contentByte) {
 
         byte[] timestamp=new byte[8];
         System.arraycopy(contentByte, 0, timestamp, 0, timestamp.length);
-        Date date = bytesToTimestamp(timestamp);
+        Date date = bytesToTimestampSmall(timestamp);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String formattedDate = sdf.format(date);
 
@@ -300,17 +366,27 @@ public interface FileResponseCallback {
             result[8]=gyroY+"";
             short gyroZ = buffer.getShort();
             result[9]=gyroZ+"";
+            // 使用无符号转换
             short temper0 = buffer.getShort();
-            result[10]=temper0+"";
+            int unsignedTemper0 = temper0 & 0xFFFF;  // 转换为无符号整数
+            result[10] = unsignedTemper0 + "";
+
             short temper1 = buffer.getShort();
-            result[11]=temper1+"";
+            int unsignedTemper1 = temper1 & 0xFFFF;
+            result[11] = unsignedTemper1 + "";
+
             short temper2 = buffer.getShort();
-            result[12]=temper2+"";
+            int unsignedTemper2 = temper2 & 0xFFFF;
+            result[12] = unsignedTemper2 + "";
             resultList.add(result);
+//            str += "greenData:" + greenData + ";redData:" + redData+ ";irData:" + irData+  ";accX:" + accX + ";accY:" + accY + ";accZ:" + accZ
+//                    +  ";gyroX:" + gyroX+  ";gyroY:" + gyroY+  ";gyroZ:" + gyroZ+  ";temper0:" + temper0+  ";temper1:" + temper1+  ";temper2:" + temper2
+//                    + "\r\n";
 
         }
 
         return resultList;
+    }
 ```
 
 ```java
