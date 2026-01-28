@@ -5,7 +5,7 @@ icon: industry
 
 # 厂家定制指令
 
-* &#x20;**实时PPG血压测量**
+* **实时PPG血压测量**
 * **6轴协议**
 * **寿世PPG波形传输**
 
@@ -67,7 +67,8 @@ LmAPI.GET_REAL_TIME_BP((byte) 0x30, (byte) 1, (byte) 1, new IRealTimePPGB
 ```
 
 **iOS:**
-```Swift
+
+```swift
 /// 血压测量
 /// - Parameters:
 ///   - collectTime: 采集时间(单位：秒)
@@ -78,7 +79,8 @@ func startBloodPressure(collectTime: Int, waveformConfig: Int, progressConfig: I
 ```
 
 #### 调用示例
-```Swift
+
+```swift
 BCLRingManager.shared.startBloodPressure(collectTime: 30, waveformConfig: 1, progressConfig: 1) { result in
     switch result {
     case .success(let response):
@@ -133,7 +135,8 @@ LmAPI.STOP_REAL_TIME_BP()
 ```
 
 **iOS:**
-```Swift
+
+```swift
 /// 停止血压测量
 /// - Parameter completion: 停止血压测量回调
 /// - BCLStopBloodPressureResponse: 包含停止血压测量结果的响应模型
@@ -141,7 +144,8 @@ func stopBloodPressure(completion: @escaping (Result<BCLStopBloodPressureRespons
 ```
 
 #### 调用示例
-```Swift
+
+```swift
 BCLRingManager.shared.stopBloodPressure { result in
     switch result {
     case .success(_):
@@ -181,7 +185,8 @@ public interface I6axisListener {
 ### 设置六轴传感器工作频率
 
 **iOS:**
-```Swift
+
+```swift
 /// 设置六轴传感器工作频率 (暂不支持分开设置，需保证加速度、陀螺仪频率一致)
 /// - Parameters:
 ///   - accelerationFrequency: 加速度频率 (25hz，50hz，100hz，150hz，200hz)
@@ -191,7 +196,8 @@ func setSixAxisWorkFrequency(accelerationFrequency: Int, gyroscopeFrequency: Int
 ```
 
 #### 调用示例
-```Swift
+
+```swift
 BCLRingManager.shared.setSixAxisWorkFrequency(accelerationFrequency: 100, gyroscopeFrequency: 100) { result in
     switch result {
     case .success(let response):
@@ -205,7 +211,8 @@ BCLRingManager.shared.setSixAxisWorkFrequency(accelerationFrequency: 100, gyrosc
 ### 获取六轴传感器工作频率
 
 **iOS:**
-```Swift
+
+```swift
 /// 获取六轴传感器工作频率
 /// - BCLGetWorkFrequencyResponse: 包含获取结果的响应模型
 func getSixAxisWorkFrequency(completion: @escaping (Result<BCLGetWorkFrequencyResponse, BCLError>) -> Void)
@@ -214,7 +221,8 @@ func getSixAxisWorkFrequency(completion: @escaping (Result<BCLGetWorkFrequencyRe
 ### 获取六轴传感器数据（单次）
 
 **iOS:**
-```Swift
+
+```swift
 /// 获取六轴传感器-加速度数据(单次)
 func getSixAxisAccelerationData(completion: @escaping (Result<BCLReadAccelerationResponse, BCLError>) -> Void)
 
@@ -228,7 +236,8 @@ func getSixAxisAccelerationAndGyroscopeData(completion: @escaping (Result<BCLRea
 ### 获取六轴传感器实时数据（持续上传）
 
 **iOS:**
-```Swift
+
+```swift
 /// 获取六轴传感器-加速度数据(开启后一直上传直至接收到停止指令)
 func getSixAxisRealTimeAccelerationData(completion: @escaping (Result<BCLReadRealTimeAccelerationResponse, BCLError>) -> Void)
 
@@ -242,7 +251,8 @@ func getSixAxisRealTimeAccelerationAndGyroscopeData(completion: @escaping (Resul
 ### 停止六轴传感器数据上传
 
 **iOS:**
-```Swift
+
+```swift
 /// 停止六轴传感器数据上传
 func stopSixAxisData(completion: @escaping (Result<BCLCloseSixAxisResponse, BCLError>) -> Void)
 ```
@@ -250,7 +260,8 @@ func stopSixAxisData(completion: @escaping (Result<BCLCloseSixAxisResponse, BCLE
 ### 设置六轴传感器省电模式
 
 **iOS:**
-```Swift
+
+```swift
 /// 设置六轴传感器省电模式
 func setSixAxisPowerSavingMode(completion: @escaping (Result<BCLSetPowerSavingModeResponse, BCLError>) -> Void)
 ```
@@ -344,8 +355,10 @@ public interface IHeartListener {
 定制化功能，涉及到的回调返回有error，resultDataSHOUSHI，waveformData，progress，success，stop
 
 ### 开始PPG波形测量
+
 **iOS:**
-```Swift
+
+```swift
 /// PPG波形测量
 /// - Parameters:
 ///   - collectTime: 采集时间，默认30、0为一直采集
@@ -357,7 +370,8 @@ func ppgWaveFormMeasurement(collectTime: Int, waveConfig: Int, progressConfig: I
 ```
 
 #### 调用示例
-```Swift
+
+```swift
 BCLRingManager.shared.ppgWaveFormMeasurement(collectTime: 30, waveConfig: 1, progressConfig: 1, waveSetting: 0) { result in
     switch result {
     case .success(let response):
@@ -371,7 +385,8 @@ BCLRingManager.shared.ppgWaveFormMeasurement(collectTime: 30, waveConfig: 1, pro
 ### 停止PPG波形测量
 
 **iOS:**
-```Swift
+
+```swift
 /// PPG波形测量停止
 /// - Parameters:
 ///   - completion: 停止结果回调
@@ -379,7 +394,8 @@ func ppgWaveFormStop(completion: @escaping (Result<BCLPPGWaveFormStopResponse, B
 ```
 
 #### 调用示例
-```Swift
+
+```swift
 BCLRingManager.shared.ppgWaveFormStop { result in
     switch result {
     case .success(_):
@@ -389,3 +405,78 @@ BCLRingManager.shared.ppgWaveFormStop { result in
     }
 }
 ```
+
+实时PPG测量
+
+
+
+```java
+/**
+ * 实时PPG测量（0x3C）
+ */
+/**
+ *  实时PPG测量（0x3C）
+ * @param time 采集时间，默认30
+ * @param frequency 采集频率，默认25(保留)
+ * @param ledGreen led_green电流，默认20
+ * @param ledIr led_ir电流，默认20
+ * @param ledRed led_red电流，默认20 （电流每档为392uA，档位上限50）
+ * @param progress 进度响应0:不上传 1:上传
+ * @param wave 波形响应0:不上传 1:上传
+ * @param iRealTimePPGListener1 回调
+ */
+public static void START_REAL_TIME_PPG(int time, int frequency,int ledGreen, int ledIr, int ledRed, int progress, int wave, IRealTimePPGListener iRealTimePPGListener1) 
+    /**
+     * 停止实时PPG测量（0x3C）
+     */
+    public static void STOP_REAL_TIME_PPG() 
+```
+
+调用示例：
+
+```java
+postView("\n开启实时ppg");
+//postView("\n开始读取未上传数据");
+
+LmAPI.START_REAL_TIME_PPG(30, 100, 20, 20, 20, 1, 1, new IRealTimePPGListener() {
+    @Override
+    public void time(long time, int zone) {
+        postView("\ntime:"+time+",zone:"+zone);
+    }
+
+    @Override
+    public void waveformData(int seq, int number, List<String[]> waveData) {
+        postView("\nwaveformData seq:"+seq+",number:"+number);
+
+        for (String[] array : waveData) {
+            postView("\nwaveData:"+Arrays.toString(array));
+        }
+    }
+
+    @Override
+    public void progress(int progress) {
+        postView("\nprogress :"+progress);
+    }
+
+    @Override
+    public void RRIData(int number, byte[] rriData) {
+        postView("\nRRIData number:"+number+",rriData length:"+rriData.length);
+    }
+
+    @Override
+    public void result(int result0, int heartRate, int bloodOxygen, int temperature) {
+        postView("\nresult result0:"+result0+",heartRate:"+heartRate+",bloodOxygen:"+bloodOxygen+",temperature:"+temperature);
+    }
+});
+```
+
+停止测量
+
+```java
+postView("\n停止实时ppg");
+//postView("\n开始读取未上传数据");
+
+LmAPI.STOP_REAL_TIME_PPG();
+```
+
+<br>
