@@ -33,6 +33,7 @@
 * [运动模式](zhi-neng-jie-zhi-sdk-shi-yong/yun-dong-mo-shi.md)
 * [厂家定制指令](zhi-neng-jie-zhi-sdk-shi-yong/chang-jia-ding-zhi-zhi-ling.md)
 * [获取蓝牙信号](zhi-neng-jie-zhi-sdk-shi-yong/huo-qu-lan-ya-xin-hao.md)
+* [获取sn码（序列号）](zhi-neng-jie-zhi-sdk-shi-yong/huo-qu-sn-ma-xu-lie-hao.md)
 * [常规指令(不推荐)](zhi-neng-jie-zhi-sdk-shi-yong/chang-gui-zhi-ling.md)
 
 ## 升级服务
