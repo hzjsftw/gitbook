@@ -32,6 +32,50 @@ layout:
 
 历史数据默认是保存在本地数据库的
 
+### 复合指令特殊处理
+
+**android：**
+
+复合指令会自动上传历史数据，需要在页面上设置监听历史数据上传，否则会有null异常，在Activity里进行监听，通过LmAPI或者LmAPILite调用，样例：
+
+```java
+private void READ_HISTORY_AUTO() {
+    uploadServerHistoryData.clear();
+    LmAPILite.READ_HISTORY_AUTO(new IHistoryListenerLite() {
+        @Override
+        public void error(int code) {
+            readHistoryError();
+           
+        }
+
+        @Override
+        public void success() {
+            readHistorySuccess(true);
+           
+
+        }
+
+        @Override
+        public void progress(double progress, HistoryDataBean historyDataBean) {
+            uploadServerHistoryData.add(historyDataBean);
+            readHistoryProgress();
+        }
+
+        @Override
+        public void clearHistory() {
+
+        }
+
+        @Override
+        public void noNewDataAvailable() {
+           
+        }
+    });
+}
+```
+
+除非有特殊情况，比如需要手动获取历史数据，一般不需要再重复使用《读取戒指历史数据》
+
 ### 如何保存到服务器
 
 如果想保存到用户自己的服务器，需要将数据上传，最好再有一个查询用户最后一条记录的时间的接口，调用sdk api的时候可以传进去，获取该时间段后的数据，保证数据链完整
@@ -369,46 +413,4 @@ LmAPI.CLEAN_HISTORY（）
 public static void CLEAN_HISTORY()
 ```
 
-### 复合指令特殊处理
-
-**android：**
-
-复合指令会自动上传历史数据，需要在页面上设置监听历史数据上传，否则会有null异常，在Activity里进行监听，通过LmAPI或者LmAPILite调用，样例：
-
-```java
-private void READ_HISTORY_AUTO() {
-    uploadServerHistoryData.clear();
-    LmAPILite.READ_HISTORY_AUTO(new IHistoryListenerLite() {
-        @Override
-        public void error(int code) {
-            readHistoryError();
-           
-        }
-
-        @Override
-        public void success() {
-            readHistorySuccess(true);
-           
-
-        }
-
-        @Override
-        public void progress(double progress, HistoryDataBean historyDataBean) {
-            uploadServerHistoryData.add(historyDataBean);
-            readHistoryProgress();
-        }
-
-        @Override
-        public void clearHistory() {
-
-        }
-
-        @Override
-        public void noNewDataAvailable() {
-           
-        }
-    });
-}
-```
-
-除非有特殊情况，比如需要手动获取历史数据，一般不需要再重复使用《读取戒指历史数据》
+###
