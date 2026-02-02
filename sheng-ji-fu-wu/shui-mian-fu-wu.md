@@ -1041,6 +1041,45 @@ LmAPI 或者 LmAPILite 调用SET_GOMORE_USER();
             });
 ```
 
+睡眠实体类
+
+```java
+/**
+ * gomore算法睡眠数据
+ */
+public class GoMoreSleep {
+    /**
+     * 0为睡眠总览响应
+     * 1为睡眠分期响应
+     * 2为无睡眠数据
+     */
+    private int resType;
+    private long startTs;//开始时间戳（单位秒）
+    private long endTs;//结束时间戳（单位秒）
+    private int numEpochs;      // Number of Stages 有效数据长度（最大为2880）
+    private int latency;            //睡眠潜伏期（单位分钟）
+    private int wakeTimes;        //清醒时间（单位分钟）
+    private int totalSleepTime;     //不包含清醒时间的总睡眠时间（单位分钟）
+    private int waso;               //入睡后的总清醒时间（单位分钟）
+    private int sleepPeriod;        //睡眠时间（单位分钟）
+    private int efficiency;         //睡眠效率（除以100为百分比）
+    private int wakeRatio;          //清醒与睡眠比例（除以100为百分比）
+    private int remRatio;           //眼动与睡眠比例（除以100为百分比）
+    private int lightRatio;         //浅睡与睡眠比例（除以100为百分比）
+    private int deepRatio;          //深睡与睡眠比例（除以100为百分比）
+    private int wakeNumMinutes;     //清醒时间（单位分钟）
+    private int remNumMinutes;      //眼动时间（单位分钟）
+    private int lightNumMinutes;    //浅睡时间（单位分钟）
+    private int deepNumMinutes;     //深睡时间（单位分钟）
+    private int score;              //睡眠评分，100满
+    private int type;             //类型：长睡/短睡（1长睡2短睡，短睡时只有开始结束时间戳）
+    private int packNum;//（总包数）
+    private int packNo;//（包序号
+    private int stageNum;//（当前包stages数组长度）
+    private short[] stages;//睡眠分期,0：唤醒，1：眼动，2：浅睡，3：深睡
+}
+```
+
 ### 服务器相关接口
 
 看公司需求，如果需要保存到自己数据库，这一步可以省略
