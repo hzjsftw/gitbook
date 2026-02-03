@@ -765,7 +765,7 @@ BCLRingManager.shared.restoreFactorySettings { result in
 
 ### 采集周期设置
 
-接口功能：采集周期设置。设置后下次有效
+接口功能：采集周期设置。设置后下次有效。周期采集的是心率、hrv、rri、体温、压力。固定一小时采集的是血氧、心率、体温
 
 **android:**
 
