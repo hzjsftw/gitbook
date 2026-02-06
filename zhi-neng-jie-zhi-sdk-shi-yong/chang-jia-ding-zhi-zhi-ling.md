@@ -479,4 +479,41 @@ postView("\n停止实时ppg");
 LmAPI.STOP_REAL_TIME_PPG();
 ```
 
+### 设置定时启动运动采集
+
+```java
+    /**
+     * 设置定时启动运动采集
+     * @param model 0周期采集 1连续采集
+     * @param startTime 开始时间
+     * @param endTime 结束时间
+     * @param listenerLite
+     */
+    public static void SET_SCHEDULED_STARTUP(int model,long startTime,long endTime,ICollectionListener listenerLite) {
+```
+
 <br>
+
+### 获取定时启动运动采集
+
+```java
+public static void GET_SCHEDULED_STARTUP(ICollectionListener listenerLite)
+```
+
+回调：<br>
+
+```java
+/**
+ * 设置定时启动运动采集3805
+ * @param success
+ */
+public void setScheduledStartup(boolean success);
+
+/**
+ * 获取定时启动运动采集3806
+ * @param model 模式 0周期采集 1连续采集
+ * @param startTime 开始时间
+ * @param endTime 结束时间
+ */
+public void getScheduledStartup(int model,long startTime,long endTime);
+```
