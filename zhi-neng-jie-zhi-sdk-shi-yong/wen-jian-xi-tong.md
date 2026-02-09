@@ -68,7 +68,7 @@ public interface IFileListListener {
 
 3:PPG数据红外+红色+三轴(spo2)
 
-4:PPG数据绿色
+4:PPG数据绿色+三轴(hr)
 
 5:PPG数据红外
 
@@ -231,7 +231,7 @@ public interface FileResponseCallback {
 
 **3:PPG数据红外+红色+三轴(spo2)**
 
-**4:PPG数据绿色**
+**4:PPG数据绿色+三轴(hr)**
 
 **5:PPG数据红外**
 
