@@ -605,7 +605,7 @@ func uploadHistory(historyData: [BCLRingDBModel],
 
 ```java
 public class Sleep2thBean {
-    List<HistoryDataBean> sleepDataBeanList;
+    List<HistoryDataBean> sleepDataBeanList;//绘图用
     long startTime;//第一次入睡时间
     long endTime;//最后一次醒来时间
     long sleepTime;//睡眠时长，包含清醒时间
