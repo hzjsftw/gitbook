@@ -39,7 +39,7 @@
 ## 升级服务
 
 * [获取token](sheng-ji-fu-wu/huo-qu-token.md)
-* [睡眠服务](sheng-ji-fu-wu/shui-mian-fu-wu.md)
+* [睡眠服务(包括Gomore)](sheng-ji-fu-wu/shui-mian-fu-wu.md)
 * [OTA升级服务](sheng-ji-fu-wu/ota-sheng-ji-fu-wu.md)
 * [血压和血糖算法](sheng-ji-fu-wu/xue-ya-he-xue-tang-suan-fa.md)
 * [获取固件列表](sheng-ji-fu-wu/huo-qu-gu-jian-lie-biao.md)
