@@ -18,7 +18,7 @@ BLEUtils.contentTitle = "自己想要展示在app前台服务里的内容"
 [images-and-media.md](images-and-media.md)
 {% endcontent-ref %}
 
-&#x20;可以通过设置BLEUtils.pendingIntent，可以响应前台服务通知点击事件，如果app在后台，点击前台服务，跳转到指定页面。 例如：
+可以通过设置BLEUtils.pendingIntent，可以响应前台服务通知点击事件，如果app在后台，点击前台服务，跳转到指定页面。 例如：
 
 ```java
         // 创建返回首页的Intent
@@ -54,15 +54,21 @@ if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIO
 
 ### 实时更新标题
 
-有客户可能需要在前台服务更新一些变化的内容，比如电量变化之类，sdk也提供了方法，可以通过广播的形式，进行发送
+有客户可能需要在前台服务更新一些变化的内容，比如电量变化之类，sdk也提供了方法，可以通过广播的形式，进行发送。
+
+为了防止多个使用sdk的app，显示同样的通知，需要在发送通知之前，设置一下自己app的包名
 
 **android:**
 
 ```java
-Intent updateIntent = new Intent("ACTION_UPDATE_TITLE");
-updateIntent.putExtra("EXTRA_NEW_TITLE", "新的标题");
-sendBroadcast(updateIntent);
+  BLEUtils.setAppPackageNameForServiceTitle(getPackageName());//设置app的包名
+
+ Intent updateIntent = new Intent("ACTION_UPDATE_TITLE");
+ updateIntent.putExtra(BLEUtils.getExtraNewTitle(), "需要实时显示的标题");
+ sendBroadcast(updateIntent);
 ```
+
+###
 
 ### 点击服务，跳转到页面
 
