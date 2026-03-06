@@ -1058,7 +1058,7 @@ public class GoMoreSleep {
     private long endTs;//结束时间戳（单位秒）
     private int numEpochs;      // Number of Stages 有效数据长度（最大为2880）
     private int latency;            //睡眠潜伏期（单位分钟）
-    private int wakeTimes;        //清醒时间（单位分钟）
+    private int wakeTimes;        //清醒次数
     private int totalSleepTime;     //不包含清醒时间的总睡眠时间（单位分钟）
     private int waso;               //入睡后的总清醒时间（单位分钟）
     private int sleepPeriod;        //睡眠时间（单位分钟）
