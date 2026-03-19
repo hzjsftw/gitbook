@@ -2,20 +2,6 @@
 description: >-
   戒指会每隔一定周期，测量用户的体征数据，保存在戒指里，这是非常重要的数据，对于app显示用户数据，计算用户睡眠情况，都非常必要。获取历史数据，有两种方式，第一是获取所有历史数据，第二是只获取未上传数据
 icon: rectangle-vertical-history
-layout:
-  width: default
-  title:
-    visible: true
-  description:
-    visible: true
-  tableOfContents:
-    visible: true
-  outline:
-    visible: true
-  pagination:
-    visible: true
-  metadata:
-    visible: true
 ---
 
 # 历史数据相关
@@ -94,7 +80,7 @@ private void READ_HISTORY_AUTO() {
    //如需使用更精准的睡眠算法，获取戒指历史数据时，请调用该指令(LmAPI.READ_HISTORY不支持上传服务器操作)，这个支持一代协议,(byte) 0x00是未上传历史，(byte) 0x01是所有历史，正常情况下传0x00就可以了
    //如果使用复合指令的话，不需要主动触发，使用READ_HISTORY_AUTO_UPDATE_TO_SERVER(String mMac, IHistoryListener listener, IWebHistoryResult mWebHistoryResult)
    //会自动上传未上传历史数据，只需要在页面上监听即可。
-    LmAPI.READ_HISTORY_UPDATE_TO_SERVER((byte) 0x00,  mac, new IHistoryListener() {
+    LmAPI.READ_HISTORY_UPDATE_TO_SERVER((byte) 0x00,  服务器时间戳，mac, new IHistoryListener() {
                     @Override
                     public void error(int code) {
                         if (code == 3) {
