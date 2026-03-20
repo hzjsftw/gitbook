@@ -190,7 +190,7 @@ public class HistoryDataBean{
      */
     private int temperature;
     /**
-     * 运动激烈程度 1个字节
+     * 运动激烈程度 1个字节(不维护)
      */
     private int exerciseIntensity;
     /**
