@@ -182,27 +182,13 @@ icon: map
 **android:**
 
 <pre class="language-java"><code class="lang-java"><strong>//默认是当前时区
-</strong><strong>LmAPI.SYNC_TIME();
+</strong><strong>LmAPILite.SYNC_TIME(ISyncTimeListenerLite listenerLite);
 </strong>//同步时间可以设置时区， 东区为正，西区为负，比如东八区8，西八区为-8
-LmAPI.SYNC_TIME_ZONE();
+LmAPILite.SYNC_TIME_ZONE(ISyncTimeListenerLite listenerLite)
 </code></pre>
 
-注意事项：同步时间和读取时间共用一个返回值。 参数说明：无\
-返回值
-
 ```java
-void syncTime(byte datum,byte[] time)
-```
 
-| 参数名称  | 类型      | 示例值  | 说明              |
-| ----- | ------- | ---- | --------------- |
-| datum | byte    | 0或1  | 0代表同步成功 1代表读取时间 |
-| time  | byte\[] | null | 同步时间不会返回byte\[] |
-
-简化版本
-
-```java
-public static void SYNC_TIME(ISyncTimeListenerLite listenerLite)
 
 public interface ISyncTimeListenerLite {
 
@@ -247,28 +233,11 @@ BCLRingManager.shared.syncTime(date: Date(), timeZone: BCLRingTimeZone.getCurren
 
 **android：**
 
-接口声明：\
-注意事项：同步时间和读取时间共用一个返回值。 参数说明：无
+接口声明:
 
 ```java
-LmAPI.READ_TIME();
-```
-
-返回值
-
-```java
-void syncTime(byte datum,byte[] time)
-```
-
-| 参数名称  | 类型      | 示例值                                                  | 说明                           |
-| ----- | ------- | ---------------------------------------------------- | ---------------------------- |
-| datum | byte    | 0或1                                                  | 0代表同步成功 1代表读取时间              |
-| time  | byte\[] | \[48, -23, -1, 83, -111, 1, 0, 0, 8] = 1723691166000 | 读取时间成功，需转化为时间戳(小端模式，最后一位为时区) |
-
-简化版本
-
-```java
- public static void READ_TIME(ISyncTimeListenerLite listenerLite) 
+LmAPILite:
+  public static void READ_TIME(ISyncTimeListenerLite listenerLite) 
 
 public interface ISyncTimeListenerLite {
 /**
@@ -325,26 +294,6 @@ BCLRingManager.shared.readTime { res in
 接口功能：版本信息 ，获取戒指的版本信息。
 
 **android:**
-
-接口声明：
-
-```java
-LmAPI.GET_VERSION((byte) 0x00);  //0x00获取软件版本，0x01获取硬件版本
-```
-
-参数说明：type：0x00获取软件版本 ，0x01获取硬件版本\
-返回值
-
-```java
-void VERSION(byte type, String version)
-```
-
-| 参数名称    | 类型     | 示例值     | 说明                |
-| ------- | ------ | ------- | ----------------- |
-| type    | byte   | 0或1     | 0代表软件版本号 1代表硬件版本号 |
-| version | String | 1.0.0.1 | 版本号               |
-
-简化版本
 
 ```java
 public static void GET_VERSION(boolean softVersion,IVersionListenerLite listenerLite)
@@ -407,27 +356,6 @@ BCLRingManager.shared.readFirmware { res in
 接口功能：获取电池电量、 电池状态。
 
 **android:**
-
-接口声明：
-
-```java
-LmAPI.GET_BATTERY((byte) 0x00);  //0x00获取电量，0x01获取充电状态，0x02电量推送
-```
-
-参数说明：type：0x00获取电量 ，0x01获取充电状态，0x01获取充电状态，0x02当戒指未复位，充电状态发生变化的时候，蓝牙连接中，戒指主动进行电量推送，间隔1s发送三次\
-返回值
-
-```java
-void battery(byte status, byte datum)
-```
-
-| 参数名称   | 类型   | 示例值   | 说明              |
-| ------ | ---- | ----- | --------------- |
-| status | byte | 0或1   | 0代表电池电量 1代表充电状态 |
-| datum  | byte | 0-100 | 电量              |
-| datum  | byte | 1     | 0未充电 1充电中 2充满   |
-
-简化版本
 
 ```java
 //type 电池类型，0读取电量(充电中和充电完成，电量无效) 1充电状态，电量无效，2，0x02当戒指未复位，充电状态发生变化的时候，
@@ -518,28 +446,9 @@ BCLRingManager.shared.readChargingState { result in
 
 接口功能：获取当天累计步数。
 
-这个指令针对一般戒指使用，对于累积计步方式的戒指不适用
-
 **android:**
 
 接口声明：
-
-```java
-LmAPI.STEP_COUNTING（）
-```
-
-参数说明：无\
-返回值
-
-```java
-void stepCount(byte[] bytes)
-```
-
-| 参数名称  | 类型      | 示例值  | 说明                       |
-| ----- | ------- | ---- | ------------------------ |
-| bytes | byte\[] | 3303 | 步数819(小端模式，由0333转10进制得到) |
-
-简化版本
 
 ```java
 public static void STEP_COUNTING(IStepListenerLite listenerLite)
@@ -590,25 +499,6 @@ BCLRingManager.shared.readStepCount { result in
 接口功能：清除步数。
 
 **android:**
-
-接口声明：
-
-```java
-LmAPI.CLEAR_COUNTING（）
-```
-
-参数说明：无\
-返回值：
-
-```java
-void clearStepCount(byte data)
-```
-
-| 参数名称 | 类型   | 示例值 | 说明          |
-| ---- | ---- | --- | ----------- |
-| byte | data | 1   | 返回1代表清除步数成功 |
-
-简化版本
 
 ```java
  public static void CLEAR_COUNTING(IStepListenerLite listenerLite)
@@ -680,21 +570,6 @@ BCLRingManager.shared.stepNotifyBlock = { steps in
 接口功能：恢复出厂设置
 
 **android:**
-
-接口声明：
-
-```java
-LmAPI.RESET()
-```
-
-参数说明：无\
-返回值：无 ，有回调reset方法即认为成功
-
-```java
-void reset(byte[] data);
-```
-
-简化版本
 
 ```java
 public static void RESET(ISystemControlListenerLite listenerLite)
@@ -768,25 +643,6 @@ BCLRingManager.shared.restoreFactorySettings { result in
 接口功能：采集周期设置。设置后下次有效。周期采集的是心率、hrv、rri、体温、压力。固定一小时采集的是血氧、心率、体温
 
 **android:**
-
-接口声明：
-
-```java
-LmAPI.SET_COLLECTION(collection)//采集周期，单位秒
-```
-
-参数说明：colection：采集间隔，单位秒\
-返回值：
-
-```java
-void setCollection(byte result)
-```
-
-| 参数名称   | 类型   | 示例值 | 说明                      |
-| ------ | ---- | --- | ----------------------- |
-| result | byte | 0，1 | 设置采集周期失败 1代表0代表设置采集周期成功 |
-
-简化版本
 
 ```java
   /**
@@ -866,23 +722,6 @@ BCLRingManager.shared.setCollectPeriod(period: 300) { result in
 接口声明：
 
 ```java
-LmAPI.GET_COLLECTION()
-```
-
-参数说明：无\
-返回值：
-
-```java
-void getCollection(byte[] bytes)
-```
-
-| 参数名称  | 类型      | 示例值      | 说明                  |
-| ----- | ------- | -------- | ------------------- |
-| bytes | byte\[] | b0040000 | 采集时间间隔 ，单位秒 如：1200s |
-
-简化版本
-
-```java
    public static void GET_COLLECTION(ISystemControlListenerLite listenerLite)
    public interface ISystemControlListenerLite {
     /**
@@ -955,7 +794,7 @@ BCLRingManager.shared.getCollectPeriod { result in
 **android:**
 
 ```java
-LmAPI.ONE_KEY_TEST(new IOneTestListenerLite() {
+LmAPILite.ONE_KEY_TEST(new IOneTestListenerLite() {
     @Override
     public void oneTestErrorCode(int errData) {
        
