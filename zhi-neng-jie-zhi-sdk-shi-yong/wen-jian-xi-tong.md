@@ -11,7 +11,7 @@ icon: copy
 
 **android:**
 
-通过指令，可以获取戒指本地的文件列表，然后通过文件名，解析文件的内容(需要戒指支持指令) 对应的指令是：LmAPILite或者LmAPI
+通过指令，可以获取戒指本地的文件列表，然后通过文件名，解析文件的内容(需要戒指支持指令) 对应的指令是：LmAPILite
 
 ```java
  GET_FILE_LIST( IFileListListener listenerLite) //文件列表
@@ -144,19 +144,19 @@ public class ExerciseConfig {
 可以根据实际需求，定制采集时间和时长，定制自定义指令，然后发送开启采集的指令
 
 ```java
-  LmAPI.START_EXERCISE(config);
+  LmAPILite.START_EXERCISE(config);
 ```
 
 可以手动停止采集
 
 ```java
- LmAPI.STOP_EXERCISE();
+ LmAPILite.STOP_EXERCISE();
 ```
 
 如果戒指支持自动采集，直接进入获取文件的流程：
 
 ```java
-  LmAPI.GET_FILE_LIST(fileResponseCallback);
+  LmAPILite.GET_FILE_LIST(fileResponseCallback);
 ```
 
 获取文件部分的回调
@@ -447,15 +447,15 @@ temper2，类型：有符号短整型
 
 ```java
 //请求文件列表
-  LmAPI.GET_FILE_LIST(fileResponseCallback);
+  LmAPILite.GET_FILE_LIST(fileResponseCallback);
   
   //格式化文件系统
-  LmAPI.PERFORM_FORMAT_FILESYSTEM(fileResponseCallback);
+  LmAPILite.PERFORM_FORMAT_FILESYSTEM(fileResponseCallback);
   //请求文件的数据
   byte[] fileNameBytes = fileInfo.fileName.getBytes("UTF-8");
-  LmAPI.DOWNLOAD_FILE(fileNameBytes,fileResponseCallback);
+  LmAPILite.DOWNLOAD_FILE(fileNameBytes,fileResponseCallback);
   //请求文件的数据(一键上传所有文件）
-   LmAPI.DOWNLOAD_ALL_FILES(fileResponseCallback);
+   LmAPILite.DOWNLOAD_ALL_FILES(fileResponseCallback);
 ```
 
 这种模式比较复杂，返回时走的回调比较多，现在把具体的文档展示一下
