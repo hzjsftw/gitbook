@@ -19,8 +19,8 @@ LogicalApi.startECGActivity(TestActivity2.this);
 **android：**
 
 ```java
- LmAPI.STAR_ELEC()//开启心电测量
- LmAPI.STOP_ELECTROCARDIOGRAM();//结束心电测量
+ LmAPILite.STAR_ELEC()//开启心电测量
+ LmAPILite.STOP_ELECTROCARDIOGRAM();//结束心电测量
 ```
 
 简化版本
@@ -37,14 +37,16 @@ LogicalApi.startECGActivity(TestActivity2.this);
 ```
 
 **iOS:**
-```Swift
+
+```swift
 /// 心电图-采集人体心电
 /// - Parameter completion: 采集人体心电回调
 func startTakeECG(completion: @escaping (Result<BCLTakeECGResponse, BCLError>) -> Void)
 ```
 
 #### 调用示例
-```Swift
+
+```swift
 BCLRingManager.shared.startTakeECG { res in
     switch res {
     case let .success(response):
@@ -61,13 +63,13 @@ BCLRingManager.shared.startTakeECG { res in
 }
 ```
 
-```Swift
+```swift
 /// 心电图-采集模拟信号
 /// - Parameter completion: 采集模拟信号回调
 func startTakeECGSimulator(completion: @escaping (Result<BCLTakeECGSimulatorResponse, BCLError>) -> Void)
 ```
 
-```Swift
+```swift
 /// 心电图-停止采集
 /// - Parameter completion: 停止采集回调
 func stopECG(completion: @escaping (Result<BCLStopECGResponse, BCLError>) -> Void)
