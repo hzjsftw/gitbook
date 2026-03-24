@@ -720,11 +720,15 @@ func getSleepDataByTimeRange(datas: [String], completion: @escaping (Result<[BCL
 
 如果想要一个时间段内的睡眠描述，可以使用以下接口，这个接口不会返回每天的睡眠详情，否则会返回很慢
 
-<pre class="language-java"><code class="lang-java">//根据日期组合，批量获取睡眠记录，日期格式类似于 "2025-05-11"
-LogicalApi.getSleepDataBatchFromService(List&#x3C;String> dates, IWebSleepResult webApiResult)
-<strong>//对应的数据类型：
-</strong>public class SleepBatchBean {
+```java
+//根据日期组合，批量获取睡眠记录，日期格式类似于 "2025-05-11"
+LogicalApi.getSleepDataBatchFromService(List<String> dates, IWebSleepResult webApiResult)
+//gomore睡眠使用LogicalApi.getSleepDataWithGoMoreBatch
 
+//对应的数据类型：
+public class SleepBatchBean {
+ long startTime;//第一次入睡时间
+    long endTime;//最后一次醒来时间
     /**
      * 日期
      */
@@ -756,7 +760,7 @@ LogicalApi.getSleepDataBatchFromService(List&#x3C;String> dates, IWebSleepResult
      */
     private long time;
     }
-</code></pre>
+```
 
 对应接口的回调
 
