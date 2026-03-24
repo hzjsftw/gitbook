@@ -63,7 +63,7 @@ icon: circle-2
 *   安卓相关API：
 
     ```java
-    LmAPI.APP_BIND(IBindConnectRefreshListenerLite listenerLite)
+    LmAPILite.APP_BIND(IBindConnectRefreshListenerLite listenerLite)
     ```
 * IOS相关API：
 
@@ -89,7 +89,7 @@ BCLRingManager.shared.appEventBindRing(date: Date, timeZone: BCLRingTimeZone, co
          * @param timeMillis 获取时间戳以后的数据，默认传0
          * @param listenerLite
     */
-    LmAPI.APP_CONNECT(long timeMillis,IBindConnectRefreshListenerLite listenerLite) 
+    LmAPILite.APP_CONNECT(long timeMillis,IBindConnectRefreshListenerLite listenerLite) 
     ```
 * IOS相关API：
 
@@ -116,7 +116,7 @@ BCLRingManager.shared.appEventConnectRing(date: Date, timeZone: BCLRingTimeZone,
          * @param timeMillis 获取时间戳以后的数据，默认传0
          * @param listenerLite
     */
-    LmAPI.APP_REFRESH(long timeMillis,IBindConnectRefreshListenerLite listenerLite) 
+    LmAPILite.APP_REFRESH(long timeMillis,IBindConnectRefreshListenerLite listenerLite) 
     ```
 * IOS相关API：
 
