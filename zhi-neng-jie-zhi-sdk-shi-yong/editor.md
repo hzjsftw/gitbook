@@ -96,9 +96,6 @@ Privacy - Bluetooth Always Usage Description
 <mark style="color:red;">建议新客户直接使用LmAPILite简化版本</mark>
 
 ```java
-LmAPI.init(this);
-LmAPI.setDebug(true);
-//如使用简化版本，需要初始化LmAPILite
 LmAPILite.init(this);
 LmAPILite.setDebug(true);
 //如果app需要提供给海外用户，可以设置这个为true，sdk会切换到新加坡服务器
@@ -113,11 +110,11 @@ BaseActivity implements IResponseListener
 
 一般模式：
 在onResume里调用注册，先移除一下，防止弹出配对框，导致onResume重复调用，多次注册
-LmAPI.removeWLSCmdListener(this);
-LmAPI.addWLSCmdListener(this, this);
+LmAPILite.removeWLSCmdListener(this);
+LmAPILite.addWLSCmdListener(this, this);
 在onStop里清除监听
-LmAPI.removeWLSCmdListener(this)
-简化模式换成LmAPILite即可，后续调用指令都使用LmAPILite开头
+LmAPILite.removeWLSCmdListener(this)
+
 ```
 
 **IOS：**
