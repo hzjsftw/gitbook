@@ -17,38 +17,17 @@ icon: industry
 接口声明：
 
 ```java
-LmAPI.GET_REAL_TIME_BP（byte time,byte isWave,byte isProgress,IRealTimePPGBpListener iRealTimePPGBpListener）
+LmAPILite.GET_REAL_TIME_BP（byte time,byte isWave,byte isProgress,IRealTimePPGBpListener iRealTimePPGBpListener）
 ```
 
 注意事项：戒指固件必须支持，否则无法使用。 参数说明：\
-time：采集时间,byte类型，默认30s\
+time：采集时间,默认30s\
 isWave:是否上传波形。0：不上传，1：上传\
 isProgress：是否上传进度。0：不上传，1：上传
 
 ```java
-LmAPI.GET_REAL_TIME_BP((byte) 0x30, (byte) 1, (byte) 1, new IRealTimePPGBpListener() {
-                    @Override
-                    public void progress(int progress) {
-                        //进度
-                    }
-
-                    @Override
-                    public void bpResult(byte type) {
-                        //[0]:舒张压
-                        //[1]:收缩压
-                    }
-
-                    @Override
-                    public void resultData(String bpData) {
-                        //bpData包含红外值
-                    }
-             });
-```
-
-简化版本
-
-```java
-   public static void GET_REAL_TIME_BP(int time,int isWave,int isProgress,IRealTimePPGBpListenerLite iRealTimePPGBpListener)
+  LmAPILite：
+    public static void GET_REAL_TIME_BP(int time,int isWave,int isProgress,IRealTimePPGBpListenerLite iRealTimePPGBpListener)
    public interface IRealTimePPGBpListenerLite {
     void progress(int progress);
     /**
@@ -94,26 +73,9 @@ BCLRingManager.shared.startBloodPressure(collectTime: 30, waveformConfig: 1, pro
 
 接口功能：停止采集
 
-**android：**\
-接口声明：
+**android：**
 
-```java
-LmAPI.STOP_REAL_TIME_BP()
-```
-
-注意事项：戒指固件必须支持，否则无法使用。 参数说明：无\
-回调：
-
-```java
- @Override
-    public void stopRealTimeBP(byte isSend) {
-        if(isSend == (byte)0x01){
-            Logger.show("TAG","停止采集已发送");
-        }
-  }
-```
-
-简化版本
+注意事项：戒指固件必须支持，否则无法使用。 参数说明：无
 
 ```java
   public static void STOP_REAL_TIME_BP(IRealTimePPGBpListenerLite iRealTimePPGBpListener)
@@ -159,9 +121,9 @@ BCLRingManager.shared.stopBloodPressure { result in
 ### **6轴传感器协议**
 
 ```java
- LmAPI.TURN_OFF_6_AXIS_SENSORS( I6axisListener listenerLite) //关闭6轴传感器数据上报
- LmAPI.READ_6_AXIS_SENSORS(I6axisListener listenerLite);//读6轴传感器加速度数据（单次）
- LmAPI.READ_6_AXIS_ACCELERATION(I6axisListener listenerLite);//请求：读6轴传感器实时加速度数据（开启后一直上传直至接收到停止指令）
+ LmAPILite.TURN_OFF_6_AXIS_SENSORS( I6axisListener listenerLite) //关闭6轴传感器数据上报
+ LmAPILite.READ_6_AXIS_SENSORS(I6axisListener listenerLite);//读6轴传感器加速度数据（单次）
+ LmAPILite.READ_6_AXIS_ACCELERATION(I6axisListener listenerLite);//请求：读6轴传感器实时加速度数据（开启后一直上传直至接收到停止指令）
 ```
 
 回调：
@@ -438,7 +400,7 @@ public static void START_REAL_TIME_PPG(int time, int frequency,int ledGreen, int
 postView("\n开启实时ppg");
 //postView("\n开始读取未上传数据");
 
-LmAPI.START_REAL_TIME_PPG(30, 100, 20, 20, 20, 1, 1, new IRealTimePPGListener() {
+LmAPILite.START_REAL_TIME_PPG(30, 100, 20, 20, 20, 1, 1, new IRealTimePPGListener() {
     @Override
     public void time(long time, int zone) {
         postView("\ntime:"+time+",zone:"+zone);
@@ -476,7 +438,7 @@ LmAPI.START_REAL_TIME_PPG(30, 100, 20, 20, 20, 1, 1, new IRealTimePPGListener() 
 postView("\n停止实时ppg");
 //postView("\n开始读取未上传数据");
 
-LmAPI.STOP_REAL_TIME_PPG();
+LmAPILite.STOP_REAL_TIME_PPG();
 ```
 
 ### 设置定时启动运动采集
