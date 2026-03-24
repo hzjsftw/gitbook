@@ -7,7 +7,7 @@ icon: hand-holding-droplet
 
 ### android提供的接口
 
-使用LmApi或者LmApiLite，调用`BLOOD_PRESSURE_APP`测量波形值
+使用LmApiLite，调用`BLOOD_PRESSURE_APP`测量波形值
 
 ```java
 /**
@@ -23,7 +23,8 @@ icon: hand-holding-droplet
 ```
 
 **iOS:**
-```Swift
+
+```swift
 /// 血压测量
 /// - Parameters:
 ///   - collectTime: 采集时间(单位：秒)
@@ -106,7 +107,8 @@ getBloodPressureOrSugar(String mac, String waveFormValue, String testType,IWebBl
 ### IOS提供的接口
 
 **iOS:**
-```Swift
+
+```swift
 /// 上传血压测量数据
 /// - Parameters:
 ///   - mac: 设备MAC地址
