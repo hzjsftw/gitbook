@@ -12,7 +12,7 @@ icon: microphone-lines
 接口功能：获取主动推送音频信息(需要开启HID中的触摸语音，按住戒指上的磨砂区域，进行录音，戒指主动推送音频信息)
 
 ```java
-LmAPI.GET_CONTROL_AUDIO_ADPCM();
+LmAPILite.GET_CONTROL_AUDIO_ADPCM();
 ```
 
 回调：
@@ -39,32 +39,10 @@ LmAPI.GET_CONTROL_AUDIO_ADPCM();
 
 ```java
 //设置推送adpcm
-LmAPI.CONTROL_AUDIO_ADPCM_AUDIO((byte) 0x1);
+LmAPILite.CONTROL_AUDIO_ADPCM_AUDIO((byte) 0x1);
 ```
 
 ### 控制音频传输
-
-接口功能：控制音频传输
-
-接口声明：
-
-```java
-LmAPI.CONTROL_AUDIO_ADPCM(byte data)
-```
-
-参数说明：(byte) 0x1 开启，(byte) 0x0 关闭 回调：
-
-```java
-@Override
-   public void CONTROL_AUDIO(byte[] bytes) {
-       //通过以上设置，默认都是adpcm格式
- byte[] adToPcm = new AdPcmTool().adpcmToPcmFromJNI(bytes);
-  }
-```
-
-**注：返回的数据是byte数组，adpcm格式转为pcm格式，保存到文件中**
-
-简化版本
 
 ```java
 
