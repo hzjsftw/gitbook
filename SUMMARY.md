@@ -1,10 +1,8 @@
 # Table of contents
 
 * [前言](README.md)
-* [Page 1](page-1.md)
-* [Untitled](untitled/README.md)
-  * [sdk对接快速入门](untitled/sdk-dui-jie-kuai-su-ru-men.md)
-  * [Copy of sdk对接快速入门](untitled/copy-of-sdk-dui-jie-kuai-su-ru-men.md)
+* [快速入门](kuai-su-ru-men/README.md)
+  * [sdk对接快速入门](kuai-su-ru-men/sdk-dui-jie-kuai-su-ru-men.md)
 
 ## 功能总览
 
@@ -57,3 +55,7 @@
 * [指令相关问题](chang-jian-wen-ti/zhi-ling-xiang-guan-wen-ti.md)
 * [睡眠问题](chang-jian-wen-ti/shui-mian-wen-ti.md)
 * [待机时间短](chang-jian-wen-ti/dai-ji-shi-jian-duan.md)
+
+***
+
+* [Page 1](page-1.md)
