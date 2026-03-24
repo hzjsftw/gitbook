@@ -12,13 +12,10 @@ icon: clock-two
 **android:**
 
 <pre class="language-java"><code class="lang-java"><strong>//time:时间（s），type:  1：强力振动 2：持续振动 3：渐变振动
-</strong>LmAPI.SET_MOTOR(int time, int type)
+</strong>LmAPILite .SET_MOTOR(int time, int type)
 </code></pre>
 
-简化版方法名与正常版一致
-
 ```java
-LmAPI或者LmAPILite 
 /**
      * 设置线性马达参数
      * @param pattern 模式
@@ -41,14 +38,14 @@ LmAPI或者LmAPILite
 <pre class="language-java"><code class="lang-java">/**
 *设置闹钟
 **/
-<strong>LmAPI.ALARM_CLOCK_SETTING(List&#x3C;AlarmClockBean> alarmClockBeans);
+<strong>LmAPILite.ALARM_CLOCK_SETTING(List&#x3C;AlarmClockBean> alarmClockBeans);
 </strong></code></pre>
 
 ```java
 /**
 *获取闹钟配置
 **/
-LmAPI.GET_ALARM_CLOCK(IAlarmClockListenerLite listenerLite);
+LmAPILite.GET_ALARM_CLOCK(IAlarmClockListenerLite listenerLite);
 ```
 
 AlarmClockBean说明：
@@ -70,12 +67,12 @@ AlarmClockBean说明：
 /**
 *设置节假日日期
 **/
-LmAPI.HOLIDAY_SETTING(HolidayResult holidayResult, IAlarmClockListenerLite 
+LmAPILite.HOLIDAY_SETTING(HolidayResult holidayResult, IAlarmClockListenerLite 
 mIAlarmClockListenerLite);
  /**
      * 读取节假日日期（0x87）
      */
-LmAPI.GET_HOLIDAY_SETTING(int year, IAlarmClockListenerLite mIAlarmClockListenerLite)
+LmAPILite.GET_HOLIDAY_SETTING(int year, IAlarmClockListenerLite mIAlarmClockListenerLite)
 ```
 
 HolidayResult说明：
