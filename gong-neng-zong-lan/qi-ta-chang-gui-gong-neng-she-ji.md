@@ -12,7 +12,7 @@ icon: rectangles-mixed
 *   安卓相关API：
 
     ```java
-    LmAPI.GET_HEART_ROTA
+    LmAPILite.GET_HEART_ROTA
     ```
 *   IOS相关API：
 
@@ -37,8 +37,8 @@ icon: rectangles-mixed
 *   安卓相关API：
 
     ```java
-    LmAPI.GET_HEART_ROTA
-    LmAPI.STOP_HEART()
+    LmAPILite.GET_HEART_ROTA
+    LmAPILite.STOP_HEART()
     ```
 *   IOS相关API：
 
@@ -62,8 +62,8 @@ icon: rectangles-mixed
 *   安卓相关API：
 
     ```java
-    LmAPI.STAR_ELEC()//开启心电测量
-    LmAPI.STOP_ELECTROCARDIOGRAM();//结束心电测量
+    LmAPILite.STAR_ELEC()//开启心电测量
+    LmAPILite.STOP_ELECTROCARDIOGRAM();//结束心电测量
     ```
 * IOS相关API：
 
@@ -74,9 +74,9 @@ icon: rectangles-mixed
 *   安卓相关API：
 
     ```java
-    LmAPI.GET_HID_CODE//获取HID功能码
-    LmAPI.SET_HID;//设置戒指的HID模式
-    LmAPI.GET_HID;//获取HID模式
+    LmAPILite.GET_HID_CODE//获取HID功能码
+    LmAPILite.SET_HID;//设置戒指的HID模式
+    LmAPILite.GET_HID;//获取HID模式
     ```
 * IOS相关API：
 
@@ -87,9 +87,9 @@ icon: rectangles-mixed
 *   安卓相关API：
 
     ```java
-    LmAPI.SET_AUDIO//控制adpcm格式音频传输
-    LmAPI.CONTROL_AUDIO_ADPCM_AUDIO;//设置主动推送音频信息
-    LmAPI.GET_CONTROL_AUDIO_ADPCM;//获取主动推送音频信息
+    LmAPILite.SET_AUDIO//控制adpcm格式音频传输
+    LmAPILite.CONTROL_AUDIO_ADPCM_AUDIO;//设置主动推送音频信息
+    LmAPILite.GET_CONTROL_AUDIO_ADPCM;//获取主动推送音频信息
     ```
 * IOS相关API：
 
@@ -98,8 +98,8 @@ icon: rectangles-mixed
 *   安卓相关API：
 
     ```java
-    LmAPI.BLOOD_PRESSURE_APP//开始测量血压
-    LmAPI.STOP_BLOOD_PRESSURE_APP;//停止血压测量
+    LmAPILite.BLOOD_PRESSURE_APP//开始测量血压
+    LmAPILite.STOP_BLOOD_PRESSURE_APP;//停止血压测量
     ```
 * IOS相关API：
 
@@ -110,8 +110,8 @@ icon: rectangles-mixed
 *   安卓相关API：
 
     ```java
-    LmAPI.ALARM_CLOCK_SETTING//闹钟设置
-    LmAPI.GET_ALARM_CLOCK;//读取闹钟设置
+    LmAPILite.ALARM_CLOCK_SETTING//闹钟设置
+    LmAPILite.GET_ALARM_CLOCK;//读取闹钟设置
     ```
 * IOS相关API：
 
@@ -132,11 +132,12 @@ icon: rectangles-mixed
 *   安卓相关API：
 
     ```java
-    LmAPI.Set_BlueTooth_Name//设置蓝牙名称
-    LmAPI.Get_BlueTooth_Name//获取蓝牙名称
+    LmAPILite.Set_BlueTooth_Name//设置蓝牙名称
+    LmAPILite.Get_BlueTooth_Name//获取蓝牙名称
     ```
-*   IOS相关API：
-```Swift
+* IOS相关API：
+
+```swift
 /// 设置蓝牙名称
 /// - Parameter name: 蓝牙名称（字节长度1-12）
 /// - Parameter completion: 设置蓝牙名称回调
@@ -145,7 +146,8 @@ func setBluetoothName(name: String, completion: @escaping (Result<BCLSetBluetoot
 ```
 
 #### 调用示例
-```Swift
+
+```swift
 BCLRingManager.shared.setBluetoothName(name: "MyRing") { result in
     switch result {
     case .success(let response):
@@ -157,7 +159,8 @@ BCLRingManager.shared.setBluetoothName(name: "MyRing") { result in
 ```
 
 **iOS:**
-```Swift
+
+```swift
 /// 获取蓝牙名称
 /// - Parameter completion: 获取蓝牙名称回调
 /// - BCLReadBluetoothNameResponse: 包含获取结果的响应模型
@@ -165,7 +168,8 @@ func getBluetoothName(completion: @escaping (Result<BCLReadBluetoothNameResponse
 ```
 
 #### 调用示例
-```Swift
+
+```swift
 BCLRingManager.shared.getBluetoothName { result in
     switch result {
     case .success(let response):
@@ -181,10 +185,10 @@ BCLRingManager.shared.getBluetoothName { result in
 *   安卓相关API：
 
     ```java
-    LmAPI.SET_COLLECTION//设置
-    LmAPI.GET_COLLECTION//读取
+    LmAPILite.SET_COLLECTION//设置
+    LmAPILite.GET_COLLECTION//读取
     ```
-*   IOS相关API：
+* IOS相关API：
 
 ```swift
 /// 设置采集周期
@@ -207,21 +211,20 @@ BCLRingManager.shared.getCollectPeriod(completion: @escaping (Result<BCLGetColle
 
 *   安卓相关API：
 
-    ```java
-        /**
+    <pre class="language-java"><code class="lang-java">    /**
        *  设置个人信息
        * @param sex 性别，0女，1男
        * @param height 身高，单位1cm
        * @param weight 体重，单位0.1kg
        * @param age 年龄，单位月
        */
-    LmAPI.SET_USER_INFO(int sex,int height,int weight,int age) //设置用户信息
+    <strong>LmAPILite.SET_USER_INFO(int sex,int height,int weight,int age) //设置用户信息
+    </strong>
+    LmAPILite.GET_USER_INFO//获取个人信息
+    </code></pre>
+* IOS相关API： **iOS:**
 
-    LmAPI.GET_USER_INFO//获取个人信息
-    ```
-* IOS相关API：
-**iOS:**
-```Swift
+```swift
 /// 设置个人信息
 /// - Parameters:
 ///   - sex: 性别（0：女、1：男）
@@ -234,7 +237,8 @@ func setPersonalInformation(sex: Int, age: Int, height: Int, weight: Int, comple
 ```
 
 #### 调用示例
-```Swift
+
+```swift
 BCLRingManager.shared.setPersonalInformation(sex: 1, age: 300, height: 175, weight: 70) { result in
     switch result {
     case .success(let response):
@@ -246,7 +250,8 @@ BCLRingManager.shared.setPersonalInformation(sex: 1, age: 300, height: 175, weig
 ```
 
 **iOS:**
-```Swift
+
+```swift
 /// 获取个人信息
 /// - Parameter completion: 获取个人信息回调
 /// - BCLReadPersonalInformationResponse: 包含个人信息的响应模型
@@ -254,7 +259,8 @@ func getPersonalInformation(completion: @escaping (Result<BCLReadPersonalInforma
 ```
 
 #### 调用示例
-```Swift
+
+```swift
 BCLRingManager.shared.getPersonalInformation { result in
     switch result {
     case .success(let response):
