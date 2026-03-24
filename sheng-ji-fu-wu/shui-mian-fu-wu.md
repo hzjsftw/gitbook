@@ -56,57 +56,6 @@ DataApi.instance.deleteHistoryData();
 如果使用睡眠服务，上传数据，需要使用以下接口，这个接口的作用是，从戒指获取历史数据，保存到本地数据库，同时分批次上传到服务器上，一般情况下，只获取未上传数据即可，时间戳可以使用loadUserLatestHistory得到的time字段
 
 ```java
-LmAPI:
-
-/**
-     * 读取戒指本地历史数据上传到服务器
-     * @param type (byte) 0x00是未上传历史，(byte) 0x01是所有历史
-     * @param timeMillis 获取时间戳以后的历史记录，秒级时间戳
-     * @param mMac 对应的mac地址
-     * @param iHistoryListener
-     * @param mWebHistoryResult
-     */
-    public static void READ_HISTORY_UPDATE_TO_SERVER(byte type, long timeMillis, String mMac, IHistoryListener iHistoryListener, IWebHistoryResult mWebHistoryResult) {
-   
-   public interface IHistoryListener {
-    /**
-     * 获取戒指记录出错
-     * @param code
-     */
-    void error(int code);
-    /**
-     * 获取戒指记录成功
-     */
-    void success();
-    /**
-     * 获取戒指记录进度
-     * @param
-     */
-    void progress(double progress, HistoryDataBean historyDataBean);
-    /**
-     * 没有更多数据了
-     */
-    void noNewDataAvailable();
-}
-
-public interface IWebHistoryResult {
-    /**
-     * 历史数据上传服务器完成
-     */
-    void updateHistoryFinish();
-
-    /**
-     * 接口或者服务器错误
-     * @param errorMsg
-     */
-    void serviceError(String errorMsg);
-}
-
-```
-
-简化版：
-
-```java
 LmAPILite:
   /**
      * 读取戒指本地历史数据
@@ -988,7 +937,7 @@ LogicalApi.goMoreAuthorizationKey(String mac, String companyApiKey , GoMoreUtils
 如果要保证睡眠准确性，需要在授权以后，设置一下用户信息。
 
 ```java
-LmAPI 或者 LmAPILite 调用SET_GOMORE_USER();
+LmAPILite 调用SET_GOMORE_USER();
 
     /**
      *  gomore设置个人信息
