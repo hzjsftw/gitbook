@@ -22,86 +22,6 @@ icon: ruler-horizontal
 **android:**
 
 ```java
-/**
- * 测试心率和心率变异性
- *
- * @param waveForm       是否配置波形 0不上传 1上传
- * @param iHeartListener 心率监测监听
- */
-public static void GET_HEART_ROTA(byte waveForm, byte acqTime, IHeartListener iHeartListener) {
-    LmAPI.iHeartListener = iHeartListener;
-    SEND_CMD(convertToBytes(0x31, new byte[]{0x00, acqTime, 25, waveForm, 0x01, 0x01}));
-}
-
-public interface IHeartListener {
-
-    /**
-     * 进度
-     * @param progress
-     */
-    void progress(int progress);
-
-
-    /**
-     * 常规设备的心率监测
-     * @param heart 心率
-     * @param heartRota 心率变异性
-     * @param yaLi 压力
-     * @param temp 温度
-     */
-    void resultData(int heart,int heartRota,int yaLi,int temp);
-
-    /**
-     * 波形图
-     * @param seq 序号
-     * @param number 数据个数
-     * @param waveData 波形数据
-     */
-    void waveformData(byte seq,byte number,String waveData);
-
-    /**
-     * 间期响应
-     * @param seq 序号
-     * @param number 数据个数
-     * @param data RR间期
-     */
-    void rriData(byte seq,byte number,String data);
-
-    /**
-     * 错误
-     * 0	未佩戴
-     * 1	佩戴(保留)
-     * 2	充电不允许采集
-     * 4	繁忙，不执行
-     * 5	数据采集超时
-     * @param code
-     */
-    void error(int code);
-
-    /**
-     * 采集完成
-     */
-    void success();
-
-    /**
-     * 停止测量
-     */
-    void stop();
-
-    /**
-     * 寿世定制的ppg返回
-     * @param heart 心率
-     * @param bloodOxygen 血氧
-     */
-    void resultDataSHOUSHI(int heart,int bloodOxygen);
-
-}
-
-```
-
-简化版本
-
-```java
      /**
      * 测试心率和心率变异性
      * @param waveForm 是否配置波形 0不上传 1上传
@@ -301,57 +221,6 @@ BCLRingManager.shared.stopHeartRate { result in
 接口功能： 测量温度。\
 接口声明：
 
-<pre class="language-java"><code class="lang-java"> LmAPI.READ_TEMP (ITempListener iTempListener)
-
-<strong>public interface ITempListener {
-</strong>
-    void resultData(int temp);
-    void testing(int num);
-
-    void error(int code);
-}
-
-</code></pre>
-
-参数说明：ITempListener: 此接口是测量温度的监听\
-返回值：
-
-| 参数名称       | 类型  | 示范值     | 说明                                       |
-| ---------- | --- | ------- | ---------------------------------------- |
-| resultData | int | 3612    | 温度的结果，代表36.12℃                           |
-| testing    | int | 100，200 | 测量中                                      |
-| error      | int | 2，3，4，5 | <p>2：未佩戴<br>3：繁忙<br>4：充电中<br>5：温度值无效</p> |
-
-简化版本
-
-```java
-   public static void READ_TEMP(ITempListenerLite listenerLite)
-
-   public interface ITempListenerLite {
-
-    /**
-     * 测量体温完成后的结果
-     * @param temp
-     */
-    void resultData(int temp);
-
-    /**
-     *测量中的数据
-     * @param temp
-     */
-    void testing(int temp);
-
-    /**
-     * 错误
-     * @param code
-     */
-    void error(int code);
-
-}
-```
-
-简化版本
-
 ```java
    public static void READ_TEMP(ITempListenerLite listenerLite)
 
@@ -438,41 +307,6 @@ BCLRingManager.shared.readTemperature { result in
 接口声明：
 
 **android:**
-
-<pre class="language-java"><code class="lang-java">    /**
-     * 测试心率和血氧、温度
-     * 默认采集30s
-     * waveForm 波形配置0:不上传 1:上传
-     */
-<strong>    LmAPI.GET_HEART_Q2(byte waveForm,IQ2Listener iQ2Listener)
-</strong>
-    /**
-     * 测试心率和血氧、温度
-     * 可以自己配置采集时间
-     * time： [0]:采集时间，默认30(0为一直采集，保留)
-     * waveForm 波形配置0:不上传 1:上传
-     */
-     LmAPI.GET_HEART_Q2_WITH_TIME(byte waveForm,IQ2Listener iQ2Listener)
-
-</code></pre>
-
-```java
-public interface IQ2Listener {
-
-    void progress(int progress);
-
-
-    void resultData(int heart,int q2,int temp);
-    void waveformData(byte seq,byte number,String waveDate);
-
-    void error(int code);
-
-    void success();
-
-}
-```
-
-简化版本
 
 <pre class="language-java"><code class="lang-java">   /**
      * 测试心率和血氧、温度
@@ -673,7 +507,7 @@ BCLRingManager.shared.stopBloodOxygen { result in
 
 ```java
 
-         LmAPI.BLOOD_PRESSURE_APP((byte) 60, (byte) 1, (byte) 1, new IBloodPressureAPPListener() {
+         LmAPILite.BLOOD_PRESSURE_APP((byte) 60, (byte) 1, (byte) 1, new IBloodPressureAPPListener() {
                     @Override
                     public void progress(int progress) {
                         postView("\n血压或血糖测量:"+progress );
