@@ -68,8 +68,6 @@ if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIO
  sendBroadcast(updateIntent);
 ```
 
-###
-
 ### 点击服务，跳转到页面
 
 点击前台服务，默认是不跳转到任何页面的，如果想要添加，可以这样设置
