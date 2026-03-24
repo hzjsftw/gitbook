@@ -108,19 +108,3 @@ icon: triangle-instrument
 * **6轴协议**
 * **寿世PPG波形传输**
 
-### Android简化指令
-
-Android除了有一般指令，还提供了简化指令，区别就是一般指令的入参和返回是byte类型，简化指令进行了封装，修改为java的String和int等常规类型。使用方法和普通指令一样
-
-```java
-在Application的onCreate方法中进行初始化
-
-LmAPI.init(this);
-LmAPI.setDebug(true);
-//如使用简化版本，需要初始化LmAPILite
-LmAPILite.init(this);
-LmAPILite.setDebug(true);
-```
-
-使用方式为\
-LmAPILite.方法名
