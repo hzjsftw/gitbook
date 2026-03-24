@@ -1,20 +1,6 @@
 ---
 description: 现在介绍sdk涉及到蓝牙连接，断连部分的方法
 icon: bluetooth-b
-layout:
-  width: default
-  title:
-    visible: true
-  description:
-    visible: true
-  tableOfContents:
-    visible: true
-  outline:
-    visible: true
-  pagination:
-    visible: true
-  metadata:
-    visible: true
 ---
 
 # 蓝牙连接与断连
@@ -88,7 +74,8 @@ BLEUtils.startLeScan(this, leScanCallback);
 ```
 
 **iOS:**
-```Swift
+
+```swift
 /// 扫描蓝牙设备
 /// - Parameter scanResultBlock: 扫描结果回调
 /// - Result: 扫描结果
@@ -98,7 +85,8 @@ func startScan(scanResultBlock: @escaping (Result<[BCLDeviceInfoModel], BCLError
 ```
 
 #### 调用示例
-```Swift
+
+```swift
 BCLRingManager.shared.startScan { result in
     switch result {
     case .success(let devices):
@@ -125,13 +113,15 @@ BLEUtils.stopLeScan(Context context, BluetoothAdapter.LeScanCallback leScanCa
 返回值：无
 
 **iOS:**
-```Swift
+
+```swift
 /// 停止扫描
 func stopScan()
 ```
 
 #### 调用示例
-```Swift
+
+```swift
 BCLRingManager.shared.stopScan()
 ```
 
@@ -189,16 +179,15 @@ public void lmBleConnectionFailed(int code) {
 }
 ```
 
-BLEUtils.setConnecting//蓝牙是否在连接中，防止重复连接&#x20;
+BLEUtils.setConnecting//蓝牙是否在连接中，防止重复连接
 
 BLEUtils.setGetToken//是否已连接到蓝牙，这个按自己项目需求调用，公版app是在连接过后，指令走完，才算连接成功。
 
 BLEUtils.isGetToken()，根据这个是否等于true，可以获取戒指是否已经连接，如果连接，可以进行发送指令的操作了
 
-
 **iOS:**
 
-```Swift
+```swift
 // 注意：该方法建议在扫描蓝牙设备后调用。
 
 /// 连接设备
@@ -216,7 +205,8 @@ func startConnect(device: BCLDeviceInfoModel,
 ```
 
 #### 调用示例
-```Swift
+
+```swift
 BCLRingManager.shared.startConnect(device: deviceModel, isAutoReconnect: true) { result in
     switch result {
     case .success(let device):
@@ -227,7 +217,7 @@ BCLRingManager.shared.startConnect(device: deviceModel, isAutoReconnect: true) {
 }
 ```
 
-```Swift
+```swift
 // 该方法建议在用户已绑定设备后，例如App启动时调用，或者是由后台进入前台等场景调用。Mac地址作为蓝牙设备唯一标识符，可以直接连接到指定设备。即使用户切换到另一个手机，只要知道设备的Mac地址，且蓝牙设备在广播中的时候，也可以直接进行连接。
 
 /// 连接设备
@@ -245,7 +235,8 @@ func startConnect(macAddress: String,
 ```
 
 #### 调用示例
-```Swift
+
+```swift
 // 建议打开自动重连，App在使用过程中如果蓝牙意外断开，可以自动重连
 BCLRingManager.shared.startConnect(macAddress: "XX:XX:XX:XX:XX:XX", isAutoReconnect: true) { result in
     switch result {
@@ -257,7 +248,7 @@ BCLRingManager.shared.startConnect(macAddress: "XX:XX:XX:XX:XX:XX", isAutoReconn
 }
 ```
 
-```Swift
+```swift
 // 设置自动重连(如需手动处理的时候可以通过该属性控制是否自动重连，默认false)
 BCLRingManager.shared.isAutoReconnectEnabled
 ```
@@ -275,7 +266,8 @@ BLEUtils.disconnectBLE(Context context);
 返回值：无
 
 **iOS:**
-```Swift
+
+```swift
 /// 断开连接
 /// - Note：手动断开蓝牙连接，如果设置了自动重连等，将不会进行自动重连，也会涉及到一些SDK中缓存的设备信息清理操作（平时无需调用，如果涉及到用户退出登录、等情况可以按需调用）
 func disconnect()
@@ -287,7 +279,8 @@ func disconnect(peripheral: CBPeripheral?)
 ```
 
 #### 调用示例
-```Swift
+
+```swift
 // 断开当前连接
 BCLRingManager.shared.disconnect()
 

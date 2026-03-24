@@ -1,20 +1,6 @@
 ---
 description: 本小节用不同的视角对智能戒指的设计进行分析，以让开发者更直观的理解设计思路。
 icon: ring
-layout:
-  width: default
-  title:
-    visible: true
-  description:
-    visible: true
-  tableOfContents:
-    visible: true
-  outline:
-    visible: true
-  pagination:
-    visible: true
-  metadata:
-    visible: true
 ---
 
 # 智能戒指的方案设计

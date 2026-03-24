@@ -1,20 +1,6 @@
 ---
 description: 本部分内容为使用sdk之前的准备工作
 icon: square-code
-layout:
-  width: default
-  title:
-    visible: true
-  description:
-    visible: true
-  tableOfContents:
-    visible: true
-  outline:
-    visible: true
-  pagination:
-    visible: true
-  metadata:
-    visible: true
 ---
 
 # SDK移植

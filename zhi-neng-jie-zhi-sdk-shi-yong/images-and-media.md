@@ -1,20 +1,6 @@
 ---
 description: 公版app重连逻辑：如果app在前台，蓝牙断开，延时重连。如果app退到后台，定时断连蓝牙，防止功耗高，app到前台时，进行重连，同步数据
 icon: plug
-layout:
-  width: default
-  title:
-    visible: true
-  description:
-    visible: true
-  tableOfContents:
-    visible: true
-  outline:
-    visible: true
-  pagination:
-    visible: true
-  metadata:
-    visible: true
 ---
 
 # Android公版app的重连

@@ -2,20 +2,6 @@
 description: >-
   按照智能穿戴硬件产品和APP之间的从属关系，此SDK把重要的关键操作事件进行了组合，组成了五种事件：绑定，连接，刷新，断连回调，解绑。使通讯效率有效提高。以下指令为符合指令，推荐用户对接使用。此类指令使用的前提是戒指已经通过蓝牙进行了连接。
 icon: circle-2
-layout:
-  width: default
-  title:
-    visible: true
-  description:
-    visible: true
-  tableOfContents:
-    visible: true
-  outline:
-    visible: true
-  pagination:
-    visible: true
-  metadata:
-    visible: true
 ---
 
 # sdk复合指令简介

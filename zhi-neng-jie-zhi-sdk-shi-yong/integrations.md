@@ -1,20 +1,6 @@
 ---
 description: 戒指会周期测量体征数据，用户也可以通过主动测量指令，进行数据测量
 icon: ruler-horizontal
-layout:
-  width: default
-  title:
-    visible: true
-  description:
-    visible: true
-  tableOfContents:
-    visible: true
-  outline:
-    visible: true
-  pagination:
-    visible: true
-  metadata:
-    visible: true
 ---
 
 # 主动测量指令
@@ -22,7 +8,7 @@ layout:
 这些指令，是用户可以通过指令，控制戒指进行体征数据的测量，包括：
 
 * **测量心率**
-* &#x20;**测量温度**
+* **测量温度**
 * **测量血氧**
 * **测量血压（特定固件）**
 * **测量血糖（特定固件）**
@@ -169,7 +155,8 @@ public interface IHeartListener {
 ```
 
 **iOS:**
-```Swift
+
+```swift
 /// 心率测量
 /// - Parameters:
 ///   - collectTime: 采集时间(单位：秒) 默认为30s
@@ -181,9 +168,10 @@ public interface IHeartListener {
 ///   - completion: 测量结果回调
 func startHeartRate(collectTime: Int, collectFrequency: Int, waveformConfig: Int, progressConfig: Int, intervalConfig: Int, callbacks: BCLHeartRateCallbacks, completion: @escaping (Result<Void, BCLError>) -> Void)
 ```
+
 #### 调用示例
 
-```Swift
+```swift
 let callBacks = BCLHeartRateCallbacks(
     onProgress: { progress in
         BDLogger.info("测量进度: \(progress)%")
@@ -272,7 +260,8 @@ BCLRingManager.shared.startHeartRate(collectTime: 30,
 ### 停止心率测量
 
 **iOS:**
-```Swift
+
+```swift
 /// 停止心率测量
 /// - Parameter completion: 停止心率测量回调
 /// - BCLStopHeartRateResponse: 包含停止心率测量结果的响应模型
@@ -280,7 +269,8 @@ func stopHeartRate(completion: @escaping (Result<BCLStopHeartRateResponse, BCLEr
 ```
 
 #### 调用示例
-```Swift
+
+```swift
 BCLRingManager.shared.stopHeartRate { result in
     switch result {
     case .success:
@@ -389,7 +379,8 @@ BCLRingManager.shared.stopHeartRate { result in
 ```
 
 **iOS:**
-```Swift
+
+```swift
 /// 读取温度
 /// - Parameter completion: 读取温度回调
 /// - BCLTemperatureResponse: 包含温度信息的响应模型
@@ -397,7 +388,8 @@ func readTemperature(completion: @escaping (Result<BCLTemperatureResponse, BCLEr
 ```
 
 #### 调用示例
-```Swift
+
+```swift
 BCLRingManager.shared.readTemperature { result in
     switch result {
     case let .success(response):
@@ -540,7 +532,8 @@ public interface IQ2Listener {
 ### 开始血氧测量
 
 **iOS:**
-```Swift
+
+```swift
 /// 血氧测量
 /// - Parameters:
 ///   - collectTime: 采集时间(单位：秒) 默认30s
@@ -552,7 +545,8 @@ func startBloodOxygen(collectTime: Int, collectFrequency: Int, waveformConfig: I
 ```
 
 #### 调用示例
-```Swift
+
+```swift
 // 设置回调
 BCLBloodOxygenResponse.setCallbacks(BCLBloodOxygenCallbacks(
     onProgress: { progress in
@@ -648,7 +642,8 @@ BCLRingManager.shared.startBloodOxygen(collectTime: 30,
 ### 停止血氧测量
 
 **iOS:**
-```Swift
+
+```swift
 /// 停止血氧测量
 /// - Parameter completion: 停止血氧测量回调
 /// - BCLStopBloodOxygenResponse: 包含停止血氧测量结果的响应模型
@@ -656,7 +651,8 @@ func stopBloodOxygen(completion: @escaping (Result<BCLStopBloodOxygenResponse, B
 ```
 
 #### 调用示例
-```Swift
+
+```swift
 BCLRingManager.shared.stopBloodOxygen { result in
     switch result {
     case .success:
@@ -667,13 +663,12 @@ BCLRingManager.shared.stopBloodOxygen { result in
 }
 ```
 
-
 ### **测量血压和血糖（特定固件）**
 
 基于戒指传输的波形值，经过python算法，给出具体的血压值或者血糖值，调用样例，前提已经申请了token，具体申请步骤，参照《升级服务》
 
-{% content-ref url="broken-reference" %}
-[Broken link](broken-reference)
+{% content-ref url="broken-reference/" %}
+[broken-reference](broken-reference/)
 {% endcontent-ref %}
 
 ```java
@@ -757,7 +752,8 @@ BLOOD_PRESSURE_APP(byte collectionTime,byte waveformConfiguration,byte progressC
 ### 开始PWTT测量
 
 **iOS:**
-```Swift
+
+```swift
 /// PWTT测量-开始
 /// - Parameters:
 ///   - collectTime: 采集时间 默认30s，0为一直采集
@@ -768,7 +764,8 @@ func startPWTT(collectTime: Int, collectFrequency: Int, waveformConfig: Int, com
 ```
 
 #### 调用示例
-```Swift
+
+```swift
 BCLRingManager.shared.startPWTT(collectTime: 30, collectFrequency: 100, waveformConfig: 1) { result in
     switch result {
     case .success(let response):
@@ -782,7 +779,8 @@ BCLRingManager.shared.startPWTT(collectTime: 30, collectFrequency: 100, waveform
 ### 停止PWTT测量
 
 **iOS:**
-```Swift
+
+```swift
 /// PWTT测量-停止
 /// - Parameter completion: 停止测量回调
 func stopPWTT(completion: @escaping (Result<BCLStopPWTTResponse, BCLError>) -> Void)
