@@ -1,6 +1,6 @@
 ---
 description: >-
-  提供android公版app的蓝牙连接以后，App进行连接，绑定，刷新等操作，获取设备信息，需要调用的指令流程图，给开发者有个直观印象，iOS版本只需要换成iOS对应的方法即可
+  提供android公版app的蓝牙连接以后，App进行连接，绑定，刷新等操作，获取设备信息，需要调用的指令流程图，给开发者有个直观印象，iOS版本只需要换成iOS对应的方法即可。LmAPI为之前的方法，已不维护，用户直接使用LmAPILite即可
 icon: arrow-progress
 ---
 
