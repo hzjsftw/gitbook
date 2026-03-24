@@ -18,7 +18,7 @@ BleDeviceInfo bleDeviceInfo = LogicalApi.getBleDeviceInfoWhenBleScan(device, rss
 如果是这种戒指，获取当前步数，调用如下方法，否则还是用之前的`LmAPI.STEP_COUNTING()`
 
 ```java
- LmAPI.GET_CURRENT_STEP_FROM_SERVER(mBluetoothDevice.getAddress(), new IWebStepResult() {
+ LmAPILite.GET_CURRENT_STEP_FROM_SERVER(mBluetoothDevice.getAddress(), new IWebStepResult() {
                 @Override
                 public void getCurrentSteps(double allStep) {
                     postView("步数：\n"+allStep);
@@ -47,6 +47,7 @@ LogicalApi:
 接口返回的是原始历史数据，客户端可以根据自己需求，比如计算每天24小时，各个小时的步数，可以计算某个小时0分到59分之内的步数，累加(步数是65535，是主动测量或者周期测量的特殊标志，需要排除掉)，算作该小时的步数
 
 ### IOS提供的接口
+
 ```swift
 /// 查询步数信息 （特定固件、特定场景使用）
 /// - Parameter mac: 设备的mac地址
