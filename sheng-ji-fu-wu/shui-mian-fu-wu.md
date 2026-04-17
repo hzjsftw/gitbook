@@ -53,7 +53,7 @@ func loadUserLatestHistory(completion: @escaping (Result<BCLRingDBModel, BCLErro
 DataApi.instance.deleteHistoryData();
 ```
 
-如果使用睡眠服务，上传数据，需要使用以下接口，这个接口的作用是，从戒指获取历史数据，保存到本地数据库，同时分批次上传到服务器上，一般情况下，只获取未上传数据即可，时间戳可以使用loadUserLatestHistory得到的time字段
+如果使用睡眠服务，上传数据，需要使用以下接口，这个接口的作用是，从戒指获取历史数据，保存到本地数据库，同时分批次上传到服务器上，一般情况下，只获取未上传数据即可，时间戳可以使用loadUserLatestHistory得到的time字段<mark style="color:$danger;">,READ\_HISTORY\_UPDATE\_TO\_SERVER调用之前，一定要先确保mac地址不为空</mark>
 
 ```java
 LmAPILite:
