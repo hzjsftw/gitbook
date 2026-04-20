@@ -985,7 +985,8 @@ LmAPILite 调用SET_GOMORE_USER();
                 @Override
                 public void dataUploadFinish() {
                     //数据获取完成，用户可以提交到自己服务器，也可以上传到我们服务器
-                    
+                    //如果是使用1.2.6-android之后的aar，提供了合并的方法,根据以下的规则，查看自己是否需要使用合并算法
+                    List<GoMoreSleep> goMoreSleeps = SleepMergeUtil.mergeNightSleep(gomoreSleepList, com.lm.sdk.utils.TimeUtils.getTimeZone());
                 }
 
                 @Override
@@ -994,6 +995,27 @@ LmAPILite 调用SET_GOMORE_USER();
                    
                 }
             });
+```
+
+合并方法规则：<br>
+
+```java
+/**
+ * gomore多段睡眠合并逻辑
+ * 合并范围：resType=0 且 type=1 的睡眠总览
+ * 不处理：resType=2 完全不动、不参与、不合并
+ * 夜间定义：20:00 ~ 次日 10:00
+ * 一段睡眠：不合并
+ * 多天睡眠：按天独立分组，互不干扰
+ * 分期点：60 秒 = 1 个点
+ * 间隔空白：自动补 0（清醒）
+ * 合并输出：新增 1 条总览 + 1 条分期
+ * 结构：分期通过 sleepOverviewId 关联总览
+ * 原始数据：完全保留、不修改、不删除
+ * 夜间长睡合并工具（只合并 type=1 长睡，小睡 type=2 不参与任何合并/计算）
+ * 合并后会生成 1 条总览 + 1 条完整睡眠分期，标记 sleepOverviewId=-1
+ *同天夜间（20:00~次日10:00）所有睡眠，不管间隔多久，全部合并为一条
+ */
 ```
 
 睡眠实体类
