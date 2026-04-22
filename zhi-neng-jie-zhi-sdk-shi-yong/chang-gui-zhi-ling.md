@@ -373,7 +373,7 @@ public interface IBatteryListenerLite {
     /**
      * 主动推送电量信息的回调
      * @param type 0x02电量推送
-     * @param electricity 电量百分比
+     * @param electricity 电量百分比 0~100电量值范围、101充电中、102充满
      */
     void battery_push(int type, int electricity);
 }
