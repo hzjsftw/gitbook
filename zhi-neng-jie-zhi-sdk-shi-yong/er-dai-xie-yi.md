@@ -94,7 +94,7 @@ LmAPILite.READ_HISTORY_AUTO(IHistoryListenerLite iHistoryListener)
     private String firmwareVersion;//固件版本号
     private String hardwareVersion;//硬件版本号
     private int battery;//电量 0~100电量值范围、101充电中、102充满
-    private int chargingStatus;//充电状态 
+    private int chargingStatus;//充电状态  0未充电 1充电中 2充满
     private String collectionInterval;//当前采集间隔
     private boolean HIDSupport;//HID功能支持
     private TouchSupport touchSupport;//触摸支持
