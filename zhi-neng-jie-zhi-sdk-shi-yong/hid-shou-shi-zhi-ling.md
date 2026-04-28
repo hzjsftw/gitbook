@@ -22,14 +22,14 @@ icon: hand
      * 2：音乐模式
      * 3: ppt模式
      * 4：上传实时音频
-     * 255:关闭
+     * -1:关闭
      * @param gestureMode 手势hid 模式
      * 0：刷视频模式
      * 1：拍照模式
      * 2：音乐模式
      * 3：ppt模式
      * 4：打响指(拍照)模式
-     * 255:关闭
+     * -1:关闭
      * @param context
      * @param listenerLite
      */
