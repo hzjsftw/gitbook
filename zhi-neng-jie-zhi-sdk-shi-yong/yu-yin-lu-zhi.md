@@ -34,13 +34,13 @@ icon: microphone-lines
     void controlAudioRawDataResult(byte[] bytes);
 
     /**
-     * 获取主动推送音频信息，兼容老戒指，新戒指不需要
+     * 获取主动推送音频信息
      * @param adpcm 是否adpcm格式
      */
     void getControlAudioAdpcmResult(boolean adpcm);
 
     /**
-     * 获取主动推送音频信息，兼容老戒指，新戒指不需要
+     * 设置主动推送音频格式，兼容老戒指，新戒指不需要
      * @param success 是否成功
      */
     void pushAudioInformationResult(boolean success);
