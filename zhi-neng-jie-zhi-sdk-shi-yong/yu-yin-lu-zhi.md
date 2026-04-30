@@ -10,7 +10,7 @@ icon: microphone-lines
 
 ### 获取主动推送音频信息
 
-接口功能：获取主动推送音频信息(需要开启HID中的触摸语音，按住戒指上的磨砂区域，进行录音，戒指主动推送音频信息)
+接口功能：获取主动推送音频信息，对应getControlAudioAdpcmResult回调，回调的值可以不用，只是添加了获取戒指主动推送数据的监听(需要开启HID中的触摸语音，长按或者双击戒指上的磨砂区域，进行录音，戒指主动推送音频信息)
 
 ```java
   LmAPILite.GET_CONTROL_AUDIO_ADPCM(listenerLite);
