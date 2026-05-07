@@ -68,7 +68,7 @@ public interface IFileListListener {
 
 3:PPG数据红外+红色+三轴(spo2)
 
-4:PPG数据绿色+三轴(hr)
+4:PPG数据绿色
 
 5:PPG数据红外
 
@@ -76,9 +76,17 @@ public interface IFileListListener {
 
 7:红外+红色+绿色+温度+三轴
 
-8:adpcm音频
+8:adpcm音频单声道
 
 9:opus音频
+
+A:攀岩项目日志
+
+B:按键捕获adpcm音频
+
+C:按键捕获opus音频
+
+D:adpcm双声道
 
 ### 本地录音文件
 
@@ -208,6 +216,45 @@ public interface FileResponseCallback {
      * @param data
      */
     void onFileDataReceived(byte[] data);
+    /**
+     * 对应3617获取文件系统状态
+     * @param data
+     */
+    void onFileState(int data);
+
+    /**
+     * 对应361E戒指主动推送文件（推送文件名）
+     * @param data
+     */
+    void onFilePushFileName(byte[] data);
+
+    /**
+     * 对应361F戒指主动推送文件内容
+     * @param data
+     */
+    void onFilePushFileData(byte[] data);
+
+    /**
+     * 对应3618戒指断点续传
+     * @param state 1开始上传文件 2上传文件完成
+     * @param startTime 开始时间戳(秒级)
+     * @param endTime 结束时间戳(秒级)
+     */
+    void onFileResumeBreakpoint(int state,long startTime,long endTime);
+
+    /**
+     * 对应3619戒指进度
+     * @param progress 进度
+     */
+    void onFileResumeBreakpointProgress(int progress);
+    /**
+     * 获取文件系统空间信息
+     * @param capacitySize 总空间大小
+     * @param capacitySizeUsed 已使用空间大小
+     * @param capacitySizeNotUsed 未使用空间大小
+     */
+    void localMemoryFull(int capacitySize,int capacitySizeUsed,int capacitySizeNotUsed);
+
 }
 ```
 
@@ -222,34 +269,6 @@ public interface FileResponseCallback {
      String fileType= parts[parts.length - 1];
           
 ```
-
-文件类型：
-
-1:三轴数据
-
-2:六轴数据
-
-3:PPG数据红外+红色+三轴(spo2)
-
-4:PPG数据绿色
-
-5:PPG数据红外
-
-6:温度数据红外
-
-7:红外+红色+绿色+温度+三轴
-
-8:adpcm音频单声道
-
-9:opus音频
-
-A:攀岩项目日志
-
-B:按键捕获adpcm音频
-
-C:按键捕获opus音频
-
-D:adpcm双声道
 
 因篇幅限制，不会把所有解析都写在文档里，可以加入技术对接群，本公司提供蓝牙协议文档，技术人员可以提供解析样例代码
 
