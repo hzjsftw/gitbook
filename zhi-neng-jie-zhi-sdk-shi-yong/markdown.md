@@ -39,7 +39,7 @@ private BluetoothAdapter.LeScanCallback leScanCallback = new BluetoothAdapt
 
 sdk封装根据蓝牙扫描广播，获取是否符合条件的戒指，并返回该戒指的设备信息的方法LogicalApi.getBleDeviceInfoWhenBleScan，设备信息包括：
 
-是否HID戒指(hidDevice:1是0非，兼容老版本戒指)
+**是否HID戒指**(hidDevice:1是0非，兼容老版本戒指)
 
 是否支持二代协议(communicationProtocolVersion:1不支持2支持)
 
@@ -64,7 +64,7 @@ BLEUtils.startLeScan(this, leScanCallback);
     };
 ```
 
-设置BLEUtils.isHIDDevice=deviceBean.getBindingIndicatorBit()==1;如果是HID模式的戒指，可以走强连接模式连接蓝牙，保证稳定性
+**设置BLEUtils.isHIDDevice=deviceBean.getBindingIndicatorBit()==1;如果是HID模式的戒指，可以走强连接模式连接蓝牙，保证稳定性**
 
 重要: HID的戒指连接，需要将AndroidManifest.xml里的activity添加一个属性，因为HID戒指连接，会修改手机配置，如果不加，会导致重启或者连接多次的问题：
 
