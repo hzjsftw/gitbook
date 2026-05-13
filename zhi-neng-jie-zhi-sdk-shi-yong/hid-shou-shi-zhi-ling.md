@@ -165,3 +165,33 @@ func setGestureFunction(swipeUpGesture: Int, swipeDownGesture: Int, snapGesture:
 /// - Parameter completion: 读取手势功能回调
 func readGestureFunction(completion: @escaping (Result<BCLReadGestureFunctionResponse, BCLError>) -> Void)
 ```
+
+### 手势功能测试
+
+可以开启和关闭手势测试功能，通过在戒指触摸区域，手动上滑下滑单击双击三击等操作，在app端收到对应的回调
+
+android:
+
+```java
+LmAPILite.OPEN_TOUCH_TEST();//开启触摸测试
+LmAPILite.CLOSE_TOUCH_TEST();//关闭触摸测试
+
+   /**
+         * 获取戒指主动推送的按键信息
+         * @param key
+         * 0x0:长按
+         * 0x1:单击
+         * 0x2:双击
+         * 0x3:三击
+         * 0x4:上滑
+         * 0x5:下滑
+         * 0x6:左滑
+         * 0x7:右滑
+         */
+        LmAPILite.KEY_DOWN_LISTENER(new IKeyDownListener() {
+            @Override
+            public void ringPushKeyDownResult(int key) {
+              
+            }
+        });
+```
