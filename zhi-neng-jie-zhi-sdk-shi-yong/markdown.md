@@ -185,6 +185,56 @@ BLEUtils.setGetToken//是否已连接到蓝牙，这个按自己项目需求调�
 
 BLEUtils.isGetToken()，根据这个是否等于true，可以获取戒指是否已经连接，如果连接，可以进行发送指令的操作了
 
+### 连接状态：
+
+```java
+/**
+ * 链接状态--GATT通道--连接中
+ */
+public static final int CONNECT_STATE_GATT_CONNECTING = 1;
+/**
+ * 链接状态--GATT通道--已连接
+ */
+public static final int CONNECT_STATE_GATT_CONNECTED = 2;
+
+/**
+ * 链接状态--设备服务--连接中
+ */
+public static final int CONNECT_STATE_SERVICE_CONNECTING = 3;
+/**
+ * 链接状态--设备服务--已连接
+ */
+public static final int CONNECT_STATE_SERVICE_CONNECTED = 4;
+/**
+ * 链接状态--写入Character--连接中
+ */
+public static final int CONNECT_STATE_WRITE_CONNECTING = 5;
+/**
+ * 链接状态--响应Character--连接中
+ */
+public static final int CONNECT_STATE_RESPOND_CONNECTING = 6;
+/**
+ * 链接状态--BLE所有连接--连接成功--等待输入指令
+ */
+public static final int CONNECT_STATE_SUCCESS = 7;
+/**
+ * 链接状态--设备服务--连接失败
+ */
+public static final int CONNECT_STATE_SERVICE_DISCONNECTED = 8;
+/**
+ * 链接状态--写入Character--连接失败
+ */
+public static final int CONNECT_STATE_WRITE_DISCONNECTED = 9;
+/**
+ * 链接状态--响应Character--连接失败
+ */
+public static final int CONNECT_STATE_RESPOND_DISCONNECTED = 10;
+/**
+ * 链接状态--断开
+ */
+public static final int CONNECT_STATE_DISCONNECTED = 11;
+```
+
 **iOS:**
 
 ```swift
