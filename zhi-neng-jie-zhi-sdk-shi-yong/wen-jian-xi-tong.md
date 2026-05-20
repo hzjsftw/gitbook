@@ -90,7 +90,7 @@ D:adpcm双声道
 
 ### 本地录音文件
 
-特定戒指支持开启和停止录音，将录音文件保存到戒指本地，可以通过指令，获取文件列表，后缀是8的文件是adpcm格式，后缀是9的文件是opus格式，可以获取文件内容，是byte\[]类型，adpcm已经通过sdk转换为pcm格式，用户可以将内容保存到app本地进行播放
+特定戒指支持开启和停止录音，将录音文件保存到戒指本地，可以通过指令，获取文件列表，后缀是8的文件是adpcm音频单声道格式，后缀12的是adpcm双声道，可以获取文件内容，是byte\[]类型，调用sdk的解码方法，解码成pcm格式，保存到本地的pcm文件里。
 
 #### 录音
 
@@ -116,7 +116,34 @@ CMD_START_STOP_RECORDING(boolean start,int totalDuration,int segmentTime,IAudioL
 void recordingResult(boolean result);
 ```
 
-剩余部分如前部分所示，先获取文件列表，然后获取文件后缀，传入8或者9，在AudioFileContent回调得到录音信息，保存为手机pcm文件
+解码：
+
+```java
+private AdPcmTool adPcmTool = new AdPcmTool();
+ /**
+     * 转换单个数据包
+     */
+    private byte[] convertPacket(byte[] tcpData,int audioType) throws Exception {
+        // 提取ADPCM数据（从第21字节开始）
+        if (tcpData.length <= 21) {
+            return new byte[0];
+        }
+
+        int adpcmLength = tcpData.length - 21;
+        byte[] adpcmData = new byte[adpcmLength];
+        System.arraycopy(tcpData, 21, adpcmData, 0, adpcmLength);
+        if(audioType==2){//双声道
+            return adPcmTool.decodeADPCMDualChannel(adpcmData,adpcmLength);
+        }
+        return adPcmTool.decodeADPCMMonoChannel(adpcmData,adpcmLength);
+    }
+```
+
+实时获取的音频，sdk里已经解码了，直接保存到pcm文件即可，具体使用参照
+
+{% content-ref url="yu-yin-lu-zhi.md" %}
+[yu-yin-lu-zhi.md](yu-yin-lu-zhi.md)
+{% endcontent-ref %}
 
 ### 特殊版本的文件系统
 
