@@ -91,11 +91,11 @@ LmAPILite.READ_HISTORY_AUTO(IHistoryListenerLite iHistoryListener)
 
     //简化版本的实体类
     public class SystemControlBean {
-    private String firmwareVersion;//固件版本号
+        private String firmwareVersion;//固件版本号
     private String hardwareVersion;//硬件版本号
-    private int battery;//电量 0~100电量值范围、101充电中、102充满
-    private int chargingStatus;//充电状态  0未充电 1充电中 2充满
-    private String collectionInterval;//当前采集间隔
+    private int battery;//电量
+    private int chargingStatus;//充电状态
+    private int collectionInterval;//当前采集间隔
     private boolean HIDSupport;//HID功能支持
     private TouchSupport touchSupport;//触摸支持
     private GestureSupport gestureSupport;//手势支持
@@ -128,6 +128,8 @@ LmAPILite.READ_HISTORY_AUTO(IHistoryListenerLite iHistoryListener)
     private int gomoreMaxHeartRate;//gomore用户信息最大心率值（138-220，-1无效）
     private int gomoreNormalHeartRate;//gomore用户信息常态心率值（40-100，-1无效）
     private int gomoreOxygen;//gomore用户信息最大摄氧量（ml/kg/min，-1无效）
+    private int bloodPressureSupport;              // 血压曲线支持
+    private int gomoreAuthorization;              // gomore授权（1未授权，0已授权）
     }
     
  public static void APP_BIND(IBindConnectRefreshListenerLite listenerLite)
