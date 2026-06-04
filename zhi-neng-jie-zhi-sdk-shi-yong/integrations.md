@@ -1,6 +1,24 @@
 ---
 description: 戒指会周期测量体征数据，用户也可以通过主动测量指令，进行数据测量
 icon: ruler-horizontal
+layout:
+  width: default
+  title:
+    visible: true
+  description:
+    visible: true
+  tableOfContents:
+    visible: true
+  outline:
+    visible: true
+  pagination:
+    visible: true
+  metadata:
+    visible: true
+  tags:
+    visible: true
+  actions:
+    visible: true
 ---
 
 # 主动测量指令
@@ -186,6 +204,15 @@ BCLRingManager.shared.startHeartRate(collectTime: 30,
 /// - Parameter completion: 停止心率测量回调
 /// - BCLStopHeartRateResponse: 包含停止心率测量结果的响应模型
 func stopHeartRate(completion: @escaping (Result<BCLStopHeartRateResponse, BCLError>) -> Void)
+```
+
+#### android:
+
+```java
+/**
+ * 停止心率采集
+ */
+public static void STOP_HEART(IHeartListenerLite iHeartListener)
 ```
 
 #### 调用示例
@@ -482,6 +509,15 @@ BCLRingManager.shared.startBloodOxygen(collectTime: 30,
 /// - Parameter completion: 停止血氧测量回调
 /// - BCLStopBloodOxygenResponse: 包含停止血氧测量结果的响应模型
 func stopBloodOxygen(completion: @escaping (Result<BCLStopBloodOxygenResponse, BCLError>) -> Void)
+```
+
+#### android:
+
+```java
+/**
+ * 停止血氧采集
+ */
+public static void STOP_Q2(IBloodOxygenListenerLite iq2Listener)
 ```
 
 #### 调用示例
