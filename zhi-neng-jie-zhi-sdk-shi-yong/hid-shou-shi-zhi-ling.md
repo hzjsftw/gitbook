@@ -7,7 +7,7 @@ icon: hand
 
 ### 演示视频
 
-[http://221.226.159.58:11111/api/profile/upload/video/hid.mp4](http://221.226.159.58:11111/api/profile/upload/video/hid.mp4)
+[https://ali.bravechip.cn/api/profile/upload/video/hid.mp4](https://ali.bravechip.cn/api/profile/upload/video/hid.mp4)
 
 ### 设置戒指的HID模式
 
