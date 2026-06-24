@@ -213,7 +213,11 @@ public interface FileResponseCallback {
      * @param data
      */
     void onFileInfoReceived(byte[] data);
-
+    /**
+     * 对应3612删除
+     * @param success 删除是否成功
+     */
+    void onFileDelete(boolean success);
     /**
      *对应361D响应一键上传的进度
      * @param data
