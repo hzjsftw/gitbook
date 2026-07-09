@@ -68,8 +68,8 @@ private void READ_HISTORY_AUTO() {
 
 我们也提供了上传历史数据到勇芯服务器的接口，和拉取最后一条数据的接口，上传到我方服务器目的是计算睡眠和Timeline，这部分只做一个简介，具体内容请查看《升级服务》部分。
 
-{% content-ref url="/broken/pages/UM3MKKpg8WUFrgab9yGK" %}
-[Broken link](/broken/pages/UM3MKKpg8WUFrgab9yGK)
+{% content-ref url="https://app.gitbook.com/s/9Zix5Eqbh8JgOP8RgYhu/sheng-ji-fu-wu" %}
+[升级服务](https://app.gitbook.com/s/9Zix5Eqbh8JgOP8RgYhu/sheng-ji-fu-wu)
 {% endcontent-ref %}
 
 **android:**
@@ -200,6 +200,7 @@ public class HistoryDataBean{
      * 2：浅睡
      * 3：深睡
      * 4.眼动期
+     * 5.说明戒指支持gomore睡眠，该字段无意义
      */
     private int sleepType;
     /**
