@@ -1059,9 +1059,12 @@ public class GoMoreSleep {
 
 ### 数据的处理
 
-如果是自己处理gomore的睡眠数据，有以下几个注意点：\
-1.gomore会返回很多天的数据，然后每一天的数据，包含多条，其中最后一条，是汇总，所以如果想显示睡眠，需要遍历列表，找出相同开始时间，结束时间最长的那一条数据，是睡眠汇总数据\
-2.分期也会返回很多条，如果要将睡眠情况绘图，需要先获取到睡眠汇总数据，然后遍历分期数据，查找到开始时间和结束时间，与睡眠汇总开始时间和结束时间相等的那段分期\
+如果是自己处理gomore的睡眠数据，有以下几个注意点：
+\
+1.gomore会返回很多天的数据，然后每一天的数据，包含多条，其中最后一条，是汇总，所以如果想显示睡眠，需要遍历列表，找出相同开始时间，结束时间最长的那一条数据，是睡眠汇总数据
+\
+2.分期也会返回很多条，如果要将睡眠情况绘图，需要先获取到睡眠汇总数据，然后遍历分期数据，查找到开始时间和结束时间，与睡眠汇总开始时间和结束时间相等的那段分期
+\
 3.gomore睡眠的分期类型，与传统的不一致，
 
 ```java
@@ -1270,6 +1273,35 @@ LogicalApi.getSleepDataWithGoMoreBatch(List<String> dates, IWebSleepResult webAp
     /// - Note: 返回的 BCLRingSleepDayModel 包含每日睡眠统计摘要
     func getGoMoreSleepDataBatch(dates: [String], userId: String? = nil, completion: @escaping (Result<[BCLRingSleepDayModel], BCLError>) -> Void)
 
+```
+
+### iOS Gomore睡眠数据合并
+
+```swift
+    
+    /// 合并夜间长睡，默认按东八区自然夜分组。
+    ///
+    /// - Parameter rawList: 设备读取到的原始GoMore睡眠模型列表。
+    /// - Returns: 原始列表加上可选合并记录的新列表，不修改原始模型对象。
+    @objc(mergeNightSleep:)
+    public class func mergeNightSleep(_ rawList: [BCLGoMoreSleepModel]) -> [BCLGoMoreSleepModel]
+
+    /// 合并夜间长睡，保留原始数据并在需要时追加合并总览和合并分期。
+    ///
+    /// 合并范围：
+    /// - 只处理 `resType == 0 && type == 1` 的长睡总览。
+    /// - `resType == 1` 的原始分期只用于生成合并分期，不直接参与总览筛选。
+    /// - `type == 2` 短睡、`resType == 2` 无数据响应、`sleepOverviewId == -1` 已合并记录均不参与合并。
+    ///
+    /// - Parameters:
+    ///   - rawList: 设备读取到的原始GoMore睡眠模型列表。
+    ///   - timezone: 固定GMT小时偏移，例如东八区传8。
+    /// - Returns: 原始列表加上可选合并记录的新列表，不修改原始模型对象。
+    @objc(mergeNightSleep:timezone:)
+    public class func mergeNightSleep(_ rawList: [BCLGoMoreSleepModel], timezone: Int) -> [BCLGoMoreSleepModel] 
+
+    /// 示例用法 （此处注意时区设置需使用.timeZoneOffset）
+    let merged = BCLGoMoreSleepMergeUtil.mergeNightSleep(rawSleepModels, timezone: BCLRingTimeZone.getCurrentSystemTimeZone().timeZoneOffset)
 ```
 
 ### 注意事项:iOS端
