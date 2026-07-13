@@ -47,12 +47,6 @@ func loadUserLatestHistory(completion: @escaping (Result<BCLRingDBModel, BCLErro
 
 **android：**
 
-数据库清空数据
-
-```java
-DataApi.instance.deleteHistoryData();
-```
-
 如果使用睡眠服务，上传数据，需要使用以下接口，这个接口的作用是，从戒指获取历史数据，保存到本地数据库，同时分批次上传到服务器上，一般情况下，只获取未上传数据即可，时间戳可以使用loadUserLatestHistory得到的time字段<mark style="color:$danger;">,READ\_HISTORY\_UPDATE\_TO\_SERVER调用之前，一定要先确保mac地址不为空</mark>
 
 ```java
@@ -107,7 +101,7 @@ public interface IWebHistoryResult {
 
 ```java
   /**
-     * LmAPILite或者LmAPI，二代协议会自动上传历史数据到服务器，需要在页面上监听该接口
+     * LmAPILite，二代协议会自动上传历史数据到服务器，需要在页面上监听该接口
      */
     public static void READ_HISTORY_AUTO_UPDATE_TO_SERVER(  String mMac, IHistoryListenerLite listenerLite, IWebHistoryResult mWebHistoryResult) ;
     
@@ -1059,12 +1053,9 @@ public class GoMoreSleep {
 
 ### 数据的处理
 
-如果是自己处理gomore的睡眠数据，有以下几个注意点：
-\
-1.gomore会返回很多天的数据，然后每一天的数据，包含多条，其中最后一条，是汇总，所以如果想显示睡眠，需要遍历列表，找出相同开始时间，结束时间最长的那一条数据，是睡眠汇总数据
-\
-2.分期也会返回很多条，如果要将睡眠情况绘图，需要先获取到睡眠汇总数据，然后遍历分期数据，查找到开始时间和结束时间，与睡眠汇总开始时间和结束时间相等的那段分期
-\
+如果是自己处理gomore的睡眠数据，有以下几个注意点：\
+1.gomore会返回很多天的数据，然后每一天的数据，包含多条，其中最后一条，是汇总，所以如果想显示睡眠，需要遍历列表，找出相同开始时间，结束时间最长的那一条数据，是睡眠汇总数据\
+2.分期也会返回很多条，如果要将睡眠情况绘图，需要先获取到睡眠汇总数据，然后遍历分期数据，查找到开始时间和结束时间，与睡眠汇总开始时间和结束时间相等的那段分期\
 3.gomore睡眠的分期类型，与传统的不一致，
 
 ```java
