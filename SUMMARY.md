@@ -47,7 +47,7 @@
 * [获取固件列表](sheng-ji-fu-wu/huo-qu-gu-jian-lie-biao.md)
 * [时间线](sheng-ji-fu-wu/shi-jian-xian.md)
 * [特殊戒指计步方案](sheng-ji-fu-wu/te-shu-jie-zhi-ji-bu-fang-an.md)
-* [获取历史记录](sheng-ji-fu-wu/huo-qu-li-shi-ji-lu.md)
+* [获取云端历史（睡眠问题排查）](sheng-ji-fu-wu/huo-qu-li-shi-ji-lu.md)
 
 ## 常见问题
 

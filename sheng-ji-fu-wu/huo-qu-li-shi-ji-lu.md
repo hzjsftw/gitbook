@@ -1,9 +1,9 @@
 ---
-description: 鉴于有些用户需要查询服务器上，已经保存的用户历史数据，特提供一些方法
+description: 鉴于有些用户没有睡眠，需要查询服务器上，已经保存的用户历史数据，特提供一些方法
 icon: rectangle-vertical-history
 ---
 
-# 获取历史记录
+# 获取云端历史（睡眠问题排查）
 
 ### android
 
@@ -19,10 +19,9 @@ LogicalApi：
     public static void getHistoryDatasWithTime(long startTime,long endTime, IWebGetHistoryResult webApiResult)
 ```
 
+### iOS
 
-### iOS 
-
-``` swift
+```swift
 /// 获取云端上设备历史记录信息
 /// - Parameters:
 ///   - mac: 设备MAC地址（可选，传空字符串或nil表示获取所有设备）
