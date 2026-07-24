@@ -172,7 +172,7 @@ public class VersionBean implements Serializable {
 <strong>OtaApi.downloadFile(versionBean, versionCallback, activity);
 </strong></code></pre>
 
-2.调用OTA升级方法
+2.在versionCallback的success回调里，调用OTA升级方法
 
 ```java
  /**
