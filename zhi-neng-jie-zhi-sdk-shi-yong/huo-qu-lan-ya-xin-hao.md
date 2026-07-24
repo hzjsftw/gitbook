@@ -27,15 +27,37 @@ BLEService.setCallback(new BluetoothConnectCallback() {
 
             @Override
             public void onGetRssi(int rssi) {
+             //获取rssi
                 App.getInstance().getDeviceBean().setRssi(rssi);
             }
         });
 ```
 
+如需要实时显示信号，可以定一个定时器，定时去获取<br>
+
+```java
+private Handler handlerRssi = new Handler();
+private void startGetRssi(){
+    handlerRssi.postDelayed(new Runnable() {
+        @Override
+        public void run() {
+            BLEService.readRomoteRssi();
+            handlerRssi.postDelayed(this, 1000); // 每1000毫秒更新一次
+        }
+    }, 1000);
+}
+private void stopGetRssi(){
+    handlerRssi.removeCallbacksAndMessages(null); // 清除所有回调
+}
+```
+
+还是在 public void onGetRssi(int rssi)得到信号<br>
+
 ### 2.8 读取RSSI
 
 **iOS:**
-```Swift
+
+```swift
 /// 读取已连接设备的RSSI
 /// - Parameters:
 ///   - interval: 时间间隔（单位：秒）
@@ -47,7 +69,8 @@ func stopReadRSSI()
 ```
 
 #### 调用示例
-```Swift
+
+```swift
 // 每2秒读取一次RSSI
 BCLRingManager.shared.startReadRSSI(interval: 2.0) { result in
     switch result {
@@ -62,5 +85,5 @@ BCLRingManager.shared.startReadRSSI(interval: 2.0) { result in
 BCLRingManager.shared.stopReadRSSI()
 ```
 
-需要注意rssi变化略微延迟，数字越大，信号越强，如 -52 > -60  
+需要注意rssi变化略微延迟，数字越大，信号越强，如 -52 > -60\
 这个信号量，会影响到主动测量的质量，可以在页面上，进行提示，如果信号量小于-80，则提示"蓝牙信号弱，请将设备靠近手机"，可以闪烁图标进行提示
