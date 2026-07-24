@@ -13,7 +13,7 @@ android根据需要，提供了三个接口
 
 **OtaApi.otaUpdateWithCheckVersion**
 
-&#x20;该接口包含了检查版本号version(调用 LmAPI.GET\_VERSION((byte) 0x00)获取或者是二代协议返回的版本号)，从云端拉取最新固件，自动升级功能，ota升级完成以后，要延时3s重连一下戒指
+该接口包含了检查版本号version(调用 LmAPI.GET\_VERSION((byte) 0x00)获取或者是二代协议返回的版本号)，从云端拉取最新固件，自动升级功能，ota升级完成以后，要延时3s重连一下戒指
 
 ```java
 OtaApi.otaUpdateWithCheckVersion(version, TestActivity.this, App.getInstance().getDeviceBean().getDevice(), App.getInstance().getDeviceBean().getRssi(), new LmOtaProgressListener() {
@@ -118,6 +118,80 @@ public interface ICheckOtaVersion {
 }
 
 ```
+
+#### **自己保存固件**
+
+有的厂家需要自己服务器保存固件，这个sdk也提供了修改下载地址为厂家服务器的功能，只需要按照以下步骤：\
+**1.先下载固件**
+
+按照以下格式，将自己服务器上的固件地址，赋值给download ，对fileName，version同样赋值
+
+```java
+public class VersionBean implements Serializable {
+
+    /**
+     * download : https://image.lmyiot.com/FpSe2a-SAt2DFMkax1v8oJT8QMKg
+     * fileName : 2.3.7.90S.hex16
+     * version : 2.3.7.9
+     */
+
+    private String download;
+    private String fileName;
+    private String version;
+
+    public String getDownload() {
+        return download;
+    }
+
+    public void setDownload(String download) {
+        this.download = download;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
+}
+
+```
+
+然后调用sdk方法进行下载，sdk会把固件保存在本地
+
+<pre class="language-java"><code class="lang-java">VersionBean versionBean = new Gson().fromJson(result, VersionBean.class);
+<strong>OtaApi.downloadFile(versionBean, versionCallback, activity);
+</strong></code></pre>
+
+2.调用OTA升级方法
+
+```java
+ /**
+     * 已经检查过当前版本号可以更新，根据当前版本号，进行ota升级
+     *
+     * @param newVersion ota的新固件版本号
+     * @param bluetoothDevice 蓝牙的BluetoothDevice
+     * @param rssi 蓝牙信号
+     * @param mLmOtaProgressListener ota回调
+     */
+otaUpdateWithVersion(newVersion, bluetoothDevice, rssi,activity, lmOtaProgressListener);
+
+```
+
+蓝牙信号获取，参考
+
+{% content-ref url="../zhi-neng-jie-zhi-sdk-shi-yong/huo-qu-lan-ya-xin-hao.md" %}
+[huo-qu-lan-ya-xin-hao.md](../zhi-neng-jie-zhi-sdk-shi-yong/huo-qu-lan-ya-xin-hao.md)
+{% endcontent-ref %}
 
 #### **phy模式下升级异常的处理**
 
@@ -359,7 +433,8 @@ private BluetoothAdapter.LeScanCallback leScanCallback = new BluetoothAdapter.Le
 };
 ```
 
-### IOS_OTA升级说明
+### IOS\_OTA升级说明
+
 1、首先，通过SDK的接口调用，检查当前固价版本是否为最新的。
 
 2、如果不是最新版本，接口会返回最新的部件版本号、文件名和下载地址等信息。
@@ -371,15 +446,18 @@ private BluetoothAdapter.LeScanCallback leScanCallback = new BluetoothAdapter.Le
 5、根据对应的固件升级类型，然后执行相应的提供的固件升级接口，进行固件升级。
 
 **iOS:固件版本更新检查**
-```Swift
+
+```swift
 /// 固件版本更新检查
 /// - Parameters:
 ///   - version: 当前固件版本号
 /// - Parameter completion: 固件版本更新检查回调
 func checkFirmwareUpdate(version: String, completion: @escaping (Result<BCLFirmwareVersionInfo, BCLError>) -> Void)
 ```
+
 ### 调用示例
-```Swift
+
+```swift
 BCLRingManager.shared.checkFirmwareUpdate(version: "5.5.1.6Z2Y") { result in
     switch result {
     case let .success(versionInfo):
@@ -420,7 +498,8 @@ BCLRingManager.shared.checkFirmwareUpdate(version: "5.5.1.6Z2Y") { result in
 ```
 
 **iOS:固件文件下载**
-```Swift
+
+```swift
 /// 固件下载
 /// - Parameters:
 ///   - url: 固件下载地址
@@ -430,8 +509,10 @@ BCLRingManager.shared.checkFirmwareUpdate(version: "5.5.1.6Z2Y") { result in
 /// - Parameter completion: 固件下载回调
 func downloadFirmware(url: String, fileName: String, destinationPath: String, progress: @escaping (Double) -> Void, completion: @escaping (Result<String, BCLError>) -> Void)
 ```
+
 ### 调用示例
-```Swift
+
+```swift
 let fileName = "2.7.4.8Z27.hex16"
 let downloadUrl = "http://221.226.159.58:22222/profile/upload/2025/04/01/2.7.4.8Z27.hex16"
 //  固件下载保存路径
@@ -449,15 +530,18 @@ BCLRingManager.shared.downloadFirmware(url: downloadUrl, fileName: fileName, des
 ```
 
 **iOS:固件升级类型获取**
-```Swift
+
+```swift
 /// 获取固件升级类型
 /// - Parameters:
 ///   - firmwareVersion: 固件版本号()
 ///   - completion: 获取结果回调
 func getOTAType(firmwareVersion: String?, completion: @escaping (BCLOTAType) -> Void)
 ```
+
 ### 调用示例
-```Swift
+
+```swift
 BCLRingManager.shared.getOTAType(firmwareVersion: "5.5.1.6Z2Y") { response in
     BDLogger.info("固件升级类型:\(response.rawValue)")
     switch response.rawValue {
@@ -486,7 +570,8 @@ BCLRingManager.shared.getOTAType(firmwareVersion: "5.5.1.6Z2Y") { response in
 ```
 
 **iOS:Apollo固件升级**
-```Swift
+
+```swift
 /// Apollo 固件升级接口
 /// - Parameters:
 ///   - filePath: 固件文件路径
@@ -494,8 +579,10 @@ BCLRingManager.shared.getOTAType(firmwareVersion: "5.5.1.6Z2Y") { response in
 ///   - completion: 完成回调，返回成功或失败
 func apolloUpgradeFirmware(filePath: String, progressHandler: ((Float) -> Void)? = nil, completion: @escaping (Result<Void, BCLError>) -> Void)
 ```
+
 ### 调用示例
-```Swift
+
+```swift
 let fileurl = URL(fileURLWithPath: "固件文件保存路径")
 BCLRingManager.shared.apolloUpgradeFirmware(filePath: fileurl.path, progressHandler: { [weak self] progress in
     BDLogger.info("Apollo升级进度：\(progress)%")
@@ -516,7 +603,8 @@ completion: { [weak self] result in
 ```
 
 **iOS:Nordic固件升级**
-```Swift
+
+```swift
 /// Nordic 固件升级接口
 /// - Parameters:
 ///   - filePath: 固件文件路径
@@ -524,8 +612,10 @@ completion: { [weak self] result in
 ///   - completion: 完成回调，返回成功或失败
 func nrfUpgradeFirmware(filePath: String, fileName: String, progressHandler: ((Int) -> Void)? = nil, completion: @escaping (Result<BCLNrfUpgradeState.Stage, BCLError>) -> Void)
 ```
+
 ### 调用示例
-```Swift
+
+```swift
 let fileName = ""
 let fileURL = URL(fileURLWithPath: "固件文件保存路径")
 // 开始Nordic固件升级会自动断开连接后并重新连接戒指
@@ -552,7 +642,8 @@ BCLRingManager.shared.nrfUpgradeFirmware(filePath: fileURL.path, fileName: fileN
 ```
 
 **iOS:Phy固件升级**
-```Swift
+
+```swift
 /// Phy 固件升级接口
 /// - Parameters:
 ///   - filePath: 固件文件路径
@@ -560,8 +651,10 @@ BCLRingManager.shared.nrfUpgradeFirmware(filePath: fileURL.path, fileName: fileN
 ///   - completion: 完成回调，返回成功或失败
 func phyUpgradeFirmware(filePath: String, progressHandler: @escaping (Double) -> Void, completion: @escaping (Result<BCLPhyUpgradeState, BCLError>) -> Void)
 ```
+
 ### 调用示例
-```Swift
+
+```swift
 // 如果开启了自动重连，需要先关掉
 BCLRingManager.shared.isAutoReconnectEnabled = false
 let fileURL = URL(fileURLWithPath: "固件文件保存路径")
@@ -586,7 +679,8 @@ BCLRingManager.shared.phyUpgradeFirmware(filePath: fileURL.path) { [weak self] p
 ```
 
 **iOS:PHY Boot模式固件升级**
-```Swift
+
+```swift
 /// PHY Boot模式固件升级接口
 /// 用于处理PHY固件升级过程中断导致设备卡在boot模式的情况
 /// - Parameters:
@@ -597,8 +691,10 @@ BCLRingManager.shared.phyUpgradeFirmware(filePath: fileURL.path) { [weak self] p
 ///   - completion: 升级状态回调
 func phyBootModeUpgrade(filePath: String, device: BCLDeviceInfoModel, peripheral: CBPeripheral, progressHandler: @escaping (Double) -> Void, completion: @escaping (Result<BCLPhyBootModeUpgradeState, BCLError>) -> Void)
 ```
+
 ### 调用示例
-```Swift
+
+```swift
 // 📢注意：因phy固件戒指升级中断、失败会导致戒指进入boot模式，所以需要通过蓝牙搜索找到该戒指并进行连接后再执行phyBootModeUpgrade进行固件升级
 BCLRingManager.shared.stopScan()
 BCLRingManager.shared.startScan { [weak self] result in
@@ -648,5 +744,3 @@ BCLRingManager.shared.startScan { [weak self] result in
     }
 }
 ```
-
-
