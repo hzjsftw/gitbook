@@ -120,7 +120,7 @@ LmAPILite.READ_HISTORY_AUTO(IHistoryListenerLite iHistoryListener)
     private int bloodPressure;//血压
     private int bloodSugar;//血糖
     private int fileSystem;//文件系统
-    private int gomoreSleep;//gomore睡眠算法
+    private int gomoreSleep;//固件是否支持gomore睡眠算法,1支持0不支持
     private int gomoreAge;//gomore用户信息年龄（0-99）
     private int gomoreSex;//gomore用户信息性别（0女性，1男性）
     private int gomoreHeight;//gomore用户信息身高（100-220 cm）
