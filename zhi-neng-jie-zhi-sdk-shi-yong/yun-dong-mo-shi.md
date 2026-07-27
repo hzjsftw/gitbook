@@ -8,12 +8,16 @@ icon: tennis-ball
 ### android
 
 ```java
-    /**
+   /**
      * 开启运动模式
+     *1:走路
+     * 2:跑步
+     * 3:游泳
+     * 4:骑行
      */
-    public static void START_SPORT(ISportListenerLite listenerLite) {
+    public static void START_SPORT(int sportType,ISportListenerLite listenerLite) {
         iSportListenerLite = listenerLite;
-        SEND_CMD(convertToBytes(0x38, new byte[]{0x1,2}));
+        SEND_CMD(convertToBytes(0x38, new byte[]{0x1, (byte) sportType}));
     }
 
     /**
