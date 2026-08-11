@@ -29,9 +29,7 @@ icon: clock-two
 
 ### 定制闹钟
 
-接口功能：通过定制闹钟的方式，让戒指定时震动，只支持5个闹钟
-
-简化版方法名与正常版一致
+接口功能：通过定制闹钟的方式，让戒指定时震动，只支持5个闹钟，设置的时候，需要同时传入5个闹钟，如果只设置一两个，其他的都设置成0
 
 **android:**
 
@@ -40,6 +38,32 @@ icon: clock-two
 **/
 <strong>LmAPILite.ALARM_CLOCK_SETTING(List&#x3C;AlarmClockBean> alarmClockBeans);
 </strong></code></pre>
+
+设置案例：<br>
+
+```java
+   List<AlarmClockBean> setAlarmClockData = new ArrayList<>();
+for (int i = 0; i < 5; i++) {
+    AlarmClockBean alarmClockBean = new AlarmClockBean();
+    if(i==0){//测试只设置一个闹铃的情况
+        alarmClockBean.setOnOrOff((byte) 1);
+        alarmClockBean.setVibrationEffect((byte) 1);
+        alarmClockBean.setTime(1786524900);
+        alarmClockBean.setRepetitiveType((byte) 0);
+        alarmClockBean.setWeekday(new int[]{});
+    }else{//其他补0
+        alarmClockBean.setOnOrOff((byte) 0);
+        alarmClockBean.setVibrationEffect((byte) 0);
+        alarmClockBean.setTime(0);
+        alarmClockBean.setRepetitiveType((byte) 0);
+        alarmClockBean.setWeekday(new int[]{});
+    }
+
+
+       setAlarmClockData.add(alarmClockBean);
+  }
+   LmAPILite.ALARM_CLOCK_SETTING(setAlarmClockData);
+```
 
 ```java
 /**
