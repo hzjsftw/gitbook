@@ -38,6 +38,10 @@ OtaApi.otaUpdateWithCheckVersion(version, TestActivity.this, App.getInstance().g
                     public void isLatestVersion() {
                         postView("\n已是最新版本");
                     }
+                     @Override
+                    public void upgradeDescribe(String msg) {
+                        postView("\n更新说明:"+msg);
+                    }
                 });
 ```
 
@@ -59,7 +63,7 @@ OtaApi.otaUpdateWithCheckVersion(version, TestActivity.this, App.getInstance().g
 在调用OtaApi.checkCurrentVersionNeedUpdate后，需要更新固件时调用，去掉了检查是否更新的步骤
 
 ```java
- OtaApi.otaUpdateWithVersion(version, App.getInstance().getDeviceBean().getDevice(), App.getInstance().getDeviceBean().getRssi(), new LmOtaProgressListener() {
+ OtaApi.otaUpdateWithVersion(version,"",getInstance().getDeviceBean().getDevice(), App.getInstance().getDeviceBean().getRssi(), new LmOtaProgressListener() {
                     @Override
                     public void error(String message) {
                         
@@ -115,6 +119,10 @@ public interface ICheckOtaVersion {
      * @param version 新固件的版本号
      */
     void checkVersionResult(boolean needUpdate,String version);
+     /**
+         * 更新说明
+         */
+    void upgradeDescribe(String msg);
 }
 
 ```
