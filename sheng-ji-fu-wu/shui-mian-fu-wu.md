@@ -604,6 +604,10 @@ public class Sleep2thBean {
      *  Gomore特有：Score of rem ratio, ranges: 0 ~ 100
      */
     private Double remRatioScore;
+     /**
+     * Gomore特有： sleep 2.0 total (multiplicative), long sleep only; -1 = nap/invalid
+     */
+    private Double sleepScore;
     }
    
 ```
