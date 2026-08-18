@@ -579,6 +579,31 @@ public class Sleep2thBean {
     List<HistoryDataBean> historyBeanList;
     String noSleepResult;//无睡眠的原因
     List<Sleep2thBean> shortSleepList;//短睡眠列表(目前只有gomore支持，传统算法后续支持)
+    
+     /**
+     * Gomore特有：Score of total sleep time, ranges: 0 ~ 100
+     */
+    private Double totalSleepTimeScore;
+
+    /**
+     *  Gomore特有：Score of sleep efficiency, ranges: 0 ~ 100
+     */
+    private Double sleepEfficiencyScore;
+
+    /**
+     *  Gomore特有：Score of wake times, ranges: 0 ~ 100
+     */
+    private Double wakeTimeScore;
+
+    /**
+     *  Gomore特有：Score of deep ratio, ranges: 0 ~ 100
+     */
+    private Double deepRatioScore;
+
+    /**
+     *  Gomore特有：Score of rem ratio, ranges: 0 ~ 100
+     */
+    private Double remRatioScore;
     }
    
 ```
