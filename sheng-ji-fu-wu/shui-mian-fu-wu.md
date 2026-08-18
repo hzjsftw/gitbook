@@ -1087,7 +1087,7 @@ public class GoMoreSleep {
     private long endTs;//结束时间戳（单位秒）
     private int numEpochs;      // Number of Stages 有效数据长度（最大为2880）
     private int latency;            //睡眠潜伏期（单位分钟）
-    private int wakeTimes;        //清醒次数
+    private int wakeTimes;        //清醒时间（单位分钟）
     private int totalSleepTime;     //不包含清醒时间的总睡眠时间（单位分钟）
     private int waso;               //入睡后的总清醒时间（单位分钟）
     private int sleepPeriod;        //睡眠时间（单位分钟）
@@ -1102,6 +1102,14 @@ public class GoMoreSleep {
     private int deepNumMinutes;     //深睡时间（单位分钟）
     private int score;              //睡眠评分，100满
     private int type;             //类型：长睡/短睡（1长睡2短睡，短睡时只有开始结束时间戳）
+    // ===== Sleep 2.0 新增字段（老固件可能没有） =====
+    private float totalSleepTimeScore;    // Score of total sleep time, ranges: 0 ~ 100
+    private float sleepEfficiencyScore;   // Score of sleep efficiency, ranges: 0 ~ 100
+    private float wakeTimeScore;          // Score of wake times, ranges: 0 ~ 100
+    private float deepRatioScore;         // Score of deep ratio, ranges: 0 ~ 100
+    private float remRatioScore;          // Score of rem ratio, ranges: 0 ~ 100
+  
+    private float sleepScore;             // sleep 2.0 total (multiplicative), long sleep only; -1 = nap/invalid
     private int packNum;//（总包数）
     private int packNo;//（包序号
     private int stageNum;//（当前包stages数组长度）
