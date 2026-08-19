@@ -15,7 +15,7 @@ icon: plug
 
 2.在app进行Ota结束以后，需要重连，直接走广播，获取新的配置
 
-3.如果系统蓝牙已经有绑定并且是连接状态的戒指，直接连接，不需要扫描，如果是已保存未连接，则先解绑，再去直连
+3.如果系统蓝牙**已绑定已连接**状态的戒指，直接连接，不需要扫描，如果是**已保存未连接**，则先解绑，再去扫描，直连
 
 4.公版app的服务器保存了用户信息，保存了用户使用的戒指的类型，如果不是HID戒指，直接连接
 
@@ -46,61 +46,29 @@ boolean connecting = false;//是否正在连接
 
         BluetoothDevice remote = BluetoothAdapter.getDefaultAdapter().getRemoteDevice(mac);
 
-        if (BLEService.isGetToken()) {
+          if (BLEService.isGetToken()) {
             Logger.show("ConnectDevice", "蓝牙已连接");
             String status = getRsString(R.string.connecting);
 
             if (((MainActivity) getSupportActivity()) != null) {
                 ((MainActivity) getSupportActivity()).aboutFragmentSetConnectStatus(status);
             }
-            refreshLayout.setRefreshing(false);
+            setRefreshStop();
         } else if (remote != null && (mac).equalsIgnoreCase(remote.getAddress())) {
             App.getInstance().setDeviceBean(new BleDeviceInfo(remote, -50));
-            Set<BluetoothDevice> bondedDevices = BluetoothAdapter.getDefaultAdapter().getBondedDevices();
+            List<BluetoothDevice> bondedDevices =getConnectedAndBondedDevices(getSupportActivity());
 
             if (App.getInstance().otaUpdate) {
                 Logger.show("ConnectDevice", "ota升级过了，直接走广播，获取新的配置 ");
                 BLEUtils.stopLeScan(getSupportActivity(), leScanCallback);
-                BLEUtils.startLeScan(getSupportActivity(), leScanCallback);
+                startBleScanner();
             } else {
-                //如果是HID戒指，先判断戒指在系统蓝牙内是否已经连接，如果连接，直接直连，如果是已保存未连接状态，先解绑，再重新配对绑定
+                //如果是HID戒指，先判断戒指在系统蓝牙内是否已经连接，如果连接，直接直连
                 if (bondedDevices.contains(remote)) {
                     Logger.show("ConnectDevice", "系统蓝牙已经有绑定的戒指，直接连接 ");
-                    BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
-                    Set<BluetoothDevice> pairedDevices = adapter.getBondedDevices();
-                    BluetoothStatusChecker checker = new BluetoothStatusChecker(getSupportActivity());
-                    for (BluetoothDevice device : pairedDevices) {
-                        if (device.getAddress().equals(mac)) {
-                            // 在后台线程中调用
-                            new Thread(() -> {
-
-                                // 状态检查
-                                checker.printDeviceStatus(device);
-
-                                boolean isConnected = checker.isDeviceConnected(device);
-
-                                getSupportActivity().runOnUiThread(() -> {
-                                    // 更新UI
-                                    if (isConnected) {
-                                        // 设备已连接
-                                        Logger.show(TAG,"设备已连接");
-                                    } else {
-                                        // 设备已配对但未连接
-                                        Logger.show(TAG,"设备已配对但未连接");
-                                        try {
-                                            SystemUtils.removeBond(App.getInstance().getDeviceBean().getDevice());
-                                        } catch (Exception e) {
-                                            e.printStackTrace();
-                                        }
-                                    }
-                                    directConnection(remote);
-                                });
-                            }).start();
-
-                        }
-                    }
-
+                    directConnection(remote);
                 } else {
+
                     String lastMac = PreferencesUtils.getString(Constants.Prefer.LAST_MAC);
                     UserInfo userInfo = App.getInstance().getUserInfo();
                     if (userInfo != null && getSupportActivity() != null) {
@@ -110,18 +78,36 @@ boolean connecting = false;//是否正在连接
                             return;
                         }
                     }
+                    //是HID的戒指，先删除配对，重新配对，否则已配对已保存的戒指，可能是已经连接上，但是系统蓝牙还是已保存状态
+                    try {
+                        SystemUtils.removeBond(App.getInstance().getDeviceBean().getDevice());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     Logger.show("ConnectDevice", "蓝牙 startLeScan 连接");
                     BLEUtils.stopLeScan(getSupportActivity(), leScanCallback);
-                    BLEUtils.startLeScan(getSupportActivity(), leScanCallback);
+                    startBleScanner();
                 }
             }
         } else {
             Logger.show("ConnectDevice", "蓝牙1 startLeScan 连接");
             BLEUtils.stopLeScan(getSupportActivity(), leScanCallback);
-            BLEUtils.startLeScan(getSupportActivity(), leScanCallback);
+            startBleScanner();
         }
     }
-    
+
+    private void startBleScanner(){
+        BLEUtils.startLeScan(getSupportActivity(), leScanCallback);
+        //延迟20秒，关闭
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                setRefreshStop();
+                BLEUtils.stopLeScan(getSupportActivity(), leScanCallback);
+
+            }
+        }, 20000);
+    }
     @SuppressLint("MissingPermission")
     private BluetoothAdapter.LeScanCallback leScanCallback = new BluetoothAdapter.LeScanCallback() {
         @Override
@@ -139,7 +125,7 @@ boolean connecting = false;//是否正在连接
                 connecting=true;
                 App.getInstance().setDeviceBean(new BleDeviceInfo(device, rssi));
             }
-           // Logger.show("ConnectDevice", "onLeScan");
+            // Logger.show("ConnectDevice", "onLeScan");
             if (!App.getInstance().otaUpdate) {//如果不是ota升级进行的连接
                 //扫描过程中，如果已经获取到用户信息，从云端拉取用户设备信息，如果是HID模式，继续走扫描，防止出现用户在系统蓝牙内解绑设备，直连导致无法配对，如果不是，直接连接
                 UserInfo userInfo = App.getInstance().getUserInfo();
@@ -193,6 +179,53 @@ boolean connecting = false;//是否正在连接
         PreferencesUtils.setThDirectives(bleDeviceInfo.getCommunicationProtocolVersion());
         //上传设备信息到服务器
         ((MainActivity) getSupportActivity()).getPresenter().uploadDeviceInfoWhenBind(bluetoothDevice.getAddress(),bluetoothDevice.getName(),bleDeviceInfo.getChargingIndicator(),bleDeviceInfo.getBindingIndicatorBit(),bleDeviceInfo.getCommunicationProtocolVersion());
+    }
+
+    public List<BluetoothDevice> getConnectedAndBondedDevices(Context context) {
+        List<BluetoothDevice> connectedAndBondedDevices = new ArrayList<>();
+
+        // 1. 获取 BluetoothManager
+        BluetoothManager bluetoothManager = (BluetoothManager) context.getSystemService(Context.BLUETOOTH_SERVICE);
+        if (bluetoothManager == null) {
+            return connectedAndBondedDevices;
+        }
+
+        // 2. 从蓝牙管理器获取已连接的设备 (使用 GATT profile)
+        List<BluetoothDevice> connectedDevices = bluetoothManager.getConnectedDevices(BluetoothProfile.GATT);
+
+        // 3. 获取已配对的设备集合
+        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (bluetoothAdapter == null) {
+            return connectedAndBondedDevices;
+        }
+        Set<BluetoothDevice> bondedDevices = bluetoothAdapter.getBondedDevices();
+
+        // 4. 取交集：在已连接列表中的，并且也在已配对列表中的设备
+        for (BluetoothDevice device : connectedDevices) {
+            if (bondedDevices.contains(device)) {
+                connectedAndBondedDevices.add(device);
+            }
+        }
+
+        return connectedAndBondedDevices;
+    }
+//解除系统蓝牙已配对戒指
+ public static void removeBond( BluetoothDevice btDevice){
+        Method removeBondMethod = null;
+        try {
+            removeBondMethod = BluetoothDevice.class.getMethod("removeBond");
+            Boolean returnValue = (Boolean) removeBondMethod.invoke(btDevice);
+            returnValue.booleanValue();
+//            removeBondMethod = btDevice.getClass().getMethod("removeBond");
+//            Boolean returnValue = (Boolean) removeBondMethod.invoke(btDevice);
+//            returnValue.booleanValue();
+
+        } catch (Exception e) {
+            Logger.show("removeBond", "===removeBond=== Exception ");
+            e.printStackTrace();
+        }
+
+
     }
 ```
 
@@ -436,3 +469,4 @@ App.getInstance().setAppLifecycleListener(new AppLifecycleListener() {
     }
 });
 ```
+
