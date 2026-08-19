@@ -363,3 +363,9 @@ BCLRingManager.shared.disconnect(peripheral: peripheral)
 //解除系统蓝牙绑定，防止下次搜索不到戒指
   BLEUtils.removeBond(BLEService.getmBluetoothDevice());
 ```
+
+### 配对戒指注意点：
+
+对于**BLE（低功耗蓝牙）**&#x8BBE;备，**在系统蓝牙界面里“已保存”（未配对）的状态下，无法通过代码直接将其变为“已连接”状态。**
+
+原因在于，**系统蓝牙界面显示的“已连接”**，指的是**经典蓝牙（BR/EDR）的ACL链路连接**，而代码里 `connectGatt()` 建立的是**BLE的GATT连接**。这两者在Android系统底层是两套完全独立的协议栈和连接管理器。所以，在断连的时候，要先解除绑定，再次连接的时候，需要有一点间隔，500ms左右，防止还没解绑完成，直接去连接，无法弹出配对框
