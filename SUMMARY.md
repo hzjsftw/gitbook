@@ -20,7 +20,7 @@
 * [协议开发指南](zhi-neng-jie-zhi-sdk-shi-yong/xie-yi-kai-fa-zhi-nan.md)
 * [公版APP连接部分流程图](zhi-neng-jie-zhi-sdk-shi-yong/gong-ban-app-lian-jie-bu-fen-liu-cheng-tu.md)
 * [蓝牙连接与断连](zhi-neng-jie-zhi-sdk-shi-yong/markdown.md)
-* [Android公版app的重连](zhi-neng-jie-zhi-sdk-shi-yong/images-and-media.md)
+* [蓝牙断连重连实践](zhi-neng-jie-zhi-sdk-shi-yong/images-and-media.md)
 * [Android 前台服务](zhi-neng-jie-zhi-sdk-shi-yong/android-qian-tai-fu-wu.md)
 * [sdk指令介绍](zhi-neng-jie-zhi-sdk-shi-yong/sdk-zhi-ling-jie-shao.md)
 * [指令使用注意点（重要）](zhi-neng-jie-zhi-sdk-shi-yong/zhi-ling-shi-yong-zhu-yi-dian-zhong-yao.md)
