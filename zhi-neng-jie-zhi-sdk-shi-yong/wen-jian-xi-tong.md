@@ -88,6 +88,125 @@ C:按键捕获opus音频
 
 D:adpcm双声道
 
+### 删除文件
+
+```java
+/**
+ *删除文件
+ */
+public static void DELETE_FILE(byte[] fileName, ICommonalityListenerLite listenerLite)
+```
+
+### 格式化文件系统
+
+```java
+/**
+ *格式化文件系统
+ */
+public static void PERFORM_FORMAT_FILESYSTEM(FileResponseCallback fileResponse)
+```
+
+### 获取文件系统状态（存储空间）
+
+```java
+/**
+ *获取文件系统空间信息
+ */
+public static void GET_FILE_MEMORY(FileResponseCallback fileResponse) 
+```
+
+### 文件系统的回调
+
+```java
+public interface FileResponseCallback {
+
+    /**
+     * 对应3610请求文件列表指令
+     * @param data
+     */
+    void onFileListReceived(byte[] data);
+
+    /**
+     * 对应3611请求文件的数据指令
+     * @param data
+     */
+    void onFileInfoReceived(byte[] data);
+    /**
+     * 对应3612删除
+     * @param success 删除是否成功
+     */
+    void onFileDelete(boolean success);
+    /**
+     *对应361D响应一键上传的进度
+     * @param data
+     */
+    void onFileDownloadEndReceived(byte[] data);
+
+    /**
+     *对应361C一键下载，每个文件的进度
+     * @param data
+     */
+    void onDownloadAllFileProgress(byte[] data);
+
+    /**
+     *单文件下载成功回调
+
+     */
+    void oneFileDownloadSuccess();
+
+    /**
+     *对应361A请求文件的数据(一键上传）
+     * @param data
+     */
+    void onDownloadStatusReceived(byte[] data);
+
+    /**
+     * 对应3611请求文件的数据
+     * @param data
+     */
+    void onFileDataReceived(byte[] data);
+    /**
+     * 对应3617获取文件系统状态
+     * @param data
+     */
+    void onFileState(int data);
+
+    /**
+     * 对应361E戒指主动推送文件（推送文件名）
+     * @param data
+     */
+    void onFilePushFileName(byte[] data);
+
+    /**
+     * 对应361F戒指主动推送文件内容
+     * @param data
+     */
+    void onFilePushFileData(byte[] data);
+
+    /**
+     * 对应3618戒指断点续传
+     * @param state 1开始上传文件 2上传文件完成
+     * @param startTime 开始时间戳(秒级)
+     * @param endTime 结束时间戳(秒级)
+     */
+    void onFileResumeBreakpoint(int state,long startTime,long endTime);
+
+    /**
+     * 对应3619戒指进度
+     * @param progress 进度
+     */
+    void onFileResumeBreakpointProgress(int progress);
+    /**
+     * 获取文件系统空间信息
+     * @param capacitySize 总空间大小
+     * @param capacitySizeUsed 已使用空间大小
+     * @param capacitySizeNotUsed 未使用空间大小
+     */
+    void localMemoryFull(int capacitySize,int capacitySizeUsed,int capacitySizeNotUsed);
+
+}
+```
+
 ### 本地录音文件
 
 特定戒指支持开启和停止录音，将录音文件保存到戒指本地，可以通过指令，获取文件列表，后缀是8的文件是adpcm音频单声道格式，后缀D的是adpcm双声道，可以获取文件内容，是byte\[]类型，调用sdk的解码方法，解码成pcm格式，保存到本地的pcm文件里。
@@ -194,100 +313,7 @@ public class ExerciseConfig {
   LmAPILite.GET_FILE_LIST(fileResponseCallback);
 ```
 
-获取文件部分的回调
 
-```java
-/**
- * 接收文件系统的原始值，方便客户定制文件内容
- */
-public interface FileResponseCallback {
-
-    /**
-     * 对应3610请求文件列表指令
-     * @param data
-     */
-    void onFileListReceived(byte[] data);
-
-    /**
-     * 对应3611请求文件的数据指令
-     * @param data
-     */
-    void onFileInfoReceived(byte[] data);
-    /**
-     * 对应3612删除
-     * @param success 删除是否成功
-     */
-    void onFileDelete(boolean success);
-    /**
-     *对应361D响应一键上传的进度
-     * @param data
-     */
-    void onFileDownloadEndReceived(byte[] data);
-
-    /**
-     *对应361C一键下载，每个文件的进度
-     * @param data
-     */
-    void onDownloadAllFileProgress(byte[] data);
-
-    /**
-     *单文件下载成功回调
-
-     */
-    void oneFileDownloadSuccess();
-
-    /**
-     *对应361A请求文件的数据(一键上传）
-     * @param data
-     */
-    void onDownloadStatusReceived(byte[] data);
-
-    /**
-     * 对应3611请求文件的数据
-     * @param data
-     */
-    void onFileDataReceived(byte[] data);
-    /**
-     * 对应3617获取文件系统状态
-     * @param data
-     */
-    void onFileState(int data);
-
-    /**
-     * 对应361E戒指主动推送文件（推送文件名）
-     * @param data
-     */
-    void onFilePushFileName(byte[] data);
-
-    /**
-     * 对应361F戒指主动推送文件内容
-     * @param data
-     */
-    void onFilePushFileData(byte[] data);
-
-    /**
-     * 对应3618戒指断点续传
-     * @param state 1开始上传文件 2上传文件完成
-     * @param startTime 开始时间戳(秒级)
-     * @param endTime 结束时间戳(秒级)
-     */
-    void onFileResumeBreakpoint(int state,long startTime,long endTime);
-
-    /**
-     * 对应3619戒指进度
-     * @param progress 进度
-     */
-    void onFileResumeBreakpointProgress(int progress);
-    /**
-     * 获取文件系统空间信息
-     * @param capacitySize 总空间大小
-     * @param capacitySizeUsed 已使用空间大小
-     * @param capacitySizeNotUsed 未使用空间大小
-     */
-    void localMemoryFull(int capacitySize,int capacitySizeUsed,int capacitySizeNotUsed);
-
-}
-```
 
 文件内容有多种，根据文件名获取后缀，每种后缀对应不同的解析方式，根据文件名获取后缀名的样例：
 
