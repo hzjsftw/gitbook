@@ -204,7 +204,7 @@ public class HistoryDataBean{
      */
     private int sleepType;
     /**
-     * 测量标志
+     * 测量标志(>=100是未佩戴)
      */
     private int measurementMarker;
     /**
@@ -226,7 +226,7 @@ public class HistoryDataBean{
     private String rrBytesString;
 
     /**
-     * 呼吸率
+     * 呼吸率(仅供参考)
      */
     private String respiratoryRate;
 
@@ -244,7 +244,7 @@ public class HistoryDataBean{
 
 
     /**
-     * 测量类型
+     * 测量类型(保留字段)
      */
     private Integer measureType;
 
@@ -268,16 +268,16 @@ public class HistoryDataBean{
      */
     private Integer batteryVoltage;
     /**
-     * 不佩戴消极原因：0：光学 1：算法
+     * 不佩戴消极原因：0：光学 1：算法(保留字段)
      */
     private Integer notWornReason;
     /**
-     * 记录校准标志：0：已校准，1：未校准
+     * 记录校准标志：0：已校准，1：未校准(保留字段)
      */
     private Integer recordCalibrationFlag;
 
     /**
-     * 环境光强度系数：0-100%
+     * 环境光强度系数：0-100%(保留字段)
      */
     private Integer ambientLightIntensityFactor ;
 
@@ -286,28 +286,28 @@ public class HistoryDataBean{
      */
     private String temperatureData ;
 
-    // 步频 - 五分钟内最大值，单位步/min
+        // 步频 - 五分钟内最大值，单位步/min-gomore戒指支持
     private Integer stepRateMax;
 
-    // 步频 - 五分钟内最小值，单位步/min
+    // 步频 - 五分钟内最小值，单位步/min-gomore戒指支持
     private Integer stepRateMin;
 
-    //呼吸率：7-25
+    //呼吸率：7-25-gomore戒指支持
     private Integer breathingRate;
 
-    // 呼吸率置信度：0-100
+    // 呼吸率置信度：0-100-gomore戒指支持
     private Integer breathingRateConfidence;
 
-    // 运动状态：0-久坐, 1-走路, 2-跑步
+    // 运动状态：0-久坐, 1-走路, 2-跑步-gomore戒指支持
     private Integer activityStatus;
 
-    // 总卡路里，全天累加，零点清零，单位千卡
+    // 总卡路里，全天累加，零点清零，单位千卡-gomore戒指支持
     private Integer totalCalories;
 
-    // 基础代谢卡路里，全天累加，零点清零，单位千卡
+    // 基础代谢卡路里，全天累加，零点清零，单位千卡-gomore戒指支持
     private Integer basalMetabolicCalories;
 
-    // 运动卡路里，全天累加，零点清零，单位千卡
+    // 运动卡路里，全天累加，零点清零，单位千卡-gomore戒指支持
     private Integer exerciseCalories;
     }
 ```
