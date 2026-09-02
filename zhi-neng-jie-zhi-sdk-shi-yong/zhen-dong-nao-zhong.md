@@ -61,7 +61,7 @@ for (int i = 0; i < 5; i++) {
 
        setAlarmClockData.add(alarmClockBean);
   }
-   LmAPILite.ALARM_CLOCK_SETTING(setAlarmClockData);
+   LmAPILite.ALARM_CLOCK_SETTING(setAlarmClockData,listenerLite);
 ```
 
 ```java
@@ -71,21 +71,24 @@ for (int i = 0; i < 5; i++) {
 LmAPILite.GET_ALARM_CLOCK(IAlarmClockListenerLite listenerLite);
 ```
 
-如果设置重复类型为1，需要设置weekday，从周日到周一，七天，1是开启，0是关闭
+如果设置重复类型为1，需要设置weekday，从周日到周六，七天，1是开启，0是关闭
 
 AlarmClockBean说明：
 
 ```java
 /**
      * time 时间戳
-     * repetitiveType 重复类型 0：仅一次 1：每天 2：智能节假日 3：智能工作日
+     * repetitiveType 重复类型 0：仅一次 1：重复  2：智能工作日
      * vibrationEffect 震动效果 0：强 1：弱 2：渐变
      * onOrOff 闹钟开关 0：关闭 1：打开
+     *weekday 设置周日到周六，每天是否开启闹钟 0：关闭 1：打开
      */
     private  long time;
     private  byte repetitiveType;
     private  byte vibrationEffect;
     private  byte onOrOff;
+    private  int[] weekday;
+    
 ```
 
 ```java
