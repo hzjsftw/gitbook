@@ -36,7 +36,7 @@ icon: clock-two
 <pre class="language-java"><code class="lang-java">/**
 *设置闹钟
 **/
-<strong>LmAPILite.ALARM_CLOCK_SETTING(List&#x3C;AlarmClockBean> alarmClockBeans);
+<strong>LmAPILite.ALARM_CLOCK_SETTING(List&#x3C;AlarmClockBean> alarmClockBeans,IAlarmClockListenerLite listenerLite);
 </strong></code></pre>
 
 设置案例：<br>
@@ -45,20 +45,19 @@ icon: clock-two
    List<AlarmClockBean> setAlarmClockData = new ArrayList<>();
 for (int i = 0; i < 5; i++) {
     AlarmClockBean alarmClockBean = new AlarmClockBean();
-    if(i==0){//测试只设置一个闹铃的情况
+     if(i==0){//测试只设置一个闹铃的情况
         alarmClockBean.setOnOrOff((byte) 1);
-        alarmClockBean.setVibrationEffect((byte) 1);
-        alarmClockBean.setTime(1786524900);
+        alarmClockBean.setVibrationEffect((byte) 0);
+        alarmClockBean.setTime(1788327480);
         alarmClockBean.setRepetitiveType((byte) 0);
         alarmClockBean.setWeekday(new int[]{});
-    }else{//其他补0
+      }else{//其他补0
         alarmClockBean.setOnOrOff((byte) 0);
         alarmClockBean.setVibrationEffect((byte) 0);
         alarmClockBean.setTime(0);
         alarmClockBean.setRepetitiveType((byte) 0);
         alarmClockBean.setWeekday(new int[]{});
-    }
-
+     }
 
        setAlarmClockData.add(alarmClockBean);
   }
@@ -71,6 +70,8 @@ for (int i = 0; i < 5; i++) {
 **/
 LmAPILite.GET_ALARM_CLOCK(IAlarmClockListenerLite listenerLite);
 ```
+
+如果设置重复类型为1，需要设置weekday，从周日到周一，七天，1是开启，0是关闭
 
 AlarmClockBean说明：
 
