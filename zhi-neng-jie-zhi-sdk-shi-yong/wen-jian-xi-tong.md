@@ -147,15 +147,60 @@ public static void FILE_PROGRESS_APP_ANSWER(int finish,byte[] fileNameByte)
 
 ### 文件系统的回调
 
-```java
+````java
 /**
- * 接收文件系统的原始值，方便客户定制文件内容
+ * 接收文件系统的原始值，byte[]的前四位是指令标志位，可以忽略，从第4字节开始解析
+ * <p>
+ * ## 3610 文件列表解析示例
+ * <p>
+ * ### 字段说明
+ * | 字段 | 说明 |
+ * |------|------|
+ * | fileCount | 文件总个数 |
+ * | fileIndex | 文件序号 |
+ * | fileSize | 文件大小 |
+ * | fileName | 文件名称 |
+ * | rawDataByte | 文件名称原始数组 |
+ * <p>
+ * ### 解析方法
+ * ```java
+ * byte[] fileCountByte = new byte[4];
+ * System.arraycopy(data, 4, fileCountByte, 0, fileCountByte.length);
+ * int fileCount = DataCovertUtils.byteArray2LittleInt(fileCountByte);
+ *
+ * byte[] fileIndexByte = new byte[4];
+ * System.arraycopy(data, 8, fileIndexByte, 0, fileCountByte.length);
+ * int fileIndex = DataCovertUtils.byteArray2LittleInt(fileIndexByte);
+ *
+ * byte[] fileSizeByte = new byte[4];
+ * System.arraycopy(data, 12, fileSizeByte, 0, fileSizeByte.length);
+ * int fileSize = DataCovertUtils.byteArray2LittleInt(fileSizeByte) / 1024;
+ *
+ * byte[] fileNameByte = new byte[data.length - 16];
+ * System.arraycopy(data, 16, fileNameByte, 0, fileNameByte.length);
+ * ```
+ * <p>
+ * ### 工具方法
+ * ```java
+ * private int readUInt32LE(byte[] data, int offset) {
+ *     if (offset + 4 > data.length) {
+ *         throw new IndexOutOfBoundsException("数据不足，无法读取4字节整数");
+ *     }
+ *     return (data[offset] & 0xFF) |
+ *             ((data[offset + 1] & 0xFF) << 8) |
+ *             ((data[offset + 2] & 0xFF) << 16) |
+ *             ((data[offset + 3] & 0xFF) << 24);
+ * }
+ * ```
  */
 public interface FileResponseCallback {
 
     /**
      * 对应3610请求文件列表指令
      * @param data
+     * Total 4字节 文件总个数
+     * Seq：4字节 文件序号（1起始）
+     * Data：31字节：
      * [0:3]:文件的大小，单位字节,uint32_t类型
      * [4：31]文件名，char类型
      * 文件名组成：
@@ -174,6 +219,12 @@ public interface FileResponseCallback {
     /**
      * 对应3611请求文件的数据指令
      * @param data
+     * 文件系统状态：1字节
+     * 文件大小：4字节
+     * 总包数：4字节
+     * 当前包号：4字节
+     * 当前包长度：4字节
+     * Data：n字节：
      * [0：37]文件名，char类型
      * 文件名组成：
      * 用户id+时间戳+文件类型+后缀（.bin）
@@ -185,6 +236,21 @@ public interface FileResponseCallback {
      * 分隔符:_
      * 文件类型:3
      * 文件后缀：.bin
+     *
+     * 示例：
+     *                 int offset = 4;
+     *                 int fileStatus = data[offset] & 0xFF;
+     *                 offset += 1;
+     *                 int fileSize = readUInt32LE(data, offset);
+     *                 offset += 4;
+     *                 int totalPackets = readUInt32LE(data, offset);
+     *                 offset += 4;
+     *                 int currentPacket = readUInt32LE(data, offset);
+     *                 offset += 4;
+     *                 int currentPacketLength = readUInt32LE(data, offset);
+     *                 offset += 4;
+     *                 byte[] contentDataByte = new byte[data.length - 4 - 17];
+     *                 System.arraycopy(data, 21, contentDataByte, 0, contentDataByte.length);
      */
     void onFileInfoReceived(byte[] data);
     /**
@@ -217,6 +283,12 @@ public interface FileResponseCallback {
     /**
      *对应361A请求文件的数据(一键上传）
      * @param data
+     * [0]:0忙
+     * 1：开始一键上传
+     * 2：一键上传完成
+     * 3：文件序号不符合
+     * [1:4]开始时间戳(秒级)
+     * [5::8]结束时间戳(秒级)
      */
     void onDownloadStatusReceived(byte[] data);
 
@@ -234,7 +306,7 @@ public interface FileResponseCallback {
      * 分隔符:_
      * 文件类型:3
      * 文件后缀：.bin
-  
+     * 具体解析参照：LmApiDataUtils类
      */
     void onFileDataReceived(byte[] data);
     /**
@@ -285,7 +357,8 @@ public interface FileResponseCallback {
     void localMemoryFull(int capacitySize,int capacitySizeUsed,int capacitySizeNotUsed);
 
 }
-```
+
+````
 
 ### 本地录音文件
 
