@@ -234,7 +234,7 @@ public interface FileResponseCallback {
      * 分隔符:_
      * 文件类型:3
      * 文件后缀：.bin
-     * 具体解析参照：LmApiDataUtils类
+  
      */
     void onFileDataReceived(byte[] data);
     /**
@@ -344,7 +344,7 @@ private AdPcmTool adPcmTool = new AdPcmTool();
 [yu-yin-lu-zhi.md](yu-yin-lu-zhi.md)
 {% endcontent-ref %}
 
-### 特殊版本的文件系统
+### 文件系统获取和解析
 
 目前只支持固件版本号为1.14.的戒指，支持主动采集数据，还有自动采集数据两种模式
 
