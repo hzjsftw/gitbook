@@ -191,6 +191,13 @@ public static void FILE_PROGRESS_APP_ANSWER(int finish,byte[] fileNameByte)
  *             ((data[offset + 2] & 0xFF) << 16) |
  *             ((data[offset + 3] & 0xFF) << 24);
  * }
+ * public static int byteArray2LittleInt(byte[] b) {
+ *         int initValue = 0;
+ *         for (int i = 0; i < b.length; i++) {
+ *             initValue += (b[i] & 0xFF) << (8 * i);
+ *         }
+ *         return initValue;
+ *     }
  * ```
  */
 public interface FileResponseCallback {
