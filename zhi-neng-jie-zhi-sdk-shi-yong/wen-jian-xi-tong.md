@@ -14,8 +14,14 @@ icon: copy
 通过指令，可以获取戒指本地的文件列表，然后通过文件名，解析文件的内容(需要戒指支持指令) 对应的指令是：LmAPILite
 
 ```java
- GET_FILE_LIST( IFileListListener listenerLite) //文件列表
- GET_FILE_CONTENT( int mFileType,byte[] fileName,IFileListListener listenerLite);//根据类型和文件名原始数据，获取文件内容
+  /**
+     *请求文件列表(指令3610)
+     */
+ public static void GET_FILE_LIST(FileResponseCallback fileResponse)
+  /**
+     *请求文件的数据(指令3611)
+     */
+ public static void DOWNLOAD_FILE(byte[] fileName,FileResponseCallback fileResponse)
 ```
 
 GET\_FILE\_CONTENT的参数需要依赖GET\_FILE\_LIST的file回调，根据String fileName解析最后一个下划线后的类型，传给mFileType，比如：类型和文件名的最后一部分保持一致，EDB435685884\_10FF0A68\_7.txt，类型是7 byte\[] fileName是file回调里的byte\[] rawDataByte 回调
@@ -30,34 +36,6 @@ GET\_FILE\_CONTENT的参数需要依赖GET\_FILE\_LIST的file回调，根据Stri
      // 获取最后一个部分，即 "7"
      String fileType= parts[parts.length - 1];
      
-```
-
-```java
-public interface IFileListListener {
-
-    /**
-     * 文件列表
-     * @param fileCount 文件总个数
-     * @param fileIndex 文件序号
-     * @param fileSize 文件大小
-     * @param fileName 文件名称
-     * @param rawDataByte 文件名称原始数组
-     */
-    void file( int fileCount,int fileIndex,int fileSize,String fileName,byte[] rawDataByte);
-
-
-    /**
-     * 普通文件内容
-     * @param content
-     */
-    void fileContent(String content);
-        /**
-     * 录音文件内容
-     * @param content
-     */
-    void AudioFileContent(byte[] content);
-}
-
 ```
 
 目前支持的文件类型：
@@ -92,16 +70,16 @@ D:adpcm双声道
 
 ```java
 /**
- *删除文件
+ *删除文件(指令3612)
  */
-public static void DELETE_FILE(byte[] fileName, ICommonalityListenerLite listenerLite)
+public static void DELETE_FILE(byte[] fileName, FileResponseCallback listenerLite)
 ```
 
 ### 格式化文件系统
 
 ```java
 /**
- *格式化文件系统
+ *格式化文件系统(指令3613)
  */
 public static void PERFORM_FORMAT_FILESYSTEM(FileResponseCallback fileResponse)
 ```
@@ -110,32 +88,114 @@ public static void PERFORM_FORMAT_FILESYSTEM(FileResponseCallback fileResponse)
 
 ```java
 /**
- *获取文件系统空间信息
+ *获取文件系统空间信息(指令3614)
  */
 public static void GET_FILE_MEMORY(FileResponseCallback fileResponse) 
+```
+
+### 请求文件的数据(一键上传）
+
+```java
+/**
+ *请求文件的数据(一键上传）指令361A
+ */
+public static void DOWNLOAD_ALL_FILES(FileResponseCallback fileResponse)
+```
+
+### 断点续传
+
+```java
+/**
+ * 断点续传(指令3618)
+ * @param offset 文件偏移数据量，用于断点续传
+ * @param fileName 文件名
+ * @param fileResponse
+ */
+public static void RESUME_BREAKPOINT(long offset,byte[] fileName,FileResponseCallback fileResponse)
+```
+
+### 获取文件系统状态
+
+```java
+/**
+ *获取文件系统状态
+ */
+public static void GET_FILE_STATE(FileResponseCallback fileResponse)
+```
+
+### app回复响应(是否可以上传) 戒指主动推送文件
+
+```java
+/**
+ * app回复响应(是否可以上传) 戒指主动推送文件 指令361E
+ * @param canUpload 1可以开始上传，0不可以
+ * @param fileNameByte 文件名
+ */
+public static void FILE_PUSH_APP_ANSWER(int canUpload,byte[] fileNameByte)
+```
+
+### app回复响应（是否接收完成）戒指主动推送文件
+
+```java
+/**
+ * app回复响应（是否接收完成）
+ * @param finish 1已完成，0未完成且需重新上传
+ * @param fileNameByte 文件名
+ */
+public static void FILE_PROGRESS_APP_ANSWER(int finish,byte[] fileNameByte)
 ```
 
 ### 文件系统的回调
 
 ```java
+/**
+ * 接收文件系统的原始值，方便客户定制文件内容
+ */
 public interface FileResponseCallback {
 
     /**
      * 对应3610请求文件列表指令
      * @param data
+     * [0:3]:文件的大小，单位字节,uint32_t类型
+     * [4：31]文件名，char类型
+     * 文件名组成：
+     * 用户id+时间戳+文件类型+后缀（.txt）
+     * 示例：
+     * 010203040506_2025_6_18_13_45_20_3.txt
+     * 用户id:010203040506
+     * 分隔符:_
+     * 时间戳:2025_6_18:13:45:20（年月日时分秒）
+     * 分隔符:_
+     * 文件类型:3
+     * 文件后缀：.txt
      */
     void onFileListReceived(byte[] data);
 
     /**
      * 对应3611请求文件的数据指令
      * @param data
+     * [0：37]文件名，char类型
+     * 文件名组成：
+     * 用户id+时间戳+文件类型+后缀（.bin）
+     * 示例：
+     * 010203040506_2025_6_18:13:45:20_3.bin
+     * 用户id:010203040506
+     * 分隔符:_
+     * 时间戳:2025_6_18:13:45:20（年月日时分秒）
+     * 分隔符:_
+     * 文件类型:3
+     * 文件后缀：.bin
      */
     void onFileInfoReceived(byte[] data);
     /**
      * 对应3612删除
-     * @param success 删除是否成功
+     * @param success 删除文件是佛成功
+     * @param deleteStatus
+     * 0：失败
+     * 1：成功
+     * 2：文件繁忙
      */
-    void onFileDelete(boolean success);
+    void onFileDelete(boolean success,int deleteStatus);
     /**
      *对应361D响应一键上传的进度
      * @param data
@@ -163,23 +223,43 @@ public interface FileResponseCallback {
     /**
      * 对应3611请求文件的数据
      * @param data
+     * [0：37]文件名，char类型
+     * 文件名组成：
+     * 用户id+时间戳+文件类型+后缀（.bin）
+     * 示例：
+     * 010203040506_2025_6_18:13:45:20_3.bin
+     * 用户id:010203040506
+     * 分隔符:_
+     * 时间戳:2025_6_18:13:45:20（年月日时分秒）
+     * 分隔符:_
+     * 文件类型:3
+     * 文件后缀：.bin
+     * 具体解析参照：LmApiDataUtils类
      */
     void onFileDataReceived(byte[] data);
     /**
      * 对应3617获取文件系统状态
      * @param data
+     * 0：空闲
+     * 1：上传文件中
+     * 2：写状态
+     * 3：忙
      */
     void onFileState(int data);
 
     /**
      * 对应361E戒指主动推送文件（推送文件名）
      * @param data
+     * [0]:文件名长度
+     * [1:38]:文件名
      */
     void onFilePushFileName(byte[] data);
 
     /**
      * 对应361F戒指主动推送文件内容
      * @param data
+     *[0]:文件名长度
+     * [1:38]:文件名
      */
     void onFilePushFileData(byte[] data);
 
