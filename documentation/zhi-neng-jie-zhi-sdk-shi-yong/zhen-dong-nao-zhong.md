@@ -15,23 +15,46 @@ icon: clock-two
 </strong>LmAPILite .SET_MOTOR(int time, int type)
 </code></pre>
 
+非1.23版本的震动戒指，可以使用以下的方法
+
 ```java
-  /**
+ /**
      * 设置线性马达参数
      * @param pattern 模式 默认1
      * @param dutyCycle 占空比 这个振动强度，1-144，要设置大点，不然没震感
      * @param sequence 序列执行次数
      * @param repetitions 序列中周期重复次数 这个是振动时长单位100毫秒，比如设置5就是500毫秒
      */
-    public static void SET_GOMORE_LINEAR(int pattern,int dutyCycle,int sequence,int repetitions) 
+    public static void SET_MOTOR_LINEAR(int pattern,int dutyCycle,int sequence,int repetitions,ICommonListener commonListener)
+
  /**
      * 马达振动测试
      */
     public static void MOTOR_VIBRATION_TEST()
+//方法使用：需要先设置参数，然后在合适的时候，进行震动
+ //设置参数
+            LmAPILite.SET_MOTOR_LINEAR(1, 144, 5, 5, new ICommonListener() {
+                @Override
+                public void success() {
+                    //进行震动
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            LmAPILite.MOTOR_VIBRATION_TEST();
+                        }
+                    },200);
+
+                }
+
+                @Override
+                public void error() {
+
+                }
+            });
 
 ```
 
-设置了马达参数，需要再发送一个指令，进行振动
+1.23.x的戒指以上指令不支持，可以使用：<br>
 
 ```java
 //设置参数
@@ -53,6 +76,29 @@ LmAPILite.SET_MOTOR_LINEAR(1, 144, 5, 5, new ICommonListener() {
 
     }
 });
+```
+
+### 定制闹钟
+
+```java
+/**
+ * 戒指马达设置接口（0x8D，Subcmd=0x02）
+ * Data 2字节：[0]类型，[1]样式
+ *
+ * [0]:类型 0x01：开启录音
+ * [1]：样式
+ *   0x01:短振1次
+ *   0x02:长振1次
+ *
+ * [0]:类型 0x02：关闭录音
+ * [1]：样式
+ *   0x01:短振2次
+ *   0x02:长振2次
+ *
+ * @param type  类型：0x01-开启录音，0x02-关闭录音
+ * @param style 样式：根据类型不同对应不同样式
+ */
+public static void SET_RING_MOTOR_MODE(int type, int style)
 ```
 
 ### 定制闹钟
