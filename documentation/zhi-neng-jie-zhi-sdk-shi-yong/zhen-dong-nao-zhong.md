@@ -15,12 +15,13 @@ icon: clock-two
 </strong>LmAPILite .SET_MOTOR(int time, int type)
 </code></pre>
 
-<pre class="language-java"><code class="lang-java"><strong>/**
-</strong>     * 设置线性马达参数
-     * @param pattern 模式
-     * @param dutyCycle 占空比
+```java
+  /**
+     * 设置线性马达参数
+     * @param pattern 模式 默认1
+     * @param dutyCycle 占空比 这个振动强度，1-144，要设置大点，不然没震感
      * @param sequence 序列执行次数
-     * @param repetitions 序列中周期重复次数
+     * @param repetitions 序列中周期重复次数 这个是振动时长单位100毫秒，比如设置5就是500毫秒
      */
     public static void SET_GOMORE_LINEAR(int pattern,int dutyCycle,int sequence,int repetitions) 
  /**
@@ -28,7 +29,7 @@ icon: clock-two
      */
     public static void MOTOR_VIBRATION_TEST()
 
-</code></pre>
+```
 
 设置了马达参数，需要再发送一个指令，进行振动
 
