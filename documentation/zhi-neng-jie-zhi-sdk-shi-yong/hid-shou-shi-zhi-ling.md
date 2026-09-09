@@ -1,0 +1,197 @@
+---
+description: HID戒指是手势戒指，可以通过手势，对手机和电脑进行控制，包括刷视频，拍照，听音乐，PPT，按压戒指上传实时音频，打响指拍照等
+icon: hand
+---
+
+# HID手势指令
+
+### 演示视频
+
+[https://ali.bravechip.cn/api/profile/upload/video/hid.mp4](https://ali.bravechip.cn/api/profile/upload/video/hid.mp4)
+
+### 设置戒指的HID模式
+
+**android：**
+
+```java
+  /**
+     * 设置HID
+     * @param touchMode  触摸hid 模式
+     * 0：刷视频模式
+     * 1：拍照模式
+     * 2：音乐模式
+     * 3: ppt模式
+     * 4：上传实时音频
+     * -1:关闭
+     * @param gestureMode 手势hid 模式
+     * 0：刷视频模式
+     * 1：拍照模式
+     * 2：音乐模式
+     * 3：ppt模式
+     * 4：打响指(拍照)模式
+     * -1:关闭
+     * @param context
+     * @param listenerLite
+     */
+    public static void SET_HID(int touchMode,int gestureMode, Context context,IHIDListenerLite listenerLite)
+```
+
+**iOS:**
+
+```swift
+/// 设置HID模式
+/// - Parameters:
+///   - touchMode: 触摸模式 0:刷视屏模式、1:拍照模式、2:音乐模式、3:PPT模式、4:上传实时音频模式 255:关闭
+///   - gestureMode: 手势模式 0:刷视频模式、1:拍照模式、2:音乐模式、3:PPT模式、4:打响指（拍照）模式 255:关闭
+///   - systemType: 系统类型 0:Android 1:iOS 2:鸿蒙 3:Windows
+///   - deviceModelName: 设备型号名称
+///   - screenHeightPixel: 屏幕高度像素
+///   - screenWidthPixel: 屏幕宽度像素
+/// - Parameter completion: 设置HID模式回调
+func setHIDMode(touchMode: Int, gestureMode: Int, systemType: Int, deviceModelName: String, screenHeightPixel: Int, screenWidthPixel: Int, completion: @escaping (Result<BCLSetHIDModeResponse, BCLError>) -> Void)
+```
+
+#### 调用示例
+
+```swift
+BCLRingManager.shared.setHIDMode(
+    touchMode: 0,
+    gestureMode: 1,
+    systemType: 1,
+    deviceModelName: BCLRingManager.shared.getMobileDeviceModelName(),
+    screenHeightPixel: BCLRingManager.shared.getMobileDeviceScreenHeightPixel(),
+    screenWidthPixel: BCLRingManager.shared.getMobileDeviceScreenWidthPixel()
+) { result in
+    switch result {
+    case .success(_):
+        print("设置HID模式成功")
+    case .failure(let error):
+        print("设置HID模式失败: \(error)")
+    }
+}
+```
+
+**iOS:**
+
+```swift
+/// 获取当前手机设备型号名称
+/// - Returns: 当前手机设备型号名称
+func getMobileDeviceModelName() -> String
+
+/// 获取当前手机设备屏幕宽度像素
+/// - Returns: 当前手机设备屏幕宽度像素
+func getMobileDeviceScreenWidthPixel() -> Int
+
+/// 获取当前手机设备屏幕高度像素
+/// - Returns: 当前手机设备屏幕高度像素
+func getMobileDeviceScreenHeightPixel() -> Int
+```
+
+### 获取HID功能码
+
+获取连接戒指支持的HID功能，只有支持的功能，才能通过设置戒指的HID模式的方法进行设置
+
+**android:**
+
+```java
+  public static void GET_HID_CODE(int system,IHIDListenerLite listenerLite){
+  public interface IHIDListenerLite {
+ 
+     /**
+      * 设置HID模式  0代表失败，1代表成功
+      */
+     void setHIDResut(boolean success);
+ 
+     /**
+      * 获取HID模式
+      * @param touchMode  手势
+      * @param gestureMode   触控
+      * @param system  系统
+      */
+     void getHIDInfo(int touchMode,int gestureMode,int system);
+ 
+     /**
+      * 获取HID功能码
+      * @param HIDSupport HID功能支持
+      * @param touchSupport 触摸功能
+      *  @param gestureSupport 手势功能
+      */
+     void getHidCode(boolean HIDSupport, TouchSupport touchSupport, GestureSupport gestureSupport);
+ 
+ }
+```
+
+**iOS:**
+
+```swift
+/// 获取HID功能码
+/// - Parameter completion: 获取HID功能码回调
+func getHIDFunctionCode(completion: @escaping (Result<BCLGetHIDFunctionCodeResponse, BCLError>) -> Void)
+```
+
+### 获取HID
+
+获取当前戒指的HID模式，触摸各功能和手势各功能的开关状态
+
+**android:**
+
+```java
+ public static void GET_HID(IHIDListenerLite listenerLite)
+```
+
+**iOS:**
+
+```swift
+/// 获取当前HID模式
+/// - Parameter completion: 获取当前HID模式回调
+func getCurrentHIDMode(completion: @escaping (Result<BCLGetCurrentHIDModeResponse, BCLError>) -> Void)
+```
+
+### 手势功能设置（定制功能：Z4I）
+
+**iOS:**
+
+```swift
+/// 设置手势功能
+/// - Parameters:
+///   - swipeUpGesture: 上滑手势  1：音乐暂停/开始、2：音乐下一首、3：音乐上一首、4: 音量+、5：音量-、6：拍照、255:关闭
+///   - swipeDownGesture: 下滑手势
+///   - snapGesture: 打响指手势
+///   - pinchGesture: 捏一捏手势
+/// - Parameter completion: 设置手势功能回调
+func setGestureFunction(swipeUpGesture: Int, swipeDownGesture: Int, snapGesture: Int, pinchGesture: Int, completion: @escaping (Result<BCLSetGestureFunctionResponse, BCLError>) -> Void)
+
+/// 读取手势功能
+/// - Parameter completion: 读取手势功能回调
+func readGestureFunction(completion: @escaping (Result<BCLReadGestureFunctionResponse, BCLError>) -> Void)
+```
+
+### 手势功能测试
+
+可以开启和关闭手势测试功能，通过在戒指触摸区域，手动上滑下滑单击双击三击等操作，在app端收到对应的回调
+
+android:
+
+```java
+LmAPILite.OPEN_TOUCH_TEST();//开启触摸测试
+LmAPILite.CLOSE_TOUCH_TEST();//关闭触摸测试
+
+   /**
+         * 获取戒指主动推送的按键信息
+         * @param key
+         * 0x0:长按
+         * 0x1:单击
+         * 0x2:双击
+         * 0x3:三击
+         * 0x4:上滑
+         * 0x5:下滑
+         * 0x6:左滑
+         * 0x7:右滑
+         */
+        LmAPILite.KEY_DOWN_LISTENER(new IKeyDownListener() {
+            @Override
+            public void ringPushKeyDownResult(int key) {
+              
+            }
+        });
+```
