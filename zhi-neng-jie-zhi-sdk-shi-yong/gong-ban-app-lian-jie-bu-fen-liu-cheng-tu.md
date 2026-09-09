@@ -22,7 +22,7 @@ icon: arrow-progress
 
 ### 蓝牙重连流程
 
-<figure><img src="../.gitbook/assets/chipletRing重来你 (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/chipletRing重来你.png" alt=""><figcaption></figcaption></figure>
 
 ### 蓝牙刷新流程
 
@@ -30,4 +30,4 @@ icon: arrow-progress
 
 ### 一代指令调用顺序
 
-<figure><img src="../.gitbook/assets/chipletRing一代协议指令顺序 (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/chipletRing一代协议指令顺序.png" alt=""><figcaption></figcaption></figure>
