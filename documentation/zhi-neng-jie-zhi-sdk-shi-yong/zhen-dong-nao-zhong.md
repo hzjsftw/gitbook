@@ -15,16 +15,43 @@ icon: clock-two
 </strong>LmAPILite .SET_MOTOR(int time, int type)
 </code></pre>
 
-```java
-/**
-     * 设置线性马达参数
+<pre class="language-java"><code class="lang-java"><strong>/**
+</strong>     * 设置线性马达参数
      * @param pattern 模式
      * @param dutyCycle 占空比
      * @param sequence 序列执行次数
      * @param repetitions 序列中周期重复次数
      */
     public static void SET_GOMORE_LINEAR(int pattern,int dutyCycle,int sequence,int repetitions) 
+ /**
+     * 马达振动测试
+     */
+    public static void MOTOR_VIBRATION_TEST()
 
+</code></pre>
+
+设置了马达参数，需要再发送一个指令，进行振动
+
+```java
+//设置参数
+LmAPILite.SET_MOTOR_LINEAR(1, 144, 5, 5, new ICommonListener() {
+    @Override
+    public void success() {
+        //进行震动
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                LmAPILite.MOTOR_VIBRATION_TEST();
+            }
+        },200);
+
+    }
+
+    @Override
+    public void error() {
+
+    }
+});
 ```
 
 ### 定制闹钟
