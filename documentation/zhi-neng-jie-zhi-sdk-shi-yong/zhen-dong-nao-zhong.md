@@ -57,25 +57,24 @@ icon: clock-two
 1.23.x的戒指以上指令不支持，可以使用：<br>
 
 ```java
-//设置参数
-LmAPILite.SET_MOTOR_LINEAR(1, 144, 5, 5, new ICommonListener() {
-    @Override
-    public void success() {
-        //进行震动
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                LmAPILite.MOTOR_VIBRATION_TEST();
-            }
-        },200);
-
-    }
-
-    @Override
-    public void error() {
-
-    }
-});
+/**
+     * 戒指马达设置接口（0x8D，Subcmd=0x02）
+     * Data 2字节：[0]类型，[1]样式
+     *
+     * [0]:类型 0x01：开启录音
+     * [1]：样式
+     *   0x01:短振1次
+     *   0x02:长振1次
+     *
+     * [0]:类型 0x02：关闭录音
+     * [1]：样式
+     *   0x01:短振2次
+     *   0x02:长振2次
+     *
+     * @param type  类型：0x01-开启录音，0x02-关闭录音
+     * @param style 样式：根据类型不同对应不同样式
+     */
+    public static void SET_RING_MOTOR_MODE(int type, int style)
 ```
 
 ### 定制闹钟
