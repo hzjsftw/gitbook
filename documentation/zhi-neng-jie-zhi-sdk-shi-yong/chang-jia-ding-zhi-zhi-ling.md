@@ -121,28 +121,173 @@ BCLRingManager.shared.stopBloodPressure { result in
 ### **6轴传感器协议**
 
 ```java
- LmAPILite.TURN_OFF_6_AXIS_SENSORS( I6axisListener listenerLite) //关闭6轴传感器数据上报
- LmAPILite.READ_6_AXIS_SENSORS(I6axisListener listenerLite);//读6轴传感器加速度数据（单次）
- LmAPILite.READ_6_AXIS_ACCELERATION(I6axisListener listenerLite);//请求：读6轴传感器实时加速度数据（开启后一直上传直至接收到停止指令）
+1. 关闭6轴传感器数据上报
+方法名：CLOSE_SIX_AXIS_SENSOR(ISixAxisSensorListener listener)
+Cmd: 0x40, Subcmd: 0x00
+Data: 空
+响应: 无
+回调：onCloseResult()
+
+2. 读6轴传感器加速度数据（单次）
+方法名：GET_SIX_AXIS_ACCELERATION(ISixAxisSensorListener listener)
+Cmd: 0x40, Subcmd: 0x01
+Data: 空
+返回: 7字节
+  [1]: 状态（0正常，1设备忙）
+  [2,3]: X加速度，有符号短整型
+  [4,5]: Y加速度，有符号短整型
+  [6,7]: Z加速度，有符号短整型
+回调：onAccelerationResult(int status, int[] acceleration)
+  status: 0正常，1设备忙
+  acceleration: int[3]，[X, Y, Z]
+
+3. 读6轴传感器陀螺仪数据（单次）
+方法名：GET_SIX_AXIS_GYROSCOPE(ISixAxisSensorListener listener)
+Cmd: 0x40, Subcmd: 0x02
+Data: 空
+返回: 7字节
+  [1]: 状态（0正常，1设备忙）
+  [2,3]: X陀螺仪，有符号短整型
+  [4,5]: Y陀螺仪，有符号短整型
+  [6,7]: Z陀螺仪，有符号短整型
+回调：onGyroscopeResult(int status, int[] gyroscope)
+  status: 0正常，1设备忙
+  gyroscope: int[3]，[X, Y, Z]
+
+4. 读6轴传感器加速度与陀螺仪数据（单次）
+方法名：GET_SIX_AXIS_ACCELERATION_AND_GYROSCOPE(ISixAxisSensorListener listener)
+Cmd: 0x40, Subcmd: 0x03
+Data: 空
+返回: 13字节
+  [1]: 状态（0正常，1设备忙）
+  [2,3]: X加速度，有符号短整型
+  [4,5]: Y加速度，有符号短整型
+  [6,7]: Z加速度，有符号短整型
+  [8,9]: X陀螺仪，有符号短整型
+  [10,11]: Y陀螺仪，有符号短整型
+  [12,13]: Z陀螺仪，有符号短整型
+回调：onAccelerationAndGyroscopeResult(int status, int[] acceleration, int[] gyroscope)
+  status: 0正常，1设备忙
+  acceleration: int[3]，[X, Y, Z]
+  gyroscope: int[3]，[X, Y, Z]
+
+5. 读6轴传感器实时加速度数据（连续上报）
+方法名：START_REALTIME_ACCELERATION(ISixAxisSensorListener listener)
+Cmd: 0x40, Subcmd: 0x04
+Data: 空
+返回: 7字节（持续上报直至关闭）
+  [1]: 状态（0正常，1设备忙）
+  [2,3]: X加速度，有符号短整型
+  [4,5]: Y加速度，有符号短整型
+  [6,7]: Z加速度，有符号短整型
+回调：onRealtimeAccelerationResult(int status, int[] acceleration)
+  status: 0正常，1设备忙
+  acceleration: int[3]，[X, Y, Z]
+
+6. 读6轴传感器实时陀螺仪数据（连续上报）
+方法名：START_REALTIME_GYROSCOPE(ISixAxisSensorListener listener)
+Cmd: 0x40, Subcmd: 0x05
+Data: 空
+返回: 7字节（持续上报直至关闭）
+  [1]: 状态（0正常，1设备忙）
+  [2,3]: X陀螺仪，有符号短整型
+  [4,5]: Y陀螺仪，有符号短整型
+  [6,7]: Z陀螺仪，有符号短整型
+回调：onRealtimeGyroscopeResult(int status, int[] gyroscope)
+  status: 0正常，1设备忙
+  gyroscope: int[3]，[X, Y, Z]
+
+7. 读6轴传感器实时加速度与陀螺仪数据（连续上报）
+方法名：START_REALTIME_ACCELERATION_AND_GYROSCOPE(ISixAxisSensorListener listener)
+Cmd: 0x40, Subcmd: 0x06
+Data: 空
+返回: 1+(12*n)字节（持续上报直至关闭）
+  [1]: 状态（0正常，1设备忙）
+  [2,3]: X加速度，有符号短整型
+  [4,5]: Y加速度，有符号短整型
+  [6,7]: Z加速度，有符号短整型
+  [8,9]: X陀螺仪，有符号短整型
+  [10,11]: Y陀螺仪，有符号短整型
+  [12,13]: Z陀螺仪，有符号短整型
+  后续数据每12字节一组，依次类推
+回调：onRealtimeAccelerationAndGyroscopeResult(int status, List<int[]> dataList)
+  status: 0正常，1设备忙
+  dataList: List<int[]>，每个元素int[6]：[X加速度, Y加速度, Z加速度, X陀螺仪, Y陀螺仪, Z陀螺仪]
+
+8. 设置6轴传感器工作频率
+方法名：SET_SIX_AXIS_SENSOR_FREQUENCY(int accFreq, int gyroFreq, ISixAxisSensorListener listener)
+Cmd: 0x40, Subcmd: 0x07
+Data: 4字节
+  [0:1]: 加速度频率，无符号短整型（支持25/50/100/150/200Hz，0表示关闭）
+  [2:3]: 陀螺仪频率，无符号短整型（支持25/50/100/150/200Hz，0表示关闭）
+返回: 1字节
+  [0]: 1成功，0失败
+备注：4.0.2/4.2.1/4.1.2/4.4.1版本默认qma6100 50Hz，1.5.3版本默认icm42688 25Hz
+
+9. 获取6轴传感器工作频率
+方法名：GET_SIX_AXIS_SENSOR_FREQUENCY(ISixAxisSensorListener listener)
+Cmd: 0x40, Subcmd: 0x08
+Data: 空
+返回: 4字节
+  [0:1]: 加速度频率，无符号短整型
+  [2:3]: 陀螺仪频率，无符号短整型
 ```
 
 回调：
 
+````java
 ```java
-public interface I6axisListener {
+public interface ISixAxisSensorListener {
     /**
-     * 关闭传感器
+     * 关闭6轴传感器数据上报结果
      */
-    void turnOff();
+    void onCloseResult();
 
     /**
-     * 传感器数据
-
+     * 读取加速度数据结果（单次）
+     * @param status 0正常，1设备忙
+     * @param acceleration 加速度数据 int[3]：[X, Y, Z]
      */
-    void sensorsData(String bpData);
+    void onAccelerationResult(int status, int[] acceleration);
 
+    /**
+     * 读取陀螺仪数据结果（单次）
+     * @param status 0正常，1设备忙
+     * @param gyroscope 陀螺仪数据 int[3]：[X, Y, Z]
+     */
+    void onGyroscopeResult(int status, int[] gyroscope);
+
+    /**
+     * 读取加速度与陀螺仪数据结果（单次）
+     * @param status 0正常，1设备忙
+     * @param acceleration 加速度数据 int[3]：[X, Y, Z]
+     * @param gyroscope 陀螺仪数据 int[3]：[X, Y, Z]
+     */
+    void onAccelerationAndGyroscopeResult(int status, int[] acceleration, int[] gyroscope);
+
+    /**
+     * 实时加速度数据（连续上报）
+     * @param status 0正常，1设备忙
+     * @param acceleration 加速度数据 int[3]：[X, Y, Z]
+     */
+    void onRealtimeAccelerationResult(int status, int[] acceleration);
+
+    /**
+     * 实时陀螺仪数据（连续上报）
+     * @param status 0正常，1设备忙
+     * @param gyroscope 陀螺仪数据 int[3]：[X, Y, Z]
+     */
+    void onRealtimeGyroscopeResult(int status, int[] gyroscope);
+
+    /**
+     * 实时加速度与陀螺仪数据（连续上报）
+     * @param status 0正常，1设备忙
+     * @param dataList 数据列表，每个元素为 int[6]：[X加速度, Y加速度, Z加速度, X陀螺仪, Y陀螺仪, Z陀螺仪]
+     */
+    void onRealtimeAccelerationAndGyroscopeResult(int status, List<int[]> dataList);
 }
 ```
+````
 
 ### 设置六轴传感器工作频率
 
@@ -369,8 +514,6 @@ BCLRingManager.shared.ppgWaveFormStop { result in
 ```
 
 实时PPG测量
-
-
 
 ```java
 /**
