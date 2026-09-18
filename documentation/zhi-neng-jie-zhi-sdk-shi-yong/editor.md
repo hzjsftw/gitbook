@@ -17,7 +17,7 @@ sdk在releases里
 
 * SDK库格式：aar
 * 开发语言：JAVA
-* Android系统版本：6.0以上
+* Android系统版本：7.0以上
 * 蓝牙版本：5.0以上
 
 **IOS：**
@@ -102,7 +102,7 @@ LmAPILite.setDebug(true);
 AppConfig.setOverseas(true);
 ```
 
-2.在BaseActivity类中启用监听，该监听用于监听蓝牙连接状态和戒指的应答&#x20;
+2.在BaseActivity类中启用监听，该监听用于监听蓝牙连接状态和戒指的应答
 
 ```java
 如果是一般模式，可以实现IResponseListener，是简化模式，就实现IResponseListenerLite
