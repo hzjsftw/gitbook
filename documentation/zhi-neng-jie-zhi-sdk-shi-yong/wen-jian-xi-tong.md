@@ -405,22 +405,30 @@ void recordingResult(boolean result);
 
 ```java
 private AdPcmTool adPcmTool = new AdPcmTool();
- /**
+/**
      * 转换单个数据包
+     * @param audioData 音频数据包
+     * @param channels 0,1都是单声道，2是双声道
      */
-    private byte[] convertPacket(byte[] tcpData,int audioType) throws Exception {
+    private byte[] convertPacket(byte[] audioData, int channels,int audioEncoding) throws Exception {
         // 提取ADPCM数据（从第21字节开始）
-        if (tcpData.length <= 21) {
+        if (audioData.length <= 21) {
             return new byte[0];
         }
 
-        int adpcmLength = tcpData.length - 21;
+        int adpcmLength = audioData.length - 21;
         byte[] adpcmData = new byte[adpcmLength];
-        System.arraycopy(tcpData, 21, adpcmData, 0, adpcmLength);
-        if(audioType==2){//双声道
-            return adPcmTool.decodeADPCMDualChannel(adpcmData,adpcmLength);
+        System.arraycopy(audioData, 21, adpcmData, 0, adpcmLength);
+        if(audioEncoding==1){//adpcm
+            if (channels == 2) { // 双声道
+                return adPcmTool.decodeADPCMDualChannel(adpcmData, adpcmLength);
+            } else { // 单声道 (audioType 0 或 1)
+                return adPcmTool.decodeADPCMMonoChannel(adpcmData, adpcmLength);
+            }
+        }else if(audioEncoding==2){//opus解码
+            return adPcmTool.decodeOpusToPcm(adpcmData, adpcmLength);
         }
-        return adPcmTool.decodeADPCMMonoChannel(adpcmData,adpcmLength);
+       return new byte[0];
     }
 ```
 
