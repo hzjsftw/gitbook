@@ -47,7 +47,7 @@ public interface ISportListenerLite {
 
     /**
      * 运动模式
-     * @param sportType 运动类型(1.主动推送，2断点续传)
+     * @param sportType 运动类型(1.主动推送，2断点续传，3主动停止运动，4被动停止)
      * @param step 步数
      * @param heart 心率
      * @param calorie 卡路里(暂不支持，默认为0)
