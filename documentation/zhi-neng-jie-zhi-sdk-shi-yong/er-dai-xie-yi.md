@@ -13,7 +13,29 @@ icon: sparkle
 App绑定，是在搜索到设备，然后连接到系统蓝牙里以后，延时3s左右，再获取设备信息，戒指收到这条指令执行，恢复出厂设置（清空历史记录，清除步数)，同步时间，HID功能获取
 
 ```java
+    /*已封装好同步戒指时间戳的逻辑，默认获取当前手机的时区和时间戳*/
     LmAPILite.APP_BIND();
+    
+     /**
+     *客户需要定制时间戳（比如从服务器获取时间戳）去同步戒指时间时使用
+     * @param unixTimeMillis UNIX时间戳（毫秒），由外部传入
+     * @param timeZone    时区（单位小时，东区为正、西区为负，含夏令时），由外部传入
+     * @param listenerLite
+     *
+     * <p>参数计算样例（与 {@link TimeUtils#getTimeWithZone()}、{@link TimeUtils#getTimeZone()} 实现一致）：</p>
+     * <pre>{@code
+     * // unixTimeMillis：当前系统时间戳（自1970-01-01以来的毫秒数）
+     * long unixTimeMillis = System.currentTimeMillis();
+     *
+     * // timeZone：取系统默认时区当前偏移（含夏令时），转成小时
+     * TimeZone tz = TimeZone.getDefault();
+     * Date now = new Date();
+     * int offsetMillis = tz.getOffset(now.getTime()); // 偏移毫秒数，夏令时已包含
+     * byte timeZone = (byte) (offsetMillis / (1000 * 3600)); // 东八区=8，西八区=-8
+     * }</pre>
+     */
+    public static void APP_BIND(long unixTimeMillis, byte timeZone, IBindConnectRefreshListenerLite listenerLite) 
+        
 ```
 
 回调：
@@ -34,7 +56,30 @@ App连接，是在下次进入app的时候，连接设备，戒指收到这条�
 {% endcontent-ref %}
 
 ```java
+      /*已封装好同步戒指时间戳逻辑，默认获取当前手机的时区和时间戳*/
     LmAPILite.APP_CONNECT(long timeMillis);//秒级时间戳
+    
+     /**
+     *客户需要定制时间戳（比如从服务器获取时间戳）去同步戒指时间时使用
+     * @param timeMillis   获取时间戳以后的数据，默认传0
+     * @param unixTimeMillis UNIX时间戳（毫秒），由外部传入
+     * @param timeZone    时区（单位小时，东区为正、西区为负，含夏令时），由外部传入
+     * @param listenerLite
+     *
+     * <p>参数计算样例（与 {@link TimeUtils#getTimeWithZone()}、{@link TimeUtils#getTimeZone()} 实现一致）：</p>
+     * <pre>{@code
+     * // unixTimeMillis：当前系统时间戳（自1970-01-01以来的毫秒数）
+     * long unixTimeMillis = System.currentTimeMillis();
+     *
+     * // timeZone：取系统默认时区当前偏移（含夏令时），转成小时
+     * TimeZone tz = TimeZone.getDefault();
+     * Date now = new Date();
+     * int offsetMillis = tz.getOffset(now.getTime()); // 偏移毫秒数，夏令时已包含
+     * byte timeZone = (byte) (offsetMillis / (1000 * 3600)); // 东八区=8，西八区=-8
+     * }</pre>
+     */
+    public static void APP_CONNECT(long timeMillis, long unixTimeMillis, byte timeZone, IBindConnectRefreshListenerLite listenerLite)
+    
 ```
 
 回调：
@@ -59,7 +104,29 @@ App刷新，是在app里，用户主动进行刷线，比如下拉刷新等，�
 {% endcontent-ref %}
 
 ```java
+     /*已封装好同步戒指时间戳逻辑，默认获取当前手机的时区和时间戳*/
     LmAPILite.APP_REFRESH(long timeMillis);//秒级时间戳
+    
+     /**
+     *客户需要定制时间戳（比如从服务器获取时间戳）去同步戒指时间时使用
+     * @param timeMillis   获取时间戳以后的数据，默认传0
+     * @param unixTimeMillis UNIX时间戳（毫秒），由外部传入
+     * @param timeZone    时区（单位小时，东区为正、西区为负，含夏令时），由外部传入
+     * @param listenerLite
+     *
+     * <p>参数计算样例（与 {@link TimeUtils#getTimeWithZone()}、{@link TimeUtils#getTimeZone()} 实现一致）：</p>
+     * <pre>{@code
+     * // unixTimeMillis：当前系统时间戳（自1970-01-01以来的毫秒数）
+     * long unixTimeMillis = System.currentTimeMillis();
+     *
+     * // timeZone：取系统默认时区当前偏移（含夏令时），转成小时
+     * TimeZone tz = TimeZone.getDefault();
+     * Date now = new Date();
+     * int offsetMillis = tz.getOffset(now.getTime()); // 偏移毫秒数，夏令时已包含
+     * byte timeZone = (byte) (offsetMillis / (1000 * 3600)); // 东八区=8，西八区=-8
+     * }</pre>
+     */
+    public static void APP_REFRESH(long timeMillis, long unixTimeMillis, byte timeZone, IBindConnectRefreshListenerLite listenerLite)
 ```
 
 回调：

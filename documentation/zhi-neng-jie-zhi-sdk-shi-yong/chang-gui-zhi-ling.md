@@ -185,6 +185,27 @@ icon: map
 </strong><strong>LmAPILite.SYNC_TIME(ISyncTimeListenerLite listenerLite);
 </strong>//同步时间可以设置时区， 东区为正，西区为负，比如东八区8，西八区为-8
 LmAPILite.SYNC_TIME_ZONE(ISyncTimeListenerLite listenerLite)
+
+/**
+     * 同步时间（时间与时区由外部传入）
+     *
+     * @param currentTimeMillis UNIX时间戳（毫秒）
+     * @param timeZone         时区（单位小时，东区为正、西区为负，含夏令时）
+     * @param listenerLite
+     *
+     * &#x3C;p>参数计算样例（与 {@link TimeUtils#getTimeWithZone()}、{@link TimeUtils#getTimeZone()} 实现一致）：&#x3C;/p>
+     * &#x3C;pre>{@code
+     * // currentTimeMillis：当前系统时间戳（自1970-01-01以来的毫秒数）
+     * long currentTimeMillis = System.currentTimeMillis();
+     *
+     * // timeZone：取系统默认时区当前偏移（含夏令时），转成小时
+     * TimeZone tz = TimeZone.getDefault();
+     * Date now = new Date();
+     * int offsetMillis = tz.getOffset(now.getTime()); // 偏移毫秒数，夏令时已包含
+     * byte timeZone = (byte) (offsetMillis / (1000 * 3600)); // 东八区=8，西八区=-8
+     * }&#x3C;/pre>
+     */
+    public static void SYNC_TIME(long currentTimeMillis, byte timeZone, ISyncTimeListenerLite listenerLite)
 </code></pre>
 
 ```java
