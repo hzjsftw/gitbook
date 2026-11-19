@@ -1,6 +1,6 @@
 ---
 description: BCL 戒指原生微信小程序 SDK 客户集成、使用及接口调用示例
-icon: table-rows
+icon: weixin
 ---
 
 # 原生微信小程序 SDK 客户对接指南
@@ -9,14 +9,14 @@ icon: table-rows
 
 ## 1. 交付内容与支持边界
 
-| 项目 | 说明 |
-| --- | --- |
-| SDK 文件 | `[libs/bcl-ring-sdk](https://github.com/BravechipSpace/ChipletRing-APPSDK/tree/main/Wechat_miniprogram/library)` |
-| 文件格式 | CommonJS，使用 require |
-| 示例工程 | `[wechat-miniprogram-demo/](https://github.com/BravechipSpace/ChipletRing-APPSDK/tree/main/Wechat_miniprogram/example)` |
-| 蓝牙核心 | 扫描、连接、服务发现、Notify、协议指令、持续测量、历史同步、复合指令 |
-| 网络模块 | 同一 bundle 导出 `BCLRingNetworkSDK`，需注入平台请求适配 |
-| 验证范围 | 重点为真实 iOS / Android 手机中的微信小程序；编译、模拟测试不等于真机验收 |
+| 项目     | 说明                                                                                                                      |
+| ------ | ----------------------------------------------------------------------------------------------------------------------- |
+| SDK 文件 | `[libs/bcl-ring-sdk](https://github.com/BravechipSpace/ChipletRing-APPSDK/tree/main/Wechat_miniprogram/library)`        |
+| 文件格式   | CommonJS，使用 require                                                                                                     |
+| 示例工程   | `[wechat-miniprogram-demo/](https://github.com/BravechipSpace/ChipletRing-APPSDK/tree/main/Wechat_miniprogram/example)` |
+| 蓝牙核心   | 扫描、连接、服务发现、Notify、协议指令、持续测量、历史同步、复合指令                                                                                   |
+| 网络模块   | 同一 bundle 导出 `BCLRingNetworkSDK`，需注入平台请求适配                                                                              |
+| 验证范围   | 重点为真实 iOS / Android 手机中的微信小程序；编译、模拟测试不等于真机验收                                                                            |
 
 SDK 文件由对接人员随版本交付。仓库中的 `@bcl/*` 包为 workspace 内部包，不应假定已发布到公共 npm。客户接入无需安装 Swift / Java 原生 SDK，也不需要在页面重新封包。HID、ECG、语音、文件系统等原生 SDK 能力，不能因为旧文档列出就认定本 SDK 已全部实现；请按实际交付接口确认。
 
@@ -120,20 +120,20 @@ module.exports = { scanRings, connectRing, getRingSDK, disconnectRing };
 
 ### 3.3 扫描和连接参数
 
-| 参数 / 返回字段 | 说明 |
-| --- | --- |
-| `durationMs` | 扫描时长，默认 5000 毫秒；避免同时启动多次扫描 |
-| `filterBclManufacturerData` | 按 BCL 厂商广播过滤；定制广播需与对接人员确认 |
-| `namePrefix` / `nameIncludes` | 名称过滤，可选，不应硬编码其他客户型号 |
-| `includeConnectedDevices` | 合并指定服务的系统已连接设备，不等同全部已配对列表；仍需建立 SDK 会话 |
-| `includePhyBootloader` | 启用后允许 PHY Boot 候选通过 BCL 厂商广播过滤。名称、自定义等其他过滤仍生效 |
-| `mode` / `applicationMac` | `mode` 可为 `application`、`phyBootloader` 或 `unknown`。PHY Boot 候选有可解析 MAC 时，SDK 会另外推导应用态 `applicationMac` |
-| `onDeviceFound` | 调试回调包含未通过过滤的设备；业务选择列表优先使用最终返回的过滤结果 |
-| `deviceId` | 平台连接标识；iOS 常是 UUID，不能假定为 MAC |
-| `macAddress` | 符合厂商广播规则时解析；系统已连接设备可能没有此字段 |
-| `connected.channel` | 已发现的实际设备 / 服务 / 特征 ID |
-| `connected.currentMtu` | 主通道读取的实际 ATT MTU，可能为空；不代表 OTA 专用通道最终 MTU |
-| `preferredMtu` | 只在 Android 请求协商；iOS / 未知平台只读实际值 |
+| 参数 / 返回字段                     | 说明                                                                                                      |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------- |
+| `durationMs`                  | 扫描时长，默认 5000 毫秒；避免同时启动多次扫描                                                                              |
+| `filterBclManufacturerData`   | 按 BCL 厂商广播过滤；定制广播需与对接人员确认                                                                               |
+| `namePrefix` / `nameIncludes` | 名称过滤，可选，不应硬编码其他客户型号                                                                                     |
+| `includeConnectedDevices`     | 合并指定服务的系统已连接设备，不等同全部已配对列表；仍需建立 SDK 会话                                                                   |
+| `includePhyBootloader`        | 启用后允许 PHY Boot 候选通过 BCL 厂商广播过滤。名称、自定义等其他过滤仍生效                                                           |
+| `mode` / `applicationMac`     | `mode` 可为 `application`、`phyBootloader` 或 `unknown`。PHY Boot 候选有可解析 MAC 时，SDK 会另外推导应用态 `applicationMac` |
+| `onDeviceFound`               | 调试回调包含未通过过滤的设备；业务选择列表优先使用最终返回的过滤结果                                                                      |
+| `deviceId`                    | 平台连接标识；iOS 常是 UUID，不能假定为 MAC                                                                            |
+| `macAddress`                  | 符合厂商广播规则时解析；系统已连接设备可能没有此字段                                                                              |
+| `connected.channel`           | 已发现的实际设备 / 服务 / 特征 ID                                                                                   |
+| `connected.currentMtu`        | 主通道读取的实际 ATT MTU，可能为空；不代表 OTA 专用通道最终 MTU                                                                |
+| `preferredMtu`                | 只在 Android 请求协商；iOS / 未知平台只读实际值                                                                         |
 
 普通默认 UUID 为 Service `0001`、Write `0010`、Notify `0011`。定制固件可通过 `serviceUuid`、`writeCharacteristicUuid`、`notifyCharacteristicUuid` 覆盖，以实际发现的 GATT 属性为准。
 
@@ -141,23 +141,23 @@ module.exports = { scanRings, connectRing, getRingSDK, disconnectRing };
 
 以下 `sdk` 均为连接结果的 `connected.sdk`。除事件订阅外，方法返回 Promise；请在业务按钮处理函数中 `try/catch`。长任务按顺序执行，同一设备不要同时测量、同步历史和升级。
 
-| 功能 | 调用方式 | 返回与边界 |
-| --- | --- | --- |
-| 同步时间 | `sdk.syncTime({ timestampMs: Date.now(), timezone: 8 })` | 时间戳用毫秒。时区使用有符号整数小时，半小时与四分之一小时时区无法精确表示 |
-| 读取时间 | `sdk.getTime()` | `{ timestampMs, timezone }` |
-| 固件 / 硬件版本 | `sdk.getFirmwareVersion()` / `sdk.getHardwareVersion()` | `{ version }` |
-| 电量 | `sdk.getBatteryLevel()` | `{ level, isLevelValid, isCharging, isFull }`；先判断 `isLevelValid`，101/102 不应显示为百分比 |
-| 充电状态 | `sdk.getChargingState()` | `state` 为 `not_charging` / `charging` / `full` |
-| 实时步数 | `sdk.getStepCount()` | 返回 SDK 解析结果；累计步数不能逐条求和 |
-| 采集周期 | `sdk.setCollectionPeriod({ periodSeconds: 300 })` / `sdk.getCollectionPeriod()` | 秒；0 关闭周期采集，非零最小 60；设置后检查 `success` |
-| 蓝牙名称 | `sdk.setBluetoothName({ name: 'BCL-Ring' })` / `sdk.getBluetoothName()` | UTF-8 最多 12 字节；设置后检查 `success` |
-| 一键自检 | `sdk.oneKeySelfInspection()` | `hasError`、`faults`、`description` |
-| 温度 | `sdk.measureTemperature({ onProgress })` | 终态返回结果；温度用 `temperatureCelsius` 展示 |
-| 电量推送 | `sdk.onBatteryPush(listener)` | 返回取消监听函数，事件含有效值标志、原始 Hex |
-| 充电变化 | `sdk.onChargingStateChanged((state, event) => {})` | 返回取消监听函数 |
-| 复合绑定 | `sdk.appEventBind({ request: { timezone: 8 } })` | 戒指侧绑定复合指令；不等同云端绑定 |
-| 复合连接 / 刷新 | `sdk.appEventConnect(options)` / `sdk.appEventRefresh(options)` | 返回设备快照与历史；`request` 可指定 `timestampMs`、`timezone`、秒级 `filterTimestamp` |
-| GoMore | `sdk.queryGoMoreAuthStatus()` / `sdk.readGoMoreSleepData(options)` | 需固件支持及对应算法授权；读取结果为 `models` |
+| 功能        | 调用方式                                                                            | 返回与边界                                                                             |
+| --------- | ------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| 同步时间      | `sdk.syncTime({ timestampMs: Date.now(), timezone: 8 })`                        | 时间戳用毫秒。时区使用有符号整数小时，半小时与四分之一小时时区无法精确表示                                             |
+| 读取时间      | `sdk.getTime()`                                                                 | `{ timestampMs, timezone }`                                                       |
+| 固件 / 硬件版本 | `sdk.getFirmwareVersion()` / `sdk.getHardwareVersion()`                         | `{ version }`                                                                     |
+| 电量        | `sdk.getBatteryLevel()`                                                         | `{ level, isLevelValid, isCharging, isFull }`；先判断 `isLevelValid`，101/102 不应显示为百分比 |
+| 充电状态      | `sdk.getChargingState()`                                                        | `state` 为 `not_charging` / `charging` / `full`                                    |
+| 实时步数      | `sdk.getStepCount()`                                                            | 返回 SDK 解析结果；累计步数不能逐条求和                                                            |
+| 采集周期      | `sdk.setCollectionPeriod({ periodSeconds: 300 })` / `sdk.getCollectionPeriod()` | 秒；0 关闭周期采集，非零最小 60；设置后检查 `success`                                                |
+| 蓝牙名称      | `sdk.setBluetoothName({ name: 'BCL-Ring' })` / `sdk.getBluetoothName()`         | UTF-8 最多 12 字节；设置后检查 `success`                                                    |
+| 一键自检      | `sdk.oneKeySelfInspection()`                                                    | `hasError`、`faults`、`description`                                                 |
+| 温度        | `sdk.measureTemperature({ onProgress })`                                        | 终态返回结果；温度用 `temperatureCelsius` 展示                                                |
+| 电量推送      | `sdk.onBatteryPush(listener)`                                                   | 返回取消监听函数，事件含有效值标志、原始 Hex                                                          |
+| 充电变化      | `sdk.onChargingStateChanged((state, event) => {})`                              | 返回取消监听函数                                                                          |
+| 复合绑定      | `sdk.appEventBind({ request: { timezone: 8 } })`                                | 戒指侧绑定复合指令；不等同云端绑定                                                                 |
+| 复合连接 / 刷新 | `sdk.appEventConnect(options)` / `sdk.appEventRefresh(options)`                 | 返回设备快照与历史；`request` 可指定 `timestampMs`、`timezone`、秒级 `filterTimestamp`             |
+| GoMore    | `sdk.queryGoMoreAuthStatus()` / `sdk.readGoMoreSleepData(options)`              | 需固件支持及对应算法授权；读取结果为 `models`                                                       |
 
 `createWechatRingSDK` 用于业务已经建立连接并准备好通道的高级场景，不会代替完整连接流程；普通集成优先使用 `connectWechatRingSDK`。`sdk.close()` 关闭 SDK 请求和监听，**不会主动关闭物理 BLE 连接**；释放完整会话请调用 `connected.disconnect()`。
 
@@ -210,15 +210,15 @@ renderHistory(history.records);
 
 `renderHistory`、`appendProtectedDiagnostic` 由业务实现。全量同步调用 `syncAllHistoryData(options)`；停止调用 `stopHistoryDataUpload()`。`no_data` 是正常无数据终态。对异常记录应记录并复核，不能把缺包误当完整数据。蓝牙同步完成不代表云端上传成功，应用应先可靠保存数据，再处理上传与失败补偿；不要上传前自动清除戒指数据。
 
-| 字段 / 接口 | 单位 / 含义 |
-| --- | --- |
-| `syncTime.timestampMs`、`getTime.timestampMs` | 毫秒 |
-| 历史 `timestamp` / `timestampMs` | 秒 / 毫秒 |
-| 历史 `temperatureRaw` / `temperatureCelsius` | 0.01 ℃ / ℃；云端 `temperature` 使用原始值 |
-| 历史 `stepCount` | 当天累计步数；按时间和设备归并，不能直接累加每条记录 |
-| 云端查询 `startTime`、`endTime` | 秒 |
-| 云端时间线 `startTime`、`endTime`、主动测量 `testTime` 返回值 | 毫秒 |
-| 历史心率、血氧、HRV、压力为 0 | 按无效值处理，不应直接参与平均计算 |
+| 字段 / 接口                                         | 单位 / 含义                           |
+| ----------------------------------------------- | --------------------------------- |
+| `syncTime.timestampMs`、`getTime.timestampMs`    | 毫秒                                |
+| 历史 `timestamp` / `timestampMs`                  | 秒 / 毫秒                            |
+| 历史 `temperatureRaw` / `temperatureCelsius`      | 0.01 ℃ / ℃；云端 `temperature` 使用原始值 |
+| 历史 `stepCount`                                  | 当天累计步数；按时间和设备归并，不能直接累加每条记录        |
+| 云端查询 `startTime`、`endTime`                      | 秒                                 |
+| 云端时间线 `startTime`、`endTime`、主动测量 `testTime` 返回值 | 毫秒                                |
+| 历史心率、血氧、HRV、压力为 0                               | 按无效值处理，不应直接参与平均计算                 |
 
 ### 4.3 复合连接与刷新何时完成
 
@@ -316,10 +316,10 @@ await networkSDK.clearToken();
 
 ### 5.2 区域与域名
 
-- 国内默认 `https://ali.bravechip.cn`；例如绑定请求最终为 `/api/app/bindDevice`。
-- 小程序后台将 API 域名加入 `request 合法域名`，固件实际下载域名加入 `downloadFile 合法域名`，含实际使用的重定向域名。开发工具跳过校验不代表正式版可用。
-- 当前代码中的海外默认地址为 HTTP IP，不能直接作为微信正式版合法域名。海外服务需对接可用 HTTPS 域名或客户 HTTPS 代理；`region: 'overseas'` 不自动增加 `/api`，自定义 `baseURL` 时确认代理路径规则。
-- 默认请求头含 `clientType: WeChatMP`、本地时区小时数 `timeZone`；Token 存在时自动添加 `Authorization: Bearer ...` 和 `access_token`。uni-app 发布原生 App 时请与服务方确认并配置 `clientType`。
+* 国内默认 `https://ali.bravechip.cn`；例如绑定请求最终为 `/api/app/bindDevice`。
+* 小程序后台将 API 域名加入 `request 合法域名`，固件实际下载域名加入 `downloadFile 合法域名`，含实际使用的重定向域名。开发工具跳过校验不代表正式版可用。
+* 当前代码中的海外默认地址为 HTTP IP，不能直接作为微信正式版合法域名。海外服务需对接可用 HTTPS 域名或客户 HTTPS 代理；`region: 'overseas'` 不自动增加 `/api`，自定义 `baseURL` 时确认代理路径规则。
+* 默认请求头含 `clientType: WeChatMP`、本地时区小时数 `timeZone`；Token 存在时自动添加 `Authorization: Bearer ...` 和 `access_token`。uni-app 发布原生 App 时请与服务方确认并配置 `clientType`。
 
 ## 6. 设备绑定、历史上传与查询示例
 
@@ -447,23 +447,23 @@ function parseTemperatureRawValues(data) {
 
 ### 6.1 其他常用云端接口
 
-| 场景 | SDK 调用 | 返回 / 参数说明 |
-| --- | --- | --- |
-| 最新记录 | `loadUserLatestHistory()` | 最新历史对象或 `null` |
-| 保存主动测量 | `insertActiveMeasureData({ mac, testType: '心率', value: '72' })` | 测量成功后由业务主动调用；不会自动上传 |
-| 查询主动测量 | `queryActiveMeasureData()` | 记录数组 |
-| GoMore 睡眠上传 | `uploadGoMoreSleepData(models)` | 蓝牙 `readGoMoreSleepData()` 返回的 `models`；需实际算法支持 |
-| GoMore 查询 | `getGoMoreSleepData({ startTime, endTime })` | 睡眠对象或 `null` |
-| 周/月睡眠 | `getSleepDataByWeekOrMonth(['2026-11-01'])` / `getGoMoreSleepDataBatch(dates)` | 日期 `yyyy-MM-dd` |
-| 运动汇总 | `getSportData({ startTime, endTime })` | 对象或 `null` |
-| 查询设备 | `getDeviceByMac(mac)` | 对象或 `null` |
-| 解绑关系 | `unbindDevice(mac)` | 不自动断开 BLE；先停止任务并释放会话 |
-| 检查固件 | `checkFirmwareUpdate(version)` | `{ hasNewVersion, version, downloadUrl, fileName, ... }`；无新版本也是正常结果 |
-| 历史固件 | `getFirmwareVersionList(category)` | `{ fileName, filePath, fileUrl }[]`；下载用 `fileUrl`，不是 `filePath` |
-| 下载固件 | `downloadFirmware(url, fileName, destinationPath, onProgress)` | 需构造时注入 `downloader`；进度 0～1，成功返回平台路径 |
-| 血压 / 血糖算法 | `uploadBloodPressureData(mac, waveData)` / `uploadBloodGlucoseData(mac, waveData)` | 需真实波形、算法权限及 gzip+base64 压缩器；不代表客户端可离线计算 |
-| 日志文件上传 | `uploadFile(arrayBuffer, fileName, mimeType)` | 返回 `{ url, fileName }`；不是传电脑路径 |
-| 问题反馈 | `questionFeedback(content, logPath, feedbackType, receivedFollow)` | `logPath` 通常用上传结果 `fileName` |
+| 场景          | SDK 调用                                                                             | 返回 / 参数说明                                                           |
+| ----------- | ---------------------------------------------------------------------------------- | ------------------------------------------------------------------- |
+| 最新记录        | `loadUserLatestHistory()`                                                          | 最新历史对象或 `null`                                                      |
+| 保存主动测量      | `insertActiveMeasureData({ mac, testType: '心率', value: '72' })`                    | 测量成功后由业务主动调用；不会自动上传                                                 |
+| 查询主动测量      | `queryActiveMeasureData()`                                                         | 记录数组                                                                |
+| GoMore 睡眠上传 | `uploadGoMoreSleepData(models)`                                                    | 蓝牙 `readGoMoreSleepData()` 返回的 `models`；需实际算法支持                     |
+| GoMore 查询   | `getGoMoreSleepData({ startTime, endTime })`                                       | 睡眠对象或 `null`                                                        |
+| 周/月睡眠       | `getSleepDataByWeekOrMonth(['2026-11-01'])` / `getGoMoreSleepDataBatch(dates)`     | 日期 `yyyy-MM-dd`                                                     |
+| 运动汇总        | `getSportData({ startTime, endTime })`                                             | 对象或 `null`                                                          |
+| 查询设备        | `getDeviceByMac(mac)`                                                              | 对象或 `null`                                                          |
+| 解绑关系        | `unbindDevice(mac)`                                                                | 不自动断开 BLE；先停止任务并释放会话                                                |
+| 检查固件        | `checkFirmwareUpdate(version)`                                                     | `{ hasNewVersion, version, downloadUrl, fileName, ... }`；无新版本也是正常结果 |
+| 历史固件        | `getFirmwareVersionList(category)`                                                 | `{ fileName, filePath, fileUrl }[]`；下载用 `fileUrl`，不是 `filePath`     |
+| 下载固件        | `downloadFirmware(url, fileName, destinationPath, onProgress)`                     | 需构造时注入 `downloader`；进度 0～1，成功返回平台路径                                 |
+| 血压 / 血糖算法   | `uploadBloodPressureData(mac, waveData)` / `uploadBloodGlucoseData(mac, waveData)` | 需真实波形、算法权限及 gzip+base64 压缩器；不代表客户端可离线计算                             |
+| 日志文件上传      | `uploadFile(arrayBuffer, fileName, mimeType)`                                      | 返回 `{ url, fileName }`；不是传电脑路径                                      |
+| 问题反馈        | `questionFeedback(content, logPath, feedbackType, receivedFollow)`                 | `logPath` 通常用上传结果 `fileName`                                        |
 
 小程序运行时可能没有 `CompressionStream`，波形算法需要构造时注入 `compressWaveData(text)`，返回 gzip 后的 base64；不支持时抛出 `unsupported_compressor`。不要以普通 base64 替代 gzip。固件下载器和压缩器属于平台集成职责，不会因为导入 SDK 自动就绪。
 
@@ -473,24 +473,22 @@ function parseTemperatureRawValues(data) {
 
 先读取设备固件版本并查询更新，由客户明确选择适配固件，再读取二进制并校验；文件选择不触发升级。OTA 使用独立服务及原始传输通道，普通蓝牙命令通道不能直接当升级通道。
 
-| 类型 | SDK 入口 | 文件、通道与当前范围 |
-| --- | --- | --- |
-| Apollo | `sdk.startApolloUpgrade(transport, firmwareBytes, options)` / `sdk.stopApolloUpgrade()` | `.bin`，独立 Apollo GATT；237 字节负载，实际 ATT MTU 至少 240 |
-| Nordic | `sdk.startNordicUpgrade(transport, firmware, options)` / `sdk.stopNordicUpgrade()` | Secure DFU 单 application ZIP；需先解析 ZIP 为 NordicFirmware；标准 03/04 入口，不支持 Legacy、多镜像 |
-| PHY | `sdk.startPhyUpgrade(transport, hexBytes, options)` / `sdk.stopPhyUpgrade()` | HEX16/HEX，独立 Boot 三特征，237 字节负载，实际 ATT MTU 至少 240；失败从首分区重刷 |
+| 类型     | SDK 入口                                                                                  | 文件、通道与当前范围                                                                        |
+| ------ | --------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| Apollo | `sdk.startApolloUpgrade(transport, firmwareBytes, options)` / `sdk.stopApolloUpgrade()` | `.bin`，独立 Apollo GATT；237 字节负载，实际 ATT MTU 至少 240                                  |
+| Nordic | `sdk.startNordicUpgrade(transport, firmware, options)` / `sdk.stopNordicUpgrade()`      | Secure DFU 单 application ZIP；需先解析 ZIP 为 NordicFirmware；标准 03/04 入口，不支持 Legacy、多镜像 |
+| PHY    | `sdk.startPhyUpgrade(transport, hexBytes, options)` / `sdk.stopPhyUpgrade()`            | HEX16/HEX，独立 Boot 三特征，237 字节负载，实际 ATT MTU 至少 240；失败从首分区重刷                         |
 
 `transport` 不是扫描结果，也不是文件路径。它必须由对应 OTA 通道构建并提供通知与断连事件。Nordic 的 ZIP 解析、切换 Boot、目标关联与重连，PHY 的持久恢复记录、MAC 关联和应用态恢复还需要平台控制器；仅调用核心升级方法不包含全部业务流程。
 
 首次接入建议完整保留交付 Demo 的升级页面 / 面板和辅助模块，跑通后再移植 UI：
 
-- 原生微信：保留 `pages/apollo-ota`、`pages/nordic-ota`、`pages/phy-ota` 及其引用的 `utils/`、`libs/` 和 app.json 页面注册。Apollo 支持历史固件下载、微信聊天文件两种来源；Nordic / PHY 主要使用聊天文件。
-
-
-- Android 可请求 MTU 后读取实际结果；iOS 由系统管理，不主动设置。MTU 不足或未知时阻止依赖大包的升级，不能将期望值当作真实值。
-- 升级时独占设备，禁止同时扫描换设备、发送普通命令或同步历史；停止、离页、后台事件需转交控制器处理，文件选择引发的暂时隐藏与实际传输后台取消要区分。
-- 正文进度 100% 不代表校验、重启确认或应用态恢复完成。重连后展示真实固件版本，当前 Demo 不按文件名做目标版本比较。
-- 取消无法撤销已提交写入，也不代表设备回滚。PHY 恢复需要真实广播 MAC；不要对 iOS UUID 做 MAC 运算，不按最强信号猜测同名 Boot 设备。
-- Apollo 已有部分真机成功反馈；2026-10-26 原生微信 Nordic 基本流程有成功反馈。PHY 文档仍标记真机刷写与中断恢复待验收；这些记录不能作为所有手机、系统和固件均兼容的承诺。
+* 原生微信：保留 `pages/apollo-ota`、`pages/nordic-ota`、`pages/phy-ota` 及其引用的 `utils/`、`libs/` 和 app.json 页面注册。Apollo 支持历史固件下载、微信聊天文件两种来源；Nordic / PHY 主要使用聊天文件。
+* Android 可请求 MTU 后读取实际结果；iOS 由系统管理，不主动设置。MTU 不足或未知时阻止依赖大包的升级，不能将期望值当作真实值。
+* 升级时独占设备，禁止同时扫描换设备、发送普通命令或同步历史；停止、离页、后台事件需转交控制器处理，文件选择引发的暂时隐藏与实际传输后台取消要区分。
+* 正文进度 100% 不代表校验、重启确认或应用态恢复完成。重连后展示真实固件版本，当前 Demo 不按文件名做目标版本比较。
+* 取消无法撤销已提交写入，也不代表设备回滚。PHY 恢复需要真实广播 MAC；不要对 iOS UUID 做 MAC 运算，不按最强信号猜测同名 Boot 设备。
+* Apollo 已有部分真机成功反馈；2026-10-26 原生微信 Nordic 基本流程有成功反馈。PHY 文档仍标记真机刷写与中断恢复待验收；这些记录不能作为所有手机、系统和固件均兼容的承诺。
 
 ### 7.1 PHY Boot 恢复
 
@@ -504,17 +502,17 @@ function parseTemperatureRawValues(data) {
 
 ## 8. 错误处理
 
-| 表现 | 排查与处理 |
-| --- | --- |
-| SDK 文件加载失败 | 检查平台文件格式、相对路径及交付完整性；两平台同名文件不可互换 |
-| BLE 10000 / 10001 | 蓝牙未初始化 / 不可用；检查系统蓝牙、应用权限与实际运行环境 |
-| BLE 10003 / 10006 / 10012 | 连接失败 / 断连 / 超时；释放旧会话，检查设备占用后重新扫描连接 |
-| BLE 10004 / 10005 / 10007 | 服务 / 特征缺失或属性不支持；核对 UUID、固件模式及实际 GATT |
-| Android 扫不到设备 | 核对系统版本对应的蓝牙、附近设备与定位授权及系统开关；记录原始广播，检查过滤条件 |
-| 测量失败 | 按 `error.status` 提示佩戴、充电、忙碌、停止或超时，不只显示“调用失败” |
-| `token_error` 或 HTTP 401 | 清除旧 Token，完成重新登录 / 换取 BCL Token，避免无限自动重试 |
-| `http_error` / `server_error` | 分别检查 HTTP 状态和服务端业务状态；二者含义不同 |
-| `invalid_parameters` / `invalid_response` / `decoding_error` | 检查参数和单位、服务响应字段与代理返回内容 |
-| 请求 / 下载在正式版失败 | 核对 HTTPS、request/downloadFile 合法域名及重定向，不能依赖开发工具跳过校验 |
-| `unsupported_compressor` / 未配置下载器 | 注入适配当前运行端的 gzip+base64 压缩器 / 固件下载器 |
-| OTA 不能开始 | 检查固件、真实 MTU、设备身份和其他任务是否结束；查看控制器具体阻止原因 |
+| 表现                                                           | 排查与处理                                               |
+| ------------------------------------------------------------ | --------------------------------------------------- |
+| SDK 文件加载失败                                                   | 检查平台文件格式、相对路径及交付完整性；两平台同名文件不可互换                     |
+| BLE 10000 / 10001                                            | 蓝牙未初始化 / 不可用；检查系统蓝牙、应用权限与实际运行环境                     |
+| BLE 10003 / 10006 / 10012                                    | 连接失败 / 断连 / 超时；释放旧会话，检查设备占用后重新扫描连接                  |
+| BLE 10004 / 10005 / 10007                                    | 服务 / 特征缺失或属性不支持；核对 UUID、固件模式及实际 GATT                |
+| Android 扫不到设备                                                | 核对系统版本对应的蓝牙、附近设备与定位授权及系统开关；记录原始广播，检查过滤条件            |
+| 测量失败                                                         | 按 `error.status` 提示佩戴、充电、忙碌、停止或超时，不只显示“调用失败”        |
+| `token_error` 或 HTTP 401                                     | 清除旧 Token，完成重新登录 / 换取 BCL Token，避免无限自动重试            |
+| `http_error` / `server_error`                                | 分别检查 HTTP 状态和服务端业务状态；二者含义不同                         |
+| `invalid_parameters` / `invalid_response` / `decoding_error` | 检查参数和单位、服务响应字段与代理返回内容                               |
+| 请求 / 下载在正式版失败                                                | 核对 HTTPS、request/downloadFile 合法域名及重定向，不能依赖开发工具跳过校验 |
+| `unsupported_compressor` / 未配置下载器                            | 注入适配当前运行端的 gzip+base64 压缩器 / 固件下载器                  |
+| OTA 不能开始                                                     | 检查固件、真实 MTU、设备身份和其他任务是否结束；查看控制器具体阻止原因               |
