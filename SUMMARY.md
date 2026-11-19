@@ -13,8 +13,8 @@
 * [健康统计图设计](gong-neng-zong-lan/jian-kang-tong-ji-tu-she-ji.md)
 * [其他常规功能设计](gong-neng-zong-lan/qi-ta-chang-gui-gong-neng-she-ji.md)
 * [参考demo](gong-neng-zong-lan/can-kao-demo.md)
-* [原生微信小程序 SDK 客户对接指南](gong-neng-zong-lan/kuai-su-ru-men/wechat-miniprogram-sdk.md)
-* [Uni-app SDK 客户对接指南](gong-neng-zong-lan/kuai-su-ru-men/uniapp-sdk.md)
+* [原生微信小程序 SDK 客户对接指南](gong-neng-zong-lan/wechat-miniprogram-sdk.md)
+* [Uni-app SDK 客户对接指南](gong-neng-zong-lan/uniapp-sdk.md)
 
 ## 智能戒指SDK使用
 
